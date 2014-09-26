@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SmartDefaultEntries>
+  <SmartDefault Name ="English-Weekday-Names" Value="Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"/>
+  <SmartDefault Name ="English-Weekday-Short-Names" Value="Mon,Tue,Wed,Thu,Fri,Sat,Sun"/>
+  <SmartDefault Name ="French-Weekday-Names" Value="Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche"/>
+  <SmartDefault Name="German-Weekday-Names" Value="Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag,Sonntag"/>
+  <SmartDefault Name="Spanish-Weekday-Names" Value="Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo"/>
+  <SmartDefault Name="Italian-Weekday-Names" Value=""/>
+  <SmartDefault Name="Portuguese-Weekday-Names" Values=""/>
+</SmartDefaultEntries>
+

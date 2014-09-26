@@ -1,0 +1,60 @@
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.dll
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.pdb
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.dll
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.dll
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.pdb
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.xml
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.csprojResolveAssemblyReference.cache
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.dll
+C:\Users\mukhsudi\documents\visual studio 2012\Projects\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.pdb
+C:\Users\mukhsudi\Documents\Visual Studio 2012\Projects\TableAPI\TableAPIUnitTest\bin\Debug\NCalc.dll
+D:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.dll
+D:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.pdb
+D:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.dll
+D:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.dll
+D:\TableAPI\TableAPIUnitTest\bin\Debug\NCalc.dll
+D:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.pdb
+D:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.xml
+D:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.csprojResolveAssemblyReference.cache
+D:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.dll
+D:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.pdb
+F:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.csprojResolveAssemblyReference.cache
+F:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.dll
+F:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.dll
+F:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.pdb
+F:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.dll
+F:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.dll
+F:\TableAPI\TableAPIUnitTest\bin\Debug\NCalc.dll
+F:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.pdb
+F:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.xml
+F:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.pdb
+C:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.dll
+C:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.pdb
+C:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.dll
+C:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.dll
+C:\TableAPI\TableAPIUnitTest\bin\Debug\NCalc.dll
+C:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.pdb
+C:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.xml
+C:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.csprojResolveAssemblyReference.cache
+C:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.dll
+C:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.pdb
+H:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.dll
+H:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.pdb
+H:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.dll
+H:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.dll
+H:\TableAPI\TableAPIUnitTest\bin\Debug\NCalc.dll
+H:\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.pdb
+H:\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.xml
+H:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.csprojResolveAssemblyReference.cache
+H:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.dll
+H:\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.pdb
+C:\Squirrel\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.dll
+C:\Squirrel\TableAPI\TableAPIUnitTest\bin\Debug\TableAPIUnitTest.pdb
+C:\Squirrel\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.dll
+C:\Squirrel\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.dll
+C:\Squirrel\TableAPI\TableAPIUnitTest\bin\Debug\NCalc.dll
+C:\Squirrel\TableAPI\TableAPIUnitTest\bin\Debug\TableAPI.pdb
+C:\Squirrel\TableAPI\TableAPIUnitTest\bin\Debug\nunit.framework.xml
+C:\Squirrel\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.csprojResolveAssemblyReference.cache
+C:\Squirrel\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.dll
+C:\Squirrel\TableAPI\TableAPIUnitTest\obj\Debug\TableAPIUnitTest.pdb

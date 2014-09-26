@@ -1,0 +1,8 @@
+﻿Day,Value
+Mittwoch,45
+Montag,23
+Dientag,22
+Samtag,21
+Donnerstag,23
+Sonntag,12
+Freitag,10

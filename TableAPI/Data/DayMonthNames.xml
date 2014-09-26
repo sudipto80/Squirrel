@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SmartDefaultEntries>
+  <!-- This is the place to add smart defaults.-->
+  <SmartDefault Name = "English-Weekday-Names" Value="Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"/>
+  <SmartDefault Name = "English-Weekday-Short-Names" Value="Mon,Tue,Wed,Thu,Fri,Sat,Sun"/>
+  <SmartDefault Name = "French-Weekday-Names" Value="Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche"/>
+  <SmartDefault Name = "German-Weekday-Names" Value="Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag,Sonntag"/>
+  <SmartDefault Name = "Spanish-Weekday-Names" Value="Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo"/>
+  <SmartDefault Name = "English-Month-Names" Value="January,February,March,April,May,June,July,August,September,October,November,December"/>
+  <SmartDefault Name = "English-Month-Names-Short" Value="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"/>
+  <SmartDefault Name = "German-Month-Names" Value=""/>
+  <SmartDefault Name = "German-Month-Names-Short" Value=""/>
+  <SmartDefault Name = "French-Month-Names" Value=""/>
+  <SmartDefault Name = "French-Month-Names-Short" Value=""/>
+  <SmartDefault Name = "Italian-Month-Names" Value=""/>
+  <SmartDefault Name = "Italian-Month-Names-Short" Value=""/>
+  <SmartDefault Name = "Spanish-Month-Names" Value=""/>
+  <SmartDefault Name = "Spanish-Month-Names-Short" Value=""/>
+  <SmartDefault Name = "T-Shirt-Sizes" Values="XS,S,M,L,XL,XXL"/>
+  <SmartDefault Name = "Roman-Numerals-1-To-10" Values="I,II,III,IV,V,VI,VII,VIII,IX,X"/>
+  <SmartDefault Name = "SizesCommon" Values ="Small,Medium,Large"/>
+  <SmartDefault Name = "CarSizes" Values = "Compact,Sedan,SUV"/>
+  <SmartDefault Name = "FormFactors" Values="Phone,Tablet,Laptop,Desktop,PC,Workstation"/>
+</SmartDefaultEntries>
+
