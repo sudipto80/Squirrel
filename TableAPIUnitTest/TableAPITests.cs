@@ -13,7 +13,10 @@ namespace SquirrelUnitTest
     [TestFixture]
     public class TableAPITests
     {
-        [Test]
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]        
         public void Test_RemoveIfBetween()
         {
             Table test = new Table();
@@ -875,7 +878,7 @@ namespace SquirrelUnitTest
 
 
             Assert.IsTrue(population.CumulativeSum("Year")[1]["Population"] == "65000");
-            Assert.IsTrue(population.CumulativeFold("Year", AggregationMethod.Sum)[1]["Population"] == "65000");
+         
         }
         [Test]
         public void Test_Transform()

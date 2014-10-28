@@ -8,20 +8,11 @@ using System.Threading.Tasks;
 
 namespace Squirrel
 {
+    /// <summary>
+    /// The class that holds the data I/O methods for several file formats.
+    /// </summary>
     public static class DataAcquisition
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="csvString"></param>
-        /// <returns></returns>
-        public static Table LoadCSVFromString(string csvString)
-        {
-            return new Table();
-        }
-
-        #region Data I/O from several formats
-
+    {         
         /// <summary>
         /// Deletes the tags from a HTML line
         /// </summary>
@@ -54,26 +45,29 @@ namespace Squirrel
             return html;
         }
         /// <summary>
-        /// 
+        /// Loads the data from an Excel workbook to a table
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="workbookName"></param>
-        /// <returns></returns>
+        /// <param name="fileName">The name of the Excel file</param>
+        /// <param name="workbookName">The name of the workbook</param>
+        /// <returns>A table which holds the values from the workbook.</returns>
         public static Table LoadXLS(string fileName, string workbookName)
         {
             Table tab = new Table();
             //Use this open source project to read data from Excel.
-            //stand on the shoulder of giants.
+            //We are standing on the shoulder of giants.
             //http://exceldatareader.codeplex.com/
             //http://code.google.com/p/linqtoexcel/ (Love This!)
             return tab;
         }
+        /// <summary>
+        /// Loads data from fixed column length files.
+        /// </summary>
+        /// <param name="fileName">The fixed column length file </param>
+        /// <param name="fieldLengthMap">The dictionary that has the mapping of field names and their lengths</param>
+        /// <returns>A table with all loaded values.</returns>
         public static Table LoadFixedLength(string fileName, Dictionary<string, int> fieldLengthMap)
         {
-            //Sam  
-
             Table thisTable = new Table();
-            //fieldLengthMap.Select(f => f.Key).ToList().ForEach(m => thisTable.ColumnHeaders.Add(m));
 
             Dictionary<string, List<string>> columnWiseValues = new Dictionary<string, List<string>>();
 
@@ -122,7 +116,7 @@ namespace Squirrel
         /// Loads data from file with fixed column length. 
         /// </summary>
         /// <param name="fileName">The name of the file</param>
-        /// <param name="headersWithLength">Headers with column widths in brackets as shown name(20),age(2),course(5)</param>
+        /// <param name="headersWithLength">Headers with column widths in brackets as shown "name(20),age(2),course(5)"</param>
         /// <returns>A table with all the values loaded.</returns>
         public static Table LoadFixedLength(string fileName, string headersWithLength)// "name(20),age(2),course(5)"
         {
@@ -142,7 +136,7 @@ namespace Squirrel
         /// Data in Weka toolkit is from .arff source
         /// </summary>
         /// <param name="fileName">The arff filename</param>
-        /// <returns>Returns a table with the loaded values</returns>
+        /// <returns>Returns a table with the loaded values from the .arff files</returns>
         /// <example>Table play = Table.LoadARFF(".\data\play.arff");</example>
         public static Table LoadARFF(string fileName)
         {
@@ -200,13 +194,12 @@ namespace Squirrel
             sw.Close();
             Table loadedTable = LoadCSV("TemporaryFile.csv", true);
             return loadedTable;
-        }
-
-        
+        }        
         /// <summary>
         /// Loads a CSV file to a respective Table data structure.
         /// </summary>
         /// <param name="csvFileName">The file for which values has to be loaded into a table data structure.</param>
+        /// <param name="wrappedWihDoubleQuotes"></param>
         /// <returns>A table which has all the values in the CSV file</returns>
         public static Table LoadCSV(string csvFileName, bool wrappedWihDoubleQuotes = false)
         {
@@ -247,7 +240,8 @@ namespace Squirrel
                 {
                     line.Split(delimeters, StringSplitOptions.RemoveEmptyEntries)
                         .ToList()
-                        .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
+                        .ForEach(col => columns
+                                           .Add(col.Trim(new char[] { '"', ' ' })));
                     lineNumber++;
                 }
                 else
@@ -273,11 +267,19 @@ namespace Squirrel
             return loadedCSV;
         }
 
-
         /// <summary>
         /// Dumps the table in a pretty format to console.
         /// </summary>
-        public static void PrettyDump(this Table tab, string header = "None", Alignment align = Alignment.Right)
+        /// <param name="tab">The table to be dumped.</param>
+        /// <param name="headerColor">The header foreground color</param>
+        /// <param name="rowColor">The row color</param>
+        /// <param name="header">The header for the table</param>
+        /// <param name="align">The alignment. Possible values are left or right</param>
+        /// <example>tab.PrettyDump();//The default dump </example>
+        /// <example>tab.PrettyDump(header:"Sales Report");//dumping the table with a header</example>
+        /// <example>tab.PrettyDump(header:"Sales Report", align:Alignment.Left);//Right alignment is default</example>        
+        public static void PrettyDump(this Table tab, ConsoleColor headerColor = ConsoleColor.Green, ConsoleColor rowColor = ConsoleColor.White,
+                                                      string header = "None", Alignment align = Alignment.Right)
         {
             if (header != "None")
                 Console.WriteLine(header);
@@ -288,14 +290,16 @@ namespace Squirrel
             foreach (string col in tab.ColumnHeaders)
                 if (longestLengths[col] < col.Length)
                     longestLengths[col] = col.Length;
+            Console.ForegroundColor = headerColor;
             foreach (string col in tab.ColumnHeaders)
             {
-                if (align == Alignment.Right)
+                if (align == Alignment.Right)                   
                     Console.Write(" " + col.PadLeft(longestLengths[col]) + new string(' ', 4));
                 if (align == Alignment.Left)
                     Console.Write(" " + col.PadRight(longestLengths[col]) + new string(' ', 4));
             }
             Console.WriteLine();
+            Console.ForegroundColor = rowColor;
             for (int i = 0; i < tab.RowCount; i++)
             {
                 foreach (string col in tab.ColumnHeaders)
@@ -312,15 +316,13 @@ namespace Squirrel
             }
         }
 
-
         /// <summary>
-        /// 
+        /// Returns the html table representation of the table.
         /// </summary>
-        /// <param name="cssURL"></param>
-        /// <returns></returns>
+        /// <param name="tab"></param>
+        /// <returns>A string representing the table in HTML format.</returns>
         public static string ToHTMLTable(this Table tab)
         {
-            //To Do
             StringBuilder tableBuilder = new StringBuilder();
             tableBuilder.AppendLine("<table>");
             foreach (string header in tab.ColumnHeaders)
@@ -338,23 +340,60 @@ namespace Squirrel
             return tableBuilder.ToString();
         }
         /// <summary>
-        /// 
+        /// Generates a CSV representation of the table
         /// </summary>
-        /// <returns></returns>
-        public static string ToCSV()
+        /// <returns>a string with the table as csv</returns>
+        public static string ToCSV(this Table tab)
         {
-            return string.Empty;
+            return tab.ToValues(',');
         }
         /// <summary>
-        /// 
+        /// Generates a TSV representation of the table
         /// </summary>
-        /// <returns></returns>
-        public static string ToTSV()
+        /// <returns>a string with the table as TSV value</returns>
+        public static string ToTSV(this Table tab)
         {
-            return string.Empty;
+            return tab.ToValues('\t');
+        }
+        private static string ToValues(this Table tab, char delim)
+        {
+            Func<string, string> Quote = x => "\"" + x + "\"";
+            StringBuilder csvOrtsvBuilder = new StringBuilder();
+            //Append column headers 
+            csvOrtsvBuilder.Append(tab.ColumnHeaders.Aggregate((a, b) => Quote(a) + delim.ToString() + Quote(b)));
+            //Append rows 
+            for (int i = 0; i < tab.RowCount - 1; i++)
+            {
+                foreach (string header in tab.ColumnHeaders)
+                {
+                    csvOrtsvBuilder.Append(Quote(tab[header, i]));
+                }
+                csvOrtsvBuilder.Append(Quote(tab[tab.ColumnHeaders.ElementAt(tab.ColumnHeaders.Count - 1), tab.RowCount - 1]));
+                csvOrtsvBuilder.AppendLine();//Push in a new line.
+            }
+            return csvOrtsvBuilder.ToString();
         }
         /// <summary>
-        /// 
+        /// Generates a DataTable out of the current Table 
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable ToDataTable(this Table tab)
+        {
+            DataTable thisTable = new DataTable();
+            tab.ColumnHeaders.ToList().ForEach(m => thisTable.Columns.Add(m));
+
+            foreach (var row in tab.Rows)
+            {
+                DataRow dr = thisTable.NewRow();
+                foreach (string column in tab.ColumnHeaders)
+                    dr[column] = row[column];
+                thisTable.Rows.Add(dr);
+            }
+            
+            return thisTable;
+        }
+        /// <summary>
+        /// Returns the string representations of the table as a ARFF file. 
         /// </summary>
         /// <returns></returns>
         public static string ToARFF(this Table tab)
@@ -375,26 +414,6 @@ namespace Squirrel
             }
             return arffBuilder.ToString();
         }
-        /// <summary>
-        /// Generates a DataTable out of the current Table 
-        /// </summary>
-        /// <returns></returns>
-        public static DataTable ToDataTable(this Table tab)
-        {
-            DataTable thisTable = new DataTable();
-            tab.ColumnHeaders.ToList().ForEach(m => thisTable.Columns.Add(m));
-
-            foreach (var row in tab.Rows)
-            {
-                DataRow dr = thisTable.NewRow();
-                foreach (string column in tab.ColumnHeaders)
-                    dr[column] = row[column];
-                thisTable.Rows.Add(dr);
-            }
-            return thisTable;
-        }
-
-        #endregion
-
+        
     }
 }

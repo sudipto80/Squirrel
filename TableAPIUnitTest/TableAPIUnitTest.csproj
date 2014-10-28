@@ -63,9 +63,6 @@
       <Link>Data\DayMonthNames.xml</Link>
     </Content>
     <Content Include="Data\FixedWidthText.txt" />
-    <Content Include="..\..\DayMonthSortTest.txt">
-      <Link>Data\DayMonthSortTest.txt</Link>
-    </Content>
     <Content Include="Data\roadaccidents.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

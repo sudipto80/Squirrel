@@ -22,6 +22,11 @@ namespace Squirrel
         {
             // Initialize.
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public KeyValuePair<bool,string> DoesMatchingEntryExist(List<string> values)
         {
             foreach (string key in DefaultValues.Keys)
@@ -31,12 +36,15 @@ namespace Squirrel
             }
             return  new KeyValuePair<bool,string>(false,string.Empty);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, List<string>> GetSmartDefaultValues()
         {
-           // Dictionary<string, List<string>> vals = new Dictionary<string, List<string>>();
             if (DefaultValues.Count == 0)
             {
-                XDocument doc = XDocument.Load(@"..\..\..\TableAPI\Data\DayMonthNames.xml");
+                XDocument doc = XDocument.Load(@"..\..\..\TableAPI\Data\SmartDefaults.xml");
                 List<XElement> nodes = doc.Root.Descendants().ToList();
                 foreach (var node in nodes)
                     DefaultValues.Add(node.FirstAttribute.Value, node.LastAttribute.Value.Split(',').ToList());

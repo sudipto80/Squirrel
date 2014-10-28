@@ -16,15 +16,16 @@ namespace Squirrel
 {
     public enum MissingValueHandlingStrategy { MarkWithNA, Average }
     /// <summary>
-    /// 
+    /// The alignment for the pretty dump
     /// </summary>
     public enum Alignment { Left, Right }
     /// <summary>
     /// Sorting Direction. This enum is used with Sorting methods SortBy and SortInThisOrder
     /// </summary>
     public enum SortDirection { Ascending, Descending }
-    public enum ChartType {Pie, Donut, Bar};
-    public enum ChartProvider { HighCharts, GoogleVisualization };
+    /// <summary>
+    /// The Algorithm to use for outlier detection
+    /// </summary>
     public enum OutlierDetectionAlgorithm { IQR_Interval, Z_Score };
     /// <summary>
     /// Method to be used for aggregation/consolidation
@@ -52,412 +53,7 @@ namespace Squirrel
     {   
         private HashSet<string> _columnHeaders = new HashSet<string>();
         private List<Dictionary<string, string>> _rows = new List<Dictionary<string, string>>();      
-        #region Data I/O from several formats
 
-        /// <summary>
-        /// Deletes the tags from a HTML line
-        /// </summary>
-        /// <param name="codeLine">HTML code from which tags has to be removed</param>
-        /// <param name="exceptTheseTags">Remove all tags except this one</param>
-        /// <returns></returns>
-        private static string StripTags( string codeLine,List<string> exceptTheseTags)
-        {
-            string tag = string.Empty;
-            string html = string.Empty;
-            var tags = new List<string>();
-            for (int i = 0; i < codeLine.Length; i++)
-            {
-                tag = string.Empty;
-                if (codeLine[i] == '<')
-                {
-                    i++;
-                    do
-                    {
-                        tag = tag + codeLine[i];
-                        i++;
-                    } while (codeLine[i] != '>');
-                    tags.Add("<" + tag + ">");
-                }
-            }
-            tags.RemoveAll(t=> exceptTheseTags.Contains(t));
-            foreach (string k in codeLine.Split(tags.ToArray(), StringSplitOptions.RemoveEmptyEntries))
-                html = html + k + " ";
-
-            return html;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="workbookName"></param>
-        /// <returns></returns>
-        public Table LoadXLS(string fileName,string workbookName)
-        {
-            //Use this open source project to read data from Excel.
-            //stand on the shoulder of giants.
-            //http://exceldatareader.codeplex.com/
-            //http://code.google.com/p/linqtoexcel/ (Love This!)
-            return this;
-        }
-        /// <summary>
-        /// Loads a file with fixed length columns where the length of each column is provided by a dictionary
-        /// </summary>
-        /// <param name="fileName">The filename</param>
-        /// <param name="fieldLengthMap">The mapping of column name and the length</param>
-        /// <returns>A table with loaded values</returns>
-        public static Table LoadFixedLength(string fileName, Dictionary<string, int> fieldLengthMap)
-        {
-            //Sam  
-            
-            Table thisTable = new Table();
-            //fieldLengthMap.Select(f => f.Key).ToList().ForEach(m => thisTable.ColumnHeaders.Add(m));
-
-            Dictionary<string, List<string>> columnWiseValues = new Dictionary<string, List<string>>();
-
-            string line = string.Empty;
-
-            StreamReader sr = new StreamReader(fileName);
-            
-            while ((line = sr.ReadLine()) != null)
-            {
-                int start = 0;
-                int fieldCount = fieldLengthMap.Count;
-                foreach (string k in fieldLengthMap.Keys)
-                {
-                    
-                    if (fieldCount == 1) //last field (handle differently)
-                    {
-                        if (!columnWiseValues.ContainsKey(k))
-
-                            columnWiseValues.Add(k, new List<string>() { line.Substring(start, line.Length - start) });
-                        else
-                            columnWiseValues[k].Add(line.Substring(start, line.Length - start));
-                    }
-                    else
-                    {
-                        int max = fieldLengthMap[k] >= line.Length ? line.Length : fieldLengthMap[k];
-                        if (!columnWiseValues.ContainsKey(k))
-                        {
-
-                            columnWiseValues.Add(k, new List<string>() { line.Substring(start, max) });
-                        }
-                        else
-                            columnWiseValues[k].Add(line.Substring(start, max));
-
-                        start += fieldLengthMap[k];
-                    }
-                    fieldCount--;
-                }
-            }
-
-            foreach (string v in columnWiseValues.Keys)
-                thisTable.AddColumn(v, columnWiseValues[v]);
-
-            return thisTable;
-        }
-        /// <summary>
-        /// Loads a file with fixed length columns.
-        /// </summary>
-        /// <param name="fileName">The name of the file with fixed length columns</param>
-        /// <param name="headersWithLength">A comma separated string representing each column name and the width
-        /// For example if the file has three columns name,age and course where name can be of length 20
-        /// age is 2 and course is 5 character long then the headerWithLength parameter has to be passed like
-        /// name(20),age(2),course(5)</param>
-        /// <returns>A table with the loaded values</returns>
-        /// <example>Table fixedLengthTable = Table.LoadFixedLength("tab.txt","name(20),age(2),course(5)");</example>
-        public static Table LoadFixedLength(string fileName, string headersWithLength)// "name(20),age(2),course(5)"
-        {
-            string[] tokens = headersWithLength.Split(',');
-
-            Dictionary<string, int> expectations = new Dictionary<string, int>();
-
-            foreach (string tok in tokens)
-            {
-                string[] internalTokens = tok.Split(new char[] { '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
-                expectations.Add(internalTokens[0], Convert.ToInt16(internalTokens[1]));
-            }
-            return LoadFixedLength(fileName, expectations);
-        }
-        /// <summary>
-        /// Loads data from .arff format
-        /// Data in Weka toolkit is from .arff source
-        /// </summary>
-        /// <param name="fileName">The arff filename</param>
-        /// <returns>Returns a table with the loaded values</returns>
-        /// <example>Table play = Table.LoadARFF(".\data\play.arff");</example>
-        public static Table LoadARFF(string fileName)
-        {
-            Table result = new Table();
-            List<string> columnHeaders = new List<string> ();
-            StreamReader arffReader = new StreamReader(fileName);
-            string line = string.Empty;
-            while ((line = arffReader.ReadLine()) != null)
-            {
-                if (line.Trim().ToLower().StartsWith("@attribute"))
-                    columnHeaders.Add(line.Split(' ')[1]);
-                if (line.Trim().ToLower().StartsWith("@data"))
-                    break;
-            }
-            List<string> dataLines = File.ReadAllLines(fileName).Where(rline => !rline.Trim().StartsWith("%") && !rline.Trim().StartsWith("@"))
-                                          .ToList();
-
-            foreach (string dataLine in dataLines)
-            {
-                Dictionary<string, string> currentRow = new Dictionary<string, string>();
-                string[] tokens = dataLine.Split(new char[]{','},StringSplitOptions.RemoveEmptyEntries);
-                if (tokens.Length > 0)
-                {
-                    for (int i = 0; i < tokens.Length; i++)
-                        currentRow.Add(columnHeaders[i], tokens[i]);
-                    result.Rows.Add(currentRow);
-                }
-            }
-
-            return result;
-        }
-        /// <summary>
-        /// Loads a HTML table to the corresponding Table container
-        /// </summary>
-        /// <param name="htmlTable">The HTML code that creates the table</param>
-        /// <returns>A table with all the data from the html table</returns>
-        public static Table LoadHTMLTable(string htmlTable)
-        {
-            StreamReader htmlReader = new StreamReader(htmlTable);
-            string totalTable = htmlReader.ReadToEnd();
-            htmlReader.Close();
-            //sometimes the tags "<td> <th> and <tr> can have extra attributes. We don't care for that. we have to get rid of that
-            totalTable = totalTable.Replace("<td ", "<td><").Replace("<th ", "<th><").Replace("<tr ", "<tr><");
-            totalTable = StripTags(totalTable, new List<string>() { "<td>", "</td>", "<th>", "</th>", "<tr>", "</tr>" });
-            
-            totalTable = totalTable.Replace("\r", string.Empty).Replace("\t",string.Empty).Replace("\n", string.Empty);
-            totalTable = totalTable.Replace("<tr><th>", string.Empty)
-                              .Replace("</th></tr>", "\"" +  Environment.NewLine)
-                              .Replace("</th><th>", "\",\"")
-                              .Replace("</td></tr>", "\"" +  Environment.NewLine )
-                              .Replace("</td><td>", "\",\"")
-                              .Replace("<tr><td>",   "\"" + Environment.NewLine);
-            StreamWriter sw = new StreamWriter("TemporaryFile.csv");
-            sw.WriteLine(totalTable);
-            sw.Close();
-            Table loadedTable = LoadCSV("TemporaryFile.csv",true);
-            return loadedTable;
-        }
-        /// <summary>
-        /// Loads a CSV file to a respective Table data structure.
-        /// </summary>
-        /// <param name="csvFileName">The file for which values has to be loaded into a table data structure.</param>
-        /// <returns>A table which has all the values in the CSV file</returns>
-        public static Table LoadCSV(string csvFileName, bool wrappedWihDoubleQuotes = false)
-        {
-            if (wrappedWihDoubleQuotes)
-            {
-                return LoadFlatFile(csvFileName, new string[] { "\",\"" ,"\""});
-            }
-            else
-                return LoadFlatFile(csvFileName, new string[] { "," });
-        }
-        /// <summary>
-        /// Loads Data from Tab Separated File
-        /// </summary>
-        /// <param name="tsvFileName">The file name to read from</param>
-        /// <returns>A table loaded with these values</returns>
-        public static Table LoadTSV(string tsvFileName)
-        {
-            return LoadFlatFile(tsvFileName, new string[] { "\t" });
-        }
-        
-        /// <summary>
-        /// Loads data from any flat file
-        /// </summary>
-        /// <param name="fileName">The name of the file</param>
-        /// <param name="delimeters">Delimeters</param>
-        /// <returns>A table loaded with all the values in the file.</returns>
-        public static Table LoadFlatFile(string fileName,string[] delimeters)
-        {
-
-            Table loadedCSV = new Table();
-            StreamReader csvReader = new StreamReader(fileName);
-            string line = string.Empty;
-            int lineNumber = 0;
-            HashSet<string> columns = new HashSet<string>();
-            while ((line = csvReader.ReadLine()) != null)
-            {
-                if (lineNumber == 0)//reading the column headers
-                {
-                    line.Split(delimeters, StringSplitOptions.None)
-
-                        .Where(z => z.Trim().Length != 0)//Remove non empty column names
-                           .ToList()
-                        .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
-                    lineNumber++;
-                }
-                else
-                {
-                    string[] values = null;
-                    if (line.Trim().Length > 0)
-                    {
-                        values = line.Split(delimeters, StringSplitOptions.None);
-                        values = values.Take(columns.Count).ToArray();
-                        Dictionary<string, string> tempRow = new Dictionary<string, string>();
-
-                        for (int i = 0; i < columns.Count; i++)
-                        {
-                            try
-                            {
-                                tempRow.Add(columns.ElementAt(i), values[i].Trim(new char[] { '"', ' ' }));
-                            }
-                            catch { continue; }
-                        }
-                        if (tempRow.Keys.Count == columns.Count)
-                            loadedCSV.AddRow(tempRow);
-
-                    }
-                }
-            }
-            return loadedCSV;
-        }
-
-
-        /// <summary>
-        /// Dumps the table in a pretty format to console.
-        /// </summary>
-        /// <param name="header"></param>
-        /// <param name="align"></param>
-        public void PrettyDump(string header = "None", Alignment align = Alignment.Right)
-        {
-            if (header != "None")
-                Console.WriteLine(header);
-            Dictionary<string, int> longestLengths = new Dictionary<string, int>();
-
-            foreach (string col in ColumnHeaders)
-                longestLengths.Add(col, ValuesOf(col).OrderByDescending(t => t.Length).First().Length);
-            foreach (string col in ColumnHeaders)
-                if (longestLengths[col] < col.Length)
-                    longestLengths[col] = col.Length;
-            foreach (string col in ColumnHeaders)
-            {
-                if (align == Alignment.Right)
-                    Console.Write(" " + col.PadLeft(longestLengths[col]) + new string(' ', 4));
-                if (align == Alignment.Left)
-                    Console.Write(" " + col.PadRight(longestLengths[col]) + new string(' ', 4));
-            }
-            Console.WriteLine();
-            for (int i = 0; i < RowCount; i++)
-            {
-                foreach (string col in ColumnHeaders)
-                {
-                    if (_rows[i].ContainsKey(col))
-                    {
-                        if (align == Alignment.Right)
-                            Console.Write(" " + _rows[i][col].PadLeft(longestLengths[col]) + new string(' ', 4));
-                        if (align == Alignment.Left)
-                            Console.Write(" " + _rows[i][col].PadRight(longestLengths[col]) + new string(' ', 4));
-                    }
-                }
-                Console.WriteLine();
-            }
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cssURL"></param>
-        /// <returns></returns>
-        public string ToHTMLTable()
-        {
-            //To Do
-            StringBuilder tableBuilder = new StringBuilder();
-            tableBuilder.AppendLine("<table>");
-            foreach (string header in ColumnHeaders)
-            {
-                tableBuilder.AppendLine("<th>" + header + "</th>");
-            }
-            for (int i = 0; i < RowCount; i++)
-            {
-                tableBuilder.AppendLine("<tr>");
-                foreach (string header in ColumnHeaders)
-                    tableBuilder.AppendLine("<td>" + this[header][i] + "</td>");
-                tableBuilder.AppendLine("</tr>");
-            }
-            tableBuilder.AppendLine("</table>");
-            return tableBuilder.ToString();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string ToCSV()
-        {
-            return string.Empty;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string ToTSV()
-        {
-            return ToValues('\t');
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="delimChar"></param>
-        /// <returns></returns>
-        private string ToValues(char delimChar)
-        {
-            return
-                //Write the headers
-              ColumnHeaders.Select(t => "\"" + t + "\"").Aggregate((a, b) => a + delimChar.ToString() + b)
-                //Push a newline 
-              + Environment.NewLine
-                //Add the rows
-              + this.Rows.Select(t => t.Values.Select(z => "\"" + z + "\"").Aggregate((a, b) => a + delimChar.ToString() + b))
-               .Aggregate((f, s) => f + Environment.NewLine + s);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string ToARFF()
-        {
-            StringBuilder arffBuilder = new StringBuilder();
-            
-            foreach (string header in ColumnHeaders)
-            {
-                arffBuilder.AppendLine("@attribute " + header + " {" + ValuesOf(header).Distinct().Aggregate((a, b) => a + "," + b) + "}");
-            }
-            arffBuilder.AppendLine("@data");
-            for (int i = 0; i < RowCount; i++)
-            {
-                List<string> values  = new List<string> ();
-                foreach (string header in ColumnHeaders)
-                    values.Add(this[header][i]);
-                arffBuilder.AppendLine(values.Aggregate((a, b) => a + "," + b));
-            }
-            return arffBuilder.ToString() ;
-        }
-        /// <summary>
-        /// Generates a DataTable out of the current Table 
-        /// </summary>
-        /// <returns></returns>
-        public DataTable ToDataTable()
-        {
-            DataTable thisTable = new DataTable();
-            ColumnHeaders.ToList().ForEach(m => thisTable.Columns.Add(m));
-
-            foreach (var row in this.Rows)
-            {
-                DataRow dr = thisTable.NewRow();
-                foreach (string column in ColumnHeaders)
-                    dr[column] = row[column];
-                thisTable.Rows.Add(dr);
-            }
-            return thisTable;
-        }
-     
-        #endregion
 
         #region Filtering
         /// <summary>
@@ -528,7 +124,7 @@ namespace Squirrel
         public Table RunSQLQuery(string sql)
         {
             HashSet<string> columns = this.ColumnHeaders;
-            StreamWriter sw = new StreamWriter(@"C:\Personal\temp.csv");
+            StreamWriter sw = new StreamWriter(@"temp.csv");
             sw.WriteLine(columns.Aggregate((a, b) => a + "," + b));
             string numberRegex = "[0-9]+.*[0-9]+";
             for (int i = 0; i < _rows.Count; i++)
@@ -548,7 +144,7 @@ namespace Squirrel
             }
             sw.Close();
             string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Personal;Extended Properties='text;HDR=YES;'";
-            sql = sql.Replace("[Table]", @"C:\Personal\temp.csv");
+            sql = sql.Replace("[Table]", @"temp.csv");
 
             OleDbDataAdapter oleda = new OleDbDataAdapter(sql, strCSVConnString);
             System.Data.DataTable dataTable = new System.Data.DataTable();
@@ -792,6 +388,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="columnName">Name of the column</param>
         /// <param name="formula">Formula to calculate values of the new column</param>
+        /// <param name="decimalDigits"></param>
         public void AddColumn(string columnName, string formula, int decimalDigits)
         {
             
@@ -801,7 +398,10 @@ namespace Squirrel
             //List<string> values = new List<string>();
             string[] columns = formula.Split(new char[] { '+', '-', '*', '/', '(', ')',' ' },StringSplitOptions.RemoveEmptyEntries);
 
-            columns = columns.Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty)).Intersect(ColumnHeaders).Select(z=>"["+z+"]").ToArray();
+            columns = columns.Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty))
+                             .Intersect(ColumnHeaders)
+                             .Select(z=>"["+z+"]")
+                             .ToArray();
 
             for (int i = 0; i < RowCount; i++)
             {
@@ -832,10 +432,10 @@ namespace Squirrel
             foreach (string col in columns)
             {
                 newTable =  Transform(col, x => x.Replace(",",string.Empty)
-                                                 .Replace("$",string.Empty)//US Dollar
-                                                 .Replace("£",string.Empty)//GBP Pound
-                                                 .Replace("€",string.Empty)//
-                                                 .Replace("¥",string.Empty));//Chinese Yen
+                                                 .Replace("$",string.Empty)//Remove US Dollar symbol
+                                                 .Replace("£",string.Empty)//Remove GBP Pound symbol
+                                                 .Replace("€",string.Empty)//Remove Euro Symbol
+                                                 .Replace("¥",string.Empty));//Remove Chinese Yen symbol
             }
             return newTable;
         }
@@ -914,7 +514,8 @@ namespace Squirrel
         /// <param name="columnName"></param>
         /// <param name="how"></param>
         /// <returns></returns>
-        public Table CumulativeFold(string columnName, AggregationMethod how)
+        /// 
+        private Table CumulativeFold(string columnName, AggregationMethod how)
         {
             Table result = new Table();
             List<string> allNumericColumns = new List<string>();
@@ -946,24 +547,20 @@ namespace Squirrel
         /// <summary>
         /// Calculates cumulative summation of values in the given column
         /// </summary>
-        /// <param name="columName">The given column</param>
+        /// <param name="columnName">The given column</param>
         /// <returns>A table with cumulative sums for the given column</returns>
         public Table CumulativeSum(string columnName)
-        {            
-            Table result = new Table();            
-            List<string> allNumericColumns = new List<string>();
-            allNumericColumns.AddRange(ColumnHeaders.Where(m => ValuesOf(m).All(z => Char.IsNumber(z,0))));
-
-            for (int i = 0; i < RowCount; i++)
-            {
-                Dictionary<string, string> currentRow = new Dictionary<string, string>();
-                currentRow.Add(columnName, this[i][columnName]);
-                foreach (string col in allNumericColumns)
-                    if (col != columnName)
-                        currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Sum().ToString());
-                result.AddRow(currentRow);
-            }
-            return result;
+        {
+            return CumulativeFold(columnName, AggregationMethod.Sum);
+        }
+        /// <summary>
+        /// Calculates cumulative average of values in the given column
+        /// </summary>
+        /// <param name="columnName">The given column</param>
+        /// <returns>A table with cumulative averages for the given column.</returns>
+        public Table CumulativeAverage(string columnName)
+        {
+            return CumulativeFold(columnName, AggregationMethod.Average);
         }
         /// <summary>
         /// Change rows as columns
@@ -986,7 +583,7 @@ namespace Squirrel
 
             //So in the process of transpose values of the first column
             //becomes the headers and value of each subsequent columns become rows 
-
+            //TO DO. -> This code doesn't work yet. 
             Table transposed = new Table();
             this[this.ColumnHeaders.ElementAt(0)].ToList().ForEach( m => transposed.ColumnHeaders.Add(m));
             for (int i = 1; i < this.ColumnHeaders.Count; i++)
@@ -1005,18 +602,23 @@ namespace Squirrel
         /// <returns></returns>
         public Table RoundOffTo(int decimalDigits)
         {
-            foreach (string col in this.ColumnHeaders)
-                for (int r = 0; r < this.RowCount; r++)
+
+            for (int r = 0; r < this.RowCount; r++)
+                foreach (string col in this.ColumnHeaders)
                     if (Regex.IsMatch(this[r][col], @"^-?[0-9]\d*(\.\d+)?$"))
                         this[r][col] = Math.Round(Convert.ToDecimal(this[r][col]), decimalDigits).ToString();
 
             return this;
         }
         /// <summary>
-        /// 
+        /// Rounds off decimal digits for each column as per the given count.
+        /// Sometimes each column might need to show a certain values after decimal.
         /// </summary>
-        /// <param name="decimalDigitsForEachColumn"></param>
-        /// <returns></returns>
+        /// <param name="decimalDigitsForEachColumn">string representation of the precision required for each column. 
+        /// </param>
+        /// <example>salesReport.RoundOffTo("Q1(4),Q2(3),AverageSales(4)").PrettyDump();//Assume that there are these columns Q1,Q2 and AverageSales
+        /// //and you want to round off Q1 to 4 digits, Q2 to 3 digits and AverageSales to 4 digits after decimal.</example>
+        /// <returns>A table with specified number of digits after decimal for each of the column as mentioned.</returns>
         public Table RoundOffTo(string decimalDigitsForEachColumn)
         {
             //Q1(4),Q4(5),Q2(3)
@@ -1038,9 +640,10 @@ namespace Squirrel
         /// <summary>
         /// Aggregate values of given columns as per the given aggregation method.
         /// </summary>
+        /// <param name="newColumnName"></param>
         /// <param name="columns">The columns for which values has to be aggregated</param>
         /// <param name="how">The aggregation method</param>
-        /// <returns></returns>
+        /// <returns>A table with columns values aggregated.</returns>
         public Table AggregateColumns(string newColumnName, AggregationMethod how = AggregationMethod.Average, params string[] columns)
         {
             //Zone, Jan, Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
@@ -1075,25 +678,30 @@ namespace Squirrel
         /// <param name="columnName">Aggregate values for each distinct value in this column</param>
         /// <param name="how">The aggregation scheme to be used</param>
         /// <returns>A flattened table</returns>
+        /// <remarks>
+                // //Month | Item | Quantity  | Revenue
+                //----------------------------------
+                //Jan   | P C   |  1       | 10000
+                //Jan   | Mobile|  3       |  1000
+                //Feb   | PC    |  3       | 30000
+
+                //Aggregate("Month",AggregateMethod.Sum);
+
+                //This should generate the following output
+
+                //Month | Quantity | Revenue
+                //--------------------------
+                //Jan   | 4        | 11000
+                //Feb   | 3        | 30000
+        /// </remarks>
+        /// <example>var salesPerMonth = allSales.Aggregate("Month");</example>
+        /// <example>var avgSalesPerMonth = allSales.Aggregate("Month",AggregationMethod.Average);</example>
         public Table Aggregate(string columnName, AggregationMethod how = AggregationMethod.Sum)
         {
             List<string> allDistinctValues = ValuesOf(columnName)
                                              .Distinct()
                                              .ToList();
-            //Month | Item | Quantity  | Revenue
-            //----------------------------------
-            //Jan   | P C   |  1       | 10000
-            //Jan   | Mobile|  3       |  1000
-            //Feb   | PC    |  3       | 30000
-
-            //Aggregate("Month",AggregateMethod.Sum);
-
-            //This should generate the following output
-
-            //Month | Quantity | Revenue
-            //--------------------------
-            //Jan   | 4        | 11000
-            //Feb   | 3        | 30000
+            
 
             List<string> allNumericColumns = new List<string>();
             
@@ -1143,25 +751,7 @@ namespace Squirrel
         /// <param name="columnName">The column which will be the key for Aggregation</param>
         /// <param name="how">The method which will be used to perform the aggregation</param>
         /// <returns>A table with aggregated values</returns>
-        /// <remarks>
-        ///  
-                    //Month | Item | Quantity  | Revenue
-                    //----------------------------------
-                    //Jan   | P C   |  1       | 10000
-                    //Jan   | Mobile|  3       |  1000
-                    //Feb   | PC    |  3       | 30000
-
-                    //Aggregate("Month",AggregateMethod.Sum);
-
-                    //This should generate the following output
-
-                    //Month | Quantity | Revenue
-                    //--------------------------
-                    //Jan   | 4        | 11000
-                    //Feb   | 3        | 30000
-     
-        /// </remarks>
-        
+        /// <remarks></remarks>
         public Table Aggregate(string columnName, Func<List<string>, string> how)
         {
             List<string> allDistinctValues = ValuesOf(columnName)
@@ -1244,379 +834,6 @@ namespace Squirrel
         }       
         #endregion
 
-        #region Data Cleansing
-        
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
-        public Table DistinctBy(string columnName)
-        {
-            return this;
-        }
-        /// <summary>
-        /// Removes duplicate rows from the table
-        /// </summary>
-        /// <returns>A table with all unique rows</returns>
-        public Table Distinct()
-        {   
-            Dictionary<string, List<Dictionary<string, string>>> noDups =
-                new Dictionary<string, List<Dictionary<string, string>>>();
-
-            for (int i = 0; i < _rows.Count; i++)
-            {
-                string hash = _rows[i].OrderBy(m=>m.Key).Select(m => m.Value).Aggregate((x, y) => x + y);
-                if (!noDups.ContainsKey(hash))
-                    noDups.Add(hash, new List<Dictionary<string, string>>() { _rows[i] });
-                else
-                    noDups[hash].Add(_rows[i]);
-            }
-
-            Table noDuplicates = new Table();
-            noDuplicates._rows = noDups.Select(t => t.Value.First()).ToList();
-
-            return noDuplicates;
-        }
-        public decimal Median(List<decimal> numbers)
-        {
-            numbers = numbers.OrderBy(m=>m).ToList();
-            if (numbers.Count % 2 == 0)
-            {
-                return (numbers[numbers.Count / 2] + numbers[numbers.Count / 2 - 1]) / 2;
-            }
-            else
-            {
-                return numbers[numbers.Count / 2 ];
-            }
-        }
-        private Tuple<decimal,decimal> IQRRange(List<decimal> numbers)
-        {
-            decimal median = Median(numbers);
-            List<decimal> smaller = numbers.Where(n => n < median).ToList();
-            List<decimal> bigger = numbers.Where(n => n > median).ToList();
-            decimal Q1 = Median(smaller);
-            decimal Q3 = Median(bigger);
-            decimal IQR = Q3 - Q1;
-            return new Tuple<decimal, decimal>(Q1 - 1.5M * IQR, Q3 + 1.5M * IQR);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
-        public Table ExtractOutliers(string columnName, OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
-        {
-            Table outliers = new Table();
-            List<decimal> allValues = ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-
-            Tuple<decimal, decimal> iqrRange = IQRRange(allValues);
-            for (int i = 0; i < allValues.Count; i++)
-            {
-                if (allValues[i] < iqrRange.Item1 || allValues[i] > iqrRange.Item2)
-                    outliers.Rows.Add(this.Rows[i]);
-            }
-            return outliers;
-        }
-        /// <summary>
-        /// Remove all rows that correspond to a value for the given column which is an outlier
-        /// </summary>
-        /// <param name="columnName">The name of the column among which the outliers has to be found.</param>
-        /// <returns>A cleansed table</returns>
-        public Table RemoveOutliers(string columnName, OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
-        {
-            List<decimal> allValues = ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-
-            Tuple<decimal,decimal> iqrRange = IQRRange(allValues);
-            for (int i = 0; i < allValues.Count; i++)
-            {
-                if (allValues[i] < iqrRange.Item1 || allValues[i] > iqrRange.Item2)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes those rows at which the value of the given column falls under the given range
-        /// </summary>
-        /// <param name="columnName">The column name</param>
-        /// <param name="low">The low value of the range</param>
-        /// <param name="high">The high value of the range</param>
-        /// <returns>A table with any matching rows deleted.</returns>
-        public Table RemoveIfBetween(string columnName, decimal low, decimal high)
-        {
-            List<decimal> vals = this.ValuesOf(columnName).Select(t => Convert.ToDecimal(t)).ToList();
-            for (int i = 0; i < vals.Count(); i++)
-            {
-                if (low <= vals[i] && vals[i] <= high)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes rows from the table that 
-        /// </summary>
-        /// <param name="columnName">The numeric column</param>
-        /// <param name="low">The lowest value of the range</param>
-        /// <param name="high">The highest value of the range</param>
-        /// <returns>A cleansed table</returns>
-        public Table RemoveIfNotBetween(string columnName, decimal low, decimal high)
-        {
-            List<decimal> vals = this.ValuesOf(columnName).Select(t => Convert.ToDecimal(t)).ToList();
-            for (int i = 0; i < vals.Count(); i++)
-            {
-                if (!(low <= vals[i] && vals[i] <= high))
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Remove those rows where the values match the given regular expression
-        /// </summary>
-        /// <param name="columnName">The column name</param>
-        /// <param name="regexPattern">The regular expression against which we want to validate</param>
-        /// <returns>A cleansed table with matching rows removed</returns>
-        public Table RemoveMatches(string columnName, string regexPattern)
-        {
-            List<string> values = this.ValuesOf(columnName).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (Regex.Match(values[i], regexPattern).Success)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Remove those rows where the values don't match with the given regular expression
-        /// </summary>
-        /// <param name="columnName">The column name</param>
-        /// <param name="regexPattern">The regular expression</param>
-        /// <returns>A cleansed table where the non matching rows are removed.</returns>
-        public Table RemoveNonMatches(string columnName, string regexPattern)
-        {
-            List<string> values = this.ValuesOf(columnName).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (!Regex.Match(values[i], regexPattern).Success)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-
-        }
-        /// <summary>
-        /// Removes those rows from the given table where the value of the given date 
-        /// occurs before the date in the column given.
-        /// </summary>
-        /// <param name="dateColumnName">The date column</param>
-        /// <param name="date">The value of the date</param>
-        /// <returns>A table with those rows where the date occurs before the given date; removed.</returns>
-        public Table RemoveIfBefore(string dateColumnName, DateTime date)
-        {
-            List<DateTime> dates = this.ValuesOf(dateColumnName)
-                                       .Select(m => Convert.ToDateTime(m))
-                                       .ToList();
-
-            for (int i = 0; i < dates.Count; i++)
-            {
-                if (dates[i].CompareTo(date) < 0)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes those rows from the given table for the given column
-        /// </summary>
-        /// <param name="dateColumnName">The date column</param>
-        /// <param name="date">The terminal date after which we need to remove values</param>
-        /// <returns>A cleansed table</returns>
-        public Table RemoveIfAfter(string dateColumnName, DateTime date)
-        {
-            List<DateTime> dates = this.ValuesOf(dateColumnName).Select ( m => Convert.ToDateTime(m)).ToList();
-
-            for (int i = 0; i < dates.Count; i++)
-            {
-                if (dates[i].CompareTo(date) >= 1)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Remove all the rows where the date does fall in the given range.
-        /// </summary>
-        /// <param name="dateColumnName">The date column on which we want to run the filter</param>
-        /// <param name="startDate">The start date of the range</param>
-        /// <param name="endDate">The end date of the range</param>
-        /// <returns>A cleansed table</returns>
-        public Table RemoveIfBetween(string dateColumnName, DateTime startDate, DateTime endDate)
-        {
-            List<DateTime> dates = this.ValuesOf(dateColumnName).Select(t => Convert.ToDateTime(t)).ToList();
-            for (int i = 0; i < dates.Count; i++)
-            {
-                if (dates[i].CompareTo(startDate) >= -1 && dates[i].CompareTo(endDate) <= 1)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Remove all the rows where the date doesn't fall in between the given range.
-        /// </summary>
-        /// <param name="dateColumnName">The date column</param>
-        /// <param name="startDate">The start date</param>
-        /// <param name="endDate">The end date</param>
-        /// <returns>A cleansed table with the violating rows removed.</returns>
-        public Table RemoveIfNotBetween(string dateColumnName, DateTime startDate, DateTime endDate)
-        {
-            List<DateTime> dates = this.ValuesOf(dateColumnName).Select(t => Convert.ToDateTime(t)).ToList();
-            for (int i = 0; i < dates.Count; i++)
-            {
-                if (!(dates[i].CompareTo(startDate) >= -1 && dates[i].CompareTo(endDate) <= 1))
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes items that are not in the list of expected values.
-        /// </summary>
-        /// <param name="columnName">The name of the column on which we want to run this filter</param>
-        /// <param name="expectedValues">Set of expected values</param>
-        /// <returns>A cleansed table.</returns>
-        public Table RemoveIfNotAnyOf(string columnName, params string[] expectedValues)
-        {
-            List<string> values = this.ValuesOf(columnName).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (!expectedValues.Contains(values[i]))
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Remove all rows that has an illegal value in the given column
-        /// </summary>
-        /// <param name="columnName">The column name</param>
-        /// <param name="illegalValues">Set of illegal values</param>
-        /// <returns>A cleansed table with rows with illegal values removed.</returns>
-        public Table RemoveIfAnyOf(string columnName, params string[] illegalValues)
-        {
-            List<string> values = this.ValuesOf(columnName).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (illegalValues.Contains(values[i]))
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes items that are less than the given value
-        /// </summary>
-        /// <param name="columnName">The column for which the values have to be checked </param>
-        /// <param name="value">The basis value below which all values has to be removed.</param>
-        /// <returns>A Table with violating values removed.</returns>
-        public Table RemoveLessThan(string columnName, decimal value)
-        {
-            List<decimal> values = this.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (values[i] < value)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes items that are equal to or less than the given value 
-        /// </summary>
-        /// <param name="columnName">The column for which values has to be checked against the given value </param>
-        /// <param name="value">The given value</param>
-        /// <returns>A table with violating values removed from the specified column.</returns>
-        public Table RemoveLessThanOrEqualTo(string columnName, decimal value)
-        {
-            List<decimal> values = this.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (values[i] <= value)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes rows where the values of the given column are greater than the decimal value
-        /// </summary>
-        /// <param name="columnName">The column name for which the values need to be removed.</param>
-        /// <param name="value">The value (The threshold value)</param>
-        /// <returns></returns>
-        public Table RemoveGreaterThan(string columnName, decimal value)
-        {
-            List<decimal> values = this.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (values[i] > value)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Removes values greater than or equal to the given value for the given column
-        /// </summary>
-        /// <param name="columnName">The column for which the given values have to be removed. </param>
-        /// <param name="value">The given value; values greater than which has to be removed.</param>
-        /// <returns>A table with violating values removed.</returns>
-        public Table RemoveGreaterThanOrEqualTo(string columnName, decimal value)
-        {
-            List<decimal> values = this.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (values[i] >= value)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Generic remove function. 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="columnName"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public Table RemoveIf<T>(string columnName, Func<T, bool> predicate) where T : IEquatable<T>
-        {
-            int i = 0;
-            List<int> indicesToRemove = new List<int>();
-            List<T> castedList = this.ValuesOf(columnName).Cast<T>().ToList();
-            for (; i < castedList.Count; i++)
-            {
-                T temp = castedList[i];
-                if (predicate(temp))
-                {
-                    indicesToRemove.Add(i);
-                }
-            }
-            indicesToRemove.ForEach(k => this.Rows.RemoveAt(k));
-            return this;
-        }
-        /// <summary>
-        /// Rempves list of rows that doesn't match a given condition. 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="columnName"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public Table RemoveNotIf<T>(string columnName, Func<T, bool> predicate) where T : IEquatable<T>
-        {
-            int i = 0;
-            List<int> indicesToRemove = new List<int>();
-            List<T> castedList = this.ValuesOf(columnName).Cast<T>().ToList();
-            for (; i < castedList.Count; i++)
-            {
-                T temp = castedList[i];
-                if (!predicate(temp))
-                {
-                    indicesToRemove.Add(i);
-                }
-            }
-            indicesToRemove.ForEach(k => this.Rows.RemoveAt(k));
-            return this;
-        }
-        #endregion
 
         #region Set Operations
         /// <summary>
@@ -1722,7 +939,10 @@ namespace Squirrel
         /// Checks whether a given table is subset of this table or not
         /// </summary>
         /// <param name="anotherTable">Other table for which the </param>
-        /// <returns></returns>
+        /// <returns>true if the argument table is a subset of the table object
+        /// which called the method</returns>
+        /// <example>bool subet = t1.IsSubset(t2);
+        /// Where t1 and t2 are table instances.</example>
         public bool IsSubset(Table anotherTable)
         {
             bool isSubset = false;
@@ -1744,16 +964,7 @@ namespace Squirrel
 
         #region Useful Utility Methods
        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <param name="how"></param>
-        /// <returns></returns>
-        public Table SplitColumns(string columnName, Func<string, List<KeyValuePair<string, string>>> how)
-        {
-            return this;
-        }
+       
         /// <summary>
         /// Returns a table with merged columns 
         /// </summary>
@@ -1807,21 +1018,23 @@ namespace Squirrel
         }
     
         /// <summary>
-        /// Random Sample
+        /// Random Sample rows from the table
         /// </summary>
-        /// <param name="sampleSize">a</param>
-        /// <returns></returns>
+        /// <param name="sampleSize">Size of the sample</param>
+        /// <returns>A table with number of rows specified by the sampleSize</returns>
+        /// <example>Table randSamples = t.RandomSample(20);
+        /// This returns 20 random rows to randSamples table from table "t"
+        /// </example>
         public Table RandomSample(int sampleSize)
         {
             return this.Shuffle().Top(sampleSize);
         }
-        
-         
+           
         
         /// <summary>
         /// Retuns top n rows 
         /// </summary>
-        /// <param name="n">n number </param>
+        /// <param name="n">number of rows from top.</param>
         /// <returns>A table with top n rows</returns>
         public Table Top(int n)
         {
@@ -1835,8 +1048,8 @@ namespace Squirrel
         /// <summary>
         /// Returns last n rows
         /// </summary>
-        /// <param name="n">number of n</param>
-        /// <returns></returns>
+        /// <param name="n">number of rows from bottom</param>
+        /// <returns>A table with n rows from bottom</returns>
         public Table Bottom(int n)
         {
             Table tailTable = new Table();
@@ -1849,51 +1062,14 @@ namespace Squirrel
         /// <summary>
         /// Returns top n percent entries from the table
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <param name="n">The percentage of rows to pick from top</param>
+        /// <returns>A table with n% rows from top</returns>
         public Table TopNPercent(int n)
         {
             int rowCount = Convert.ToInt16( Math.Floor((float) this.RowCount * n / 100.0));
             return this.Top(rowCount);
         }
-        /// <summary>
-        /// Returns those rows in form of a table for which the value 
-        /// of the given column is above average for the column.
-        /// </summary>
-        /// <param name="columnName">The column name</param>
-        /// <returns>A table with values above average for the given column.</returns>
-        public Table AboveAverage(string columnName)
-        {
-            List<decimal> values = this.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-
-            decimal average = values.Average();
-
-            for (int i = 0; i < RowCount; i++)
-            {
-                if (values[i] < average)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
-        /// <summary>
-        /// Returns those rows in form of a table for which the value of the given column 
-        /// is below average for the given column
-        /// </summary>
-        /// <param name="columnName">The name of the column</param>
-        /// <returns>A table with values less than average for that particular column.</returns>
-        public Table BelowAverage(string columnName)
-        {
-            List<decimal> values = this.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-
-            decimal average = values.Average();
-
-            for (int i = 0; i < RowCount; i++)
-            {
-                if (values[i] >= average)
-                    this.Rows.RemoveAt(i);
-            }
-            return this;
-        }
+        
 
         /// <summary>
         /// Returns the bottom n % entries as a new table
@@ -1920,7 +1096,7 @@ namespace Squirrel
         /// <summary>
         /// Splits the table acording to the rows
         /// </summary>
-        /// <param name="rowsPerSplit"></param>
+        /// <param name="rowsPerSplit">The number of rows to be included in each table.</param>
         /// <returns></returns>
         public List<Table> SplitByRows(int rowsPerSplit)
         {
@@ -1932,10 +1108,10 @@ namespace Squirrel
             
         }
         /// <summary>
-        /// 
+        /// Generates multiple tables with the specified columns per table. 
         /// </summary>
-        /// <param name="columnSplitDescription"></param>
-        /// <returns></returns>
+        /// <param name="columnSplitDescription">The array with names of columns to include in each table.</param>
+        /// <returns>A list of tables with specified columns for each table.</returns>
         public List<Table> SplitByColumns(params string[][] columnSplitDescription)
         {
             List<Table> tables = new List<Table>();
@@ -1948,31 +1124,11 @@ namespace Squirrel
             }
             return tables;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pinnedColumn"></param>
-        /// <param name="columnsSplitDescription"></param>
-        /// <returns></returns>
-        public List<Table> SplitByColumns(string pinnedColumn, string columnSplitDescription)
-        {
-            string split = "{Jan,Feb,Mar},{Apr,May,Jun,July}";
-
-            return new List<Table> { this };
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pinnedColumn"></param>
-        /// <param name="columnsPerSplit"></param>
-        /// <returns></returns>
-        public List<Table> SplitByColumns(string pinnedColumn, int columnsPerSplit)
-        {
-            return new List<Table> { this };
-        }
+        
         
         /// <summary>
-        /// Random shuffle
+        /// Random shuffle. Returns a shuffled table. 
+        /// This can be very handy while generating a random sample
         /// </summary>
         public Table Shuffle()
         {            
@@ -1994,9 +1150,10 @@ namespace Squirrel
                 firstRow.Keys.All(k => secondRow[k] == firstRow[k]);
         }
         #endregion
+
         #region Natural Query
         /// <summary>
-        /// 
+        /// Some times we are interested to find rows in the table that match a given condition 
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
