@@ -20,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\TableAPI.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,7 +47,6 @@
     <Compile Include="CustomComparers.cs" />
     <Compile Include="DataAcquisition.cs" />
     <Compile Include="DatabaseConnectors.cs" />
-    <Compile Include="GoogleDataVisualizationcs.cs" />
     <Compile Include="OrderedTable.cs" />
     <Compile Include="SmartDefaults.cs" />
     <Compile Include="Story.cs" />

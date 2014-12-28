@@ -57,19 +57,6 @@ namespace Squirrel
 
         #region Filtering
         /// <summary>
-        /// Basic filtering based on the given predicate.
-        /// </summary>
-        /// <param name="predicate">The predicate takes a row and returns a bool.</param>
-        /// <returns>The result table with filtered values</returns>
-        /// <example>Table filtered  = iris.Filter(x => Convert.ToDouble(x["SepalWidth"])>3.0);//Finds all iris flowers where the SepalWidth is more than 3.0
-        /// </example>
-        public Table Filter(Func<Dictionary<string, string>, bool> predicate)
-        {
-            Table result  = new Table ();
-            result.Rows.AddRange(this.Rows.Where(t => predicate.Invoke(t)));
-            return result;
-        }
-        /// <summary>
         /// Finding a value by regular expression
         /// </summary>
         /// <param name="column">The column where the values has to be sought</param>
@@ -137,7 +124,7 @@ namespace Squirrel
         public Table RunSQLQuery(string sql)
         {
             HashSet<string> columns = this.ColumnHeaders;
-            StreamWriter sw = new StreamWriter(@"C:\temp.csv");
+            StreamWriter sw = new StreamWriter(@"temp.csv");
             sw.WriteLine(columns.Aggregate((a, b) => a + "," + b));
             string numberRegex = "[0-9]+.*[0-9]+";
             for (int i = 0; i < _rows.Count; i++)
@@ -156,7 +143,7 @@ namespace Squirrel
                 sw.WriteLine();
             }
             sw.Close();
-            string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\temp.csv;Extended Properties='text;HDR=YES;'";
+            string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Personal;Extended Properties='text;HDR=YES;'";
             sql = sql.Replace("[Table]", @"temp.csv");
 
             OleDbDataAdapter oleda = new OleDbDataAdapter(sql, strCSVConnString);
