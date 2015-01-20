@@ -44,11 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicStatistics.cs" />
-    <Compile Include="BootstrapTableDecorators.cs" />
+    <Compile Include="Data Visualization\BootstrapTableDecorators.cs" />
     <Compile Include="CustomComparers.cs" />
     <Compile Include="DataAcquisition.cs" />
-    <Compile Include="DatabaseConnectors.cs" />
-    <Compile Include="GoogleDataVisualizationcs.cs" />
+    <Compile Include="RelationalDatabaseConnectors.cs" />
+    <Compile Include="Data Visualization\GoogleDataVisualizationcs.cs" />
     <Compile Include="OrderedTable.cs" />
     <Compile Include="SmartDefaults.cs" />
     <Compile Include="Story.cs" />
@@ -71,6 +71,7 @@
     <Content Include="Data\SmartDefaults.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="SmartDefaults.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

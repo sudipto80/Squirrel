@@ -12,13 +12,61 @@ namespace Squirrel
     public  static class BootstrapTableDecorators
     {
         /// <summary>
-        /// Bootstrap classes HTML tables
+        /// Bootstrap  HTML tables classes
         /// </summary>
-        public enum BootstrapTableClasses { Table, Table_Striped, Table_Bordered, Table_Hover, Table_Condensed };
+        public enum BootstrapTableClasses 
+        { 
+            /// <summary>
+            /// The vanilla table class from bootstrap
+            /// </summary>
+            Table,
+            /// <summary>
+            /// table-striped class of Bootstrap table
+            /// </summary>
+            Table_Striped,
+            /// <summary>
+            /// table-bordered class of Bootstrap table
+            /// </summary>
+            Table_Bordered,
+            /// <summary>
+            /// table-hover class of Bootstrap table
+            /// </summary>
+            Table_Hover,
+            /// <summary>
+            /// table-condensed class of Bootstrap table
+            /// </summary>
+            Table_Condensed 
+        };
         /// <summary>
         /// Bootstrap classes for table rows 
         /// </summary>
-        public enum BootstrapTableRowClasses { None, Success, Active, Info, Warning, Danger }
+        public enum BootstrapTableRowClasses 
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            None, 
+            /// <summary>
+            /// 
+            /// </summary>
+            Success,
+            /// <summary>
+            /// 
+            /// </summary>
+            Active,
+            /// <summary>
+            /// 
+            /// </summary>
+            Info, 
+            /// <summary>
+            /// 
+            /// </summary>
+            Warning,
+            /// <summary>
+            /// 
+            /// </summary>
+            Danger 
+        }
         /// <summary>
         /// Finds indices of the rows for which the given predicate returns true.
         /// </summary>
@@ -83,6 +131,7 @@ namespace Squirrel
         /// <example>//Let's say you have a column called "StockPrice"</example>
         /// <example>//Func&lt;Dictionary&lt;string,string&gt;,bool&gt; warning = x => Convert.ToDouble(x["StockPrice"])>10.5;</example>
         /// <example>//tab.ToBootstrapHTMLTableWithColoredRows(warningPredicate:warning);</example>
+        /// <remarks>Watch this video to understand it better: </remarks>
         public static string ToBootstrapHTMLTableWithColoredRows(this Table tab,                                                                    
                                                                       //All are optional. Use any number of predicates you want.
                                                                       Func<Dictionary<string,string>,bool> successPredicate  = null,

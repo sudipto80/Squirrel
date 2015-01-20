@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Squirrel
 {
@@ -92,6 +94,9 @@ namespace Squirrel
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
+        /// 
+        [Description("More than average,Above Average,More than mean")]
+        
         public static int AboveAverageCount(this IEnumerable<decimal> values)
         {
             return values.Count(s => s > values.Average());

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Squirrel
 {
+ 
+    /// <summary>
+    /// Representation of a table which is already sorted by a given column.
+    /// </summary>
     public  class OrderedTable : Table
     {
         /// <summary>

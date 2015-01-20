@@ -211,6 +211,25 @@ namespace Squirrel
                 return LoadFlatFile(csvFileName, new string[] { "," });
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static Table LoadDataTable(DataTable dt)
+        {
+            Table temp = new Table();
+            foreach (DataRow row in dt.Rows)
+            {
+                Dictionary<string, string> _rowRep = new Dictionary<string, string>();
+                foreach (var col in dt.Columns.Cast<DataColumn>().Select(z=>z.ColumnName))
+                {
+                    _rowRep.Add(col, row[col].ToString());
+                }
+                temp.AddRow(_rowRep);
+            }
+            return temp;
+        }
+        /// <summary>
         /// Loads Data from Tab Separated File
         /// </summary>
         /// <param name="tsvFileName">The file name to read from</param>
@@ -238,7 +257,7 @@ namespace Squirrel
             {
                 if (lineNumber == 0)//reading the column headers
                 {
-                    line.Split(delimeters, StringSplitOptions.RemoveEmptyEntries)
+                    line.Split(delimeters, StringSplitOptions.None)
                         .ToList()
                         .ForEach(col => columns
                                            .Add(col.Trim(new char[] { '"', ' ' })));
@@ -315,7 +334,33 @@ namespace Squirrel
                 Console.WriteLine();
             }
         }
+        
+        public static Table ToHTMLTable(this List<Tuple<string, string, string>> gist)
+        {
 
+            return  toHTMLTablePrivate(gist);
+
+
+        }
+
+        private static Table toHTMLTablePrivate(List<Tuple<string, string, string>> gist)
+        {
+            var dic = gist.ToLookup(g => g.Item1).Select(g => new KeyValuePair<string, IEnumerable<string>>(g.Key,
+                                     g.Select(x => x.Item2 + "=" + x.Item3)));//.Dump();
+            Table gistTable = new Table();
+            foreach (var v in dic)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>();
+                row.Add("Header", v.Key);
+                foreach (var z in v.Value)
+                {
+                    string[] toks = z.Split('=');
+                    row.Add(toks[0], toks[1]);
+                }
+                gistTable.Rows.Add(row);
+            }
+            return gistTable;
+        }
         /// <summary>
         /// Returns the html table representation of the table.
         /// </summary>

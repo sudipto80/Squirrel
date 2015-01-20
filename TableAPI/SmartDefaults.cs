@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace Squirrel
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class SmartDefaults
     {
         static readonly SmartDefaults _instance = new SmartDefaults();
         public static Dictionary<string, List<string>> DefaultValues = new Dictionary<string, List<string>>();
+        /// <summary>
+        /// 
+        /// </summary>
         public static SmartDefaults Instance
         {
             get
@@ -44,7 +50,8 @@ namespace Squirrel
         {
             if (DefaultValues.Count == 0)
             {
-                XDocument doc = XDocument.Load(@"..\..\..\TableAPI\Data\SmartDefaults.xml");
+                string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                XDocument doc = XDocument.Load(@"C..\..\..\TableAPI\SmartDefaults.xml");
                 List<XElement> nodes = doc.Root.Descendants().ToList();
                 foreach (var node in nodes)
                     DefaultValues.Add(node.FirstAttribute.Value, node.LastAttribute.Value.Split(',').ToList());

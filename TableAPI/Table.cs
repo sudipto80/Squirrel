@@ -9,42 +9,125 @@ using System.Threading.Tasks;
 using NCalc;
 using System.Data;
 using System.Globalization;
+using System.ComponentModel;
 
 
 
 namespace Squirrel
 {
-    public enum MissingValueHandlingStrategy { MarkWithNA, Average }
+    
     /// <summary>
     /// The alignment for the pretty dump
     /// </summary>
-    public enum Alignment { Left, Right }
+    public enum Alignment 
+    { 
+        /// <summary>
+        /// 
+        /// </summary>
+        Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        Right 
+    }
     /// <summary>
     /// Sorting Direction. This enum is used with Sorting methods SortBy and SortInThisOrder
     /// </summary>
-    public enum SortDirection { Ascending, Descending }
+    public enum SortDirection
+    {
+        /// <summary>
+        /// To be used when sorting in the ascending order
+        /// </summary>
+        Ascending,
+        /// <summary>
+        /// To be used when to be sorting in the descending order
+        /// </summary>
+        Descending 
+    }
     /// <summary>
     /// The Algorithm to use for outlier detection
     /// </summary>
-    public enum OutlierDetectionAlgorithm { IQR_Interval, Z_Score };
+    public enum OutlierDetectionAlgorithm 
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        IQR_Interval, 
+        /// <summary>
+        /// 
+        /// </summary>
+        Z_Score 
+    };
     /// <summary>
     /// Method to be used for aggregation/consolidation
     /// </summary>
     public enum AggregationMethod 
     {
-        Sum, //Summation of the sequence
-        Average, //Average of the sequence
-        Max,//Maximum value of the sequence
-        Min, //Minimum value of the sequence
-        Count,//Total count of the sequence
-        StandardDeviation, //Standard deviation of the sequence      
-        Variance, //Calculates the variance of the sequence 
-        AboveAverageCount, //Number of instance above average 
-        BelowAverageCount,//Number of instances which are below average values
-        AverageCount,//Number of instances that has the value equal to average
-        Skew, //Measures the skewness of the given sequence
-        Kurtosis, //Measures the Kurtosis of the given sequence
-        Range //Measures the range of values of the given sequence.
+        /// <summary>
+        /// Summation of the sequence
+        /// </summary>
+        [Description("by summing")]
+        Sum, 
+        /// <summary>
+        /// Average of the sequence
+        /// </summary>
+        [Description("by average,by mean")]        
+        Average, 
+        /// <summary>
+        /// Maximum value of the sequence
+        /// </summary>
+        [Description("by max,by maximum value")]
+        Max,
+        /// <summary>
+        /// Minimum value of the sequence
+        /// </summary>
+        [Description("by min,by minimum value")]
+        Min, 
+        /// <summary>
+        /// Total count of the sequence
+        /// </summary>
+        [Description("by number of entries,by count")]
+        Count,
+        /// <summary>
+        /// Standard deviation of the sequence      
+        /// </summary>
+        [Description("by standard deviation")]        
+        StandardDeviation, 
+        /// <summary>
+        /// Calculates the variance of the sequence 
+        /// </summary>
+        [Description("by variance")]
+        Variance, 
+        /// <summary>
+        /// Number of instance above average
+        /// </summary>
+        [Description("more than average")]
+        AboveAverageCount,  
+        /// <summary>
+        /// Number of instances which are below the average value
+        /// </summary>
+        [Description("less than average")]
+        BelowAverageCount,
+        /// <summary>
+        /// Number of instances that has the value equal to average
+        /// </summary>
+        [Description("just average,average")]
+        AverageCount,
+        /// <summary>
+        /// Measures the skewness of the given sequence
+        /// </summary>
+        [Description("skewed")]
+        Skew, 
+        /// <summary>
+        /// Measures the Kurtosis of the given sequence
+        /// </summary>
+        [Description("kurtosis")]       
+        Kurtosis, 
+        /// <summary>
+        /// Measures the range of values of the given sequence.
+        /// </summary>
+        [Description("by range")]
+        Range 
     }
     /// <summary>
     /// The Table class. This is the represenation of the ubiquitous Table structure. 
@@ -54,7 +137,10 @@ namespace Squirrel
         private HashSet<string> _columnHeaders = new HashSet<string>();
         private List<Dictionary<string, string>> _rows = new List<Dictionary<string, string>>();      
 
-
+        /// <summary>
+        /// Each table can be given a name.
+        /// </summary>
+        public string Name { get; set; }
         #region Filtering
         /// <summary>
         /// Basic filtering based on the given predicate.
@@ -213,6 +299,8 @@ namespace Squirrel
         /// <param name="columnName">The column to sorty by</param>
         /// <param name="how">Whether the sorting has to be done in ascending or in descending order or not.</param>
         /// <returns></returns>
+        /// 
+        [Description("sort by")]
         public OrderedTable SortBy(string columnName, SortDirection how = SortDirection.Ascending)
         {
             OrderedTable sortedTable = new OrderedTable();
@@ -286,6 +374,8 @@ namespace Squirrel
         /// <param name="oldName">Old/Current name of the column</param>
         /// <param name="newName">New/Proposed name of the column</param>
         /// <returns>A table with modified column header names</returns>
+        /// 
+        [Description("Change column name")]
         public Table ModifyColumnName(string oldName, string newName)
         {
             List<Dictionary<string, string>> newRows = new List<Dictionary<string, string>>();
@@ -301,7 +391,23 @@ namespace Squirrel
             modTab._rows = newRows;
             return modTab;
         }
-
+        /// <summary>
+        /// The generic version of the values of method.
+        /// </summary>
+        /// <typeparam name="T">The type of the column.</typeparam>
+        /// <param name="columnName">The name of the column.</param>
+        /// <returns>A list of values with all the values of the column.</returns>
+        public List<T> ValuesOf<T>(string columnName)
+        {
+            try
+            {
+                return _rows.Select(t => t[columnName]).Cast<T>().ToList();
+            }
+            catch
+            {
+                return new List<T>() { };
+            }
+        }
         /// <summary>
         /// Returns all the values of the given column 
         /// </summary>
@@ -319,8 +425,27 @@ namespace Squirrel
             }
         }
         /// <summary>
+        /// Returns only the numeric columns
+        /// </summary>
+        public List<string> NumericColumns
+        {
+            get
+            {
+                List<string> numericColumns = new List<string> ();
+                string numericRegex = @"^-?[0-9]\d*(\.\d+)?$";//matches decimals with negative 
+                foreach (var header in ColumnHeaders)
+                {
+                    if (Regex.Match(header, numericRegex).Success)
+                        numericColumns.Add(header);
+                }
+                return numericColumns;
+            }
+        }
+
+        /// <summary>
         /// Returns names of the columns of the table
         /// </summary>
+        /// <seealso cref="Table.NumericColumns"/>
         public HashSet<string> ColumnHeaders
         {
             get
@@ -439,6 +564,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columns">The name of the column</param>
         /// <returns>A table without the currency symbol and commas</returns>
+        /// 
+        [Description("Clean numeric columns")]
         public Table TransformCurrencyToNumeric(params string[] columns)
         {
             Table newTable = this;
@@ -474,6 +601,7 @@ namespace Squirrel
             for (int i = 0; i < RowCount; i++)
                 _rows[i].Remove(columnName);
         }
+       
         /// <summary>
         /// Indexer of the table.
         /// </summary>
@@ -492,6 +620,7 @@ namespace Squirrel
             }
 
         }
+      
         /// <summary>
         /// Indexing over column.
         /// </summary>
@@ -528,6 +657,7 @@ namespace Squirrel
         /// <param name="how"></param>
         /// <returns></returns>
         /// 
+        [Description("Fold cumulatively")]
         private Table CumulativeFold(string columnName, AggregationMethod how)
         {
             Table result = new Table();
@@ -562,6 +692,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columnName">The given column</param>
         /// <returns>A table with cumulative sums for the given column</returns>
+        /// 
+        [Description("Show cumulative summation,Show cumulative sum,Sum cumulatively and show")]
         public Table CumulativeSum(string columnName)
         {
             return CumulativeFold(columnName, AggregationMethod.Sum);
@@ -571,6 +703,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columnName">The given column</param>
         /// <returns>A table with cumulative averages for the given column.</returns>
+        /// 
+        [Description("Cumulative average,Find average cumulatively")]
         public Table CumulativeAverage(string columnName)
         {
             return CumulativeFold(columnName, AggregationMethod.Average);
@@ -613,6 +747,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="decimalDigits"></param>
         /// <returns></returns>
+        /// 
+        [Description("Round off to,Round the digits to")]
         public Table RoundOffTo(int decimalDigits)
         {
 
@@ -632,6 +768,8 @@ namespace Squirrel
         /// <example>salesReport.RoundOffTo("Q1(4),Q2(3),AverageSales(4)").PrettyDump();//Assume that there are these columns Q1,Q2 and AverageSales
         /// //and you want to round off Q1 to 4 digits, Q2 to 3 digits and AverageSales to 4 digits after decimal.</example>
         /// <returns>A table with specified number of digits after decimal for each of the column as mentioned.</returns>
+        /// 
+        
         public Table RoundOffTo(string decimalDigitsForEachColumn)
         {
             //Q1(4),Q4(5),Q2(3)
@@ -685,28 +823,14 @@ namespace Squirrel
             this.AddColumn(newColumnName, newValues.Select(t => t.ToString()).ToList());
             return this;
         }
+        
+        
         /// <summary>
         /// Aggregates values of a column
         /// </summary>
         /// <param name="columnName">Aggregate values for each distinct value in this column</param>
         /// <param name="how">The aggregation scheme to be used</param>
         /// <returns>A flattened table</returns>
-        /// <remarks>
-                // //Month | Item | Quantity  | Revenue
-                //----------------------------------
-                //Jan   | P C   |  1       | 10000
-                //Jan   | Mobile|  3       |  1000
-                //Feb   | PC    |  3       | 30000
-
-                //Aggregate("Month",AggregateMethod.Sum);
-
-                //This should generate the following output
-
-                //Month | Quantity | Revenue
-                //--------------------------
-                //Jan   | 4        | 11000
-                //Feb   | 3        | 30000
-        /// </remarks>
         /// <example>var salesPerMonth = allSales.Aggregate("Month");</example>
         /// <example>var avgSalesPerMonth = allSales.Aggregate("Month",AggregationMethod.Average);</example>
         public Table Aggregate(string columnName, AggregationMethod how = AggregationMethod.Sum)
@@ -816,6 +940,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columnName">The column for which a histogram has to be created</param>
         /// <returns>A dictionary where keys represent the values and values represent the count of each such value</returns>
+        /// 
+        [Description("Frequency distribution, Show histogram,Histogram, Frequency Distribution")]
         public Dictionary<string, int> Histogram(string columnName)
         {
             Dictionary<string, int> histogram = new Dictionary<string, int>();
@@ -832,6 +958,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columnName">The column; depending on values of which we want to perform the split</param>
         /// <returns>A mapping between values of the column and their corresponding table</returns>
+        /// 
+        [Description("Split by,Split on,Break by,Partition by,Divide by")]
         public Dictionary<string, Table> SplitOn(string columnName)
         {
             Dictionary<string, Table> tables = new Dictionary<string, Table>();
@@ -1000,6 +1128,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columns">List of column names</param>
         /// <returns>A table with all the columns except the mentioned ones</returns>
+        /// 
+        [Description("Hide,Don't show")]
         public Table Drop(params string[] columns)
         {
             return Pick(ColumnHeaders.Except(columns).ToArray());
@@ -1009,6 +1139,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columns">Name of the columns that we want to show.</param>
         /// <returns>A table with only the columns mentioned in the parameter </returns>
+        /// 
+        [Description("Pick only,Show only,Show just,Just,Show me only,Just show,Only show")]
         public Table Pick(params string[] columns)
         {
             Table skippedColumnTable = new Table();
@@ -1038,6 +1170,8 @@ namespace Squirrel
         /// <example>Table randSamples = t.RandomSample(20);
         /// This returns 20 random rows to randSamples table from table "t"
         /// </example>
+        /// 
+        [Description("Pick random sample,Random sample")]
         public Table RandomSample(int sampleSize)
         {
             return this.Shuffle().Top(sampleSize);
@@ -1049,6 +1183,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="n">number of rows from top.</param>
         /// <returns>A table with top n rows</returns>
+        /// 
+        [Description("First,Top,From the beginning,From top")]
         public Table Top(int n)
         {
             Table headTable = new Table();
@@ -1063,6 +1199,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="n">number of rows from bottom</param>
         /// <returns>A table with n rows from bottom</returns>
+        /// 
+        [Description("Last,Bottom,From the end,From bottom")]
         public Table Bottom(int n)
         {
             Table tailTable = new Table();
@@ -1077,6 +1215,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="n">The percentage of rows to pick from top</param>
         /// <returns>A table with n% rows from top</returns>
+        /// 
+        [Description("Top percent")]
         public Table TopNPercent(int n)
         {
             int rowCount = Convert.ToInt16( Math.Floor((float) this.RowCount * n / 100.0));
@@ -1089,6 +1229,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
+        /// 
+        [Description("Bottom percent")]
         public Table BottomNPercent(int n)
         {
             int rowCount = Convert.ToInt16(Math.Floor((float)this.RowCount * n / 100.0));
@@ -1125,6 +1267,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columnSplitDescription">The array with names of columns to include in each table.</param>
         /// <returns>A list of tables with specified columns for each table.</returns>
+        /// 
+        [Description("Split columns,Split by columns")]
         public List<Table> SplitByColumns(params string[][] columnSplitDescription)
         {
             List<Table> tables = new List<Table>();
@@ -1143,6 +1287,8 @@ namespace Squirrel
         /// Random shuffle. Returns a shuffled table. 
         /// This can be very handy while generating a random sample
         /// </summary>
+        ///
+        [Description("Shuffle,Random shuffle,Randomize,Un order")]
         public Table Shuffle()
         {            
             Table shuffledTable = new Table();
