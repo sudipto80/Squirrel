@@ -1,3 +1,11 @@
+
+Squirrel
+====
+***Agile Data Analytics for .NET*** </br>
+
+
+Get **MORE** done with **less** code</br>
+</br>
 <a href="Squirrel">
   <img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="right" height="100" width="100" >
 </a></br>[`Squirrel logo is designed by Pirog tetyana for The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
@@ -6,9 +14,8 @@ Squirrel (Hello World Example)
 ------
 Finding whethere women are more generaous than men when it comes to paying tip</br>
 <img src="http://gifyu.com/images/tips_final.gif"/>
-Squirrel - Agile Data Analytics for .NET
-========================================
-Get **MORE** done with **less** code
+
+<a href="https://gist.github.com/sudipto80/5c53f9d53c5372cdb4c8"></a>
 
 Squirrel is a simple and easy to use interfaces for querying and reporting of data. APIs for Data acquisition, Data filtering, Data cleansing, etc. provide simple solution, often in one step, for many real world problems.
 
