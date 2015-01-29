@@ -297,11 +297,13 @@ namespace Squirrel
         /// Sorts the current table by the given column. 
         /// </summary>
         /// <param name="columnName">The column to sorty by</param>
+        /// <param name="smartSort"></param>
+        /// <param name="smartDefaultFile"></param>
         /// <param name="how">Whether the sorting has to be done in ascending or in descending order or not.</param>
         /// <returns></returns>
         /// 
         [Description("sort by")]
-        public OrderedTable SortBy(string columnName, SortDirection how = SortDirection.Ascending)
+        public OrderedTable SortBy(string columnName, bool smartSort = false, string smartDefaultFile = @"SmartDefaults.xml", SortDirection how = SortDirection.Ascending)
         {
             OrderedTable sortedTable = new OrderedTable();
             
@@ -309,15 +311,18 @@ namespace Squirrel
             Squirrel.CustomComparers.DateComparer dateComp = new Squirrel.CustomComparers.DateComparer();
             Squirrel.CustomComparers.CurrencyCustomSorter currencyComp = new CustomComparers.CurrencyCustomSorter();
 
-            SmartDefaults.Instance.GetSmartDefaultValues();//Populate and keep it ready once. 
+            if (smartSort)
+            {
+                SmartDefaults.Instance.GetSmartDefaultValues(smartDefaultFile);//Populate and keep it ready once. 
 
-            KeyValuePair<bool, string> matchingEntriesIfAny = SmartDefaults.Instance.DoesMatchingEntryExist(this.ValuesOf(columnName));
+                KeyValuePair<bool, string> matchingEntriesIfAny = SmartDefaults.Instance.DoesMatchingEntryExist(this.ValuesOf(columnName));
 
-            //Smart Sort the day and month names 
-            if(matchingEntriesIfAny.Key==true)
-            {   
-                List<string> sortingOrder = SmartDefaults.DefaultValues[ matchingEntriesIfAny.Value];
-                return this.SortInThisOrder(columnName, sortingOrder, how);
+                //Smart Sort the day and month names 
+                if (matchingEntriesIfAny.Key == true)
+                {
+                    List<string> sortingOrder = SmartDefaults.DefaultValues[matchingEntriesIfAny.Value];
+                    return this.SortInThisOrder(columnName, sortingOrder, how);
+                }
             }
             
 

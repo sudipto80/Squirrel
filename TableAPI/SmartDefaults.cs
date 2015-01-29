@@ -46,12 +46,12 @@ namespace Squirrel
         /// 
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, List<string>> GetSmartDefaultValues()
+        public Dictionary<string, List<string>> GetSmartDefaultValues(string defaultValueFilePath)
         {
             if (DefaultValues.Count == 0)
             {
                 string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                XDocument doc = XDocument.Load(@"C..\..\..\TableAPI\SmartDefaults.xml");
+                XDocument doc = XDocument.Load(defaultValueFilePath);
                 List<XElement> nodes = doc.Root.Descendants().ToList();
                 foreach (var node in nodes)
                     DefaultValues.Add(node.FirstAttribute.Value, node.LastAttribute.Value.Split(',').ToList());

@@ -20,7 +20,7 @@ namespace Squirrel
         /// <returns>A sorted table</returns>
         public  OrderedTable ThenBy(string columnName, SortDirection how = SortDirection.Ascending)
         {
-            return this.SortBy(columnName, how);
+            return this.SortBy(columnName, how: how);
         }
     }
 }
