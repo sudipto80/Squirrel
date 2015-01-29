@@ -5,7 +5,7 @@ Squirrel
 ***Agile Data Analytics for .NET*** </br>
 
 
-Get **MORE** done with **less** code</br>
+Get **MORE** done with <font color='Blue'>**less**</font> code</br>
 </br>
 
 </a></br>[`Squirrel logo is designed by Pirog tetyana for The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
