@@ -1,13 +1,13 @@
 
 Squirrel
 ====
+<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="right" height="100" width="100" />
 ***Agile Data Analytics for .NET*** </br>
 
 
 Get **MORE** done with **less** code</br>
 </br>
-<a href="Squirrel">
-  <img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="right" height="100" width="100" >
+
 </a></br>[`Squirrel logo is designed by Pirog tetyana for The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
 Squirrel (Hello World Example)
