@@ -10,6 +10,10 @@ Get **MORE** done with <font color='Blue'>**less**</font> code</br>
 <p>
 Squirrel is a simple and easy to use interfaces for querying and reporting of data. APIs for Data acquisition, Data filtering, Data cleansing, etc. provide simple solution, often in one step, for many real world problems.
 </p>
+<p>
+Here is a high level block diagram of all the components of Squirrel
+<img src="http://gifyu.com/images/blocks.png" border="0"/>
+</p>
 </a></br>[`Squirrel logo is designed by Pirog tetyana for The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
 Squirrel (Hello World Example)
@@ -72,7 +76,7 @@ System.Diagnostics.Process.Start("temp.html");
 
 Example #3 (Finding Gender-Ratio statistics in North America)
 ----
-
+<img src="http://gifyu.com/images/births.gif" border="0">
 ```csharp
  Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
 var splits = births.SplitOn("sex");
