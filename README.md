@@ -43,6 +43,7 @@ tips
 
 Example #2 (Iris dataset aggregation)
 -----
+<img src="http://gifyu.com/images/iris.gif" border="0">
 ```csharp
 Table iris = DataAcquisition.LoadCSV(@"iris.csv");
 StringBuilder builder = new StringBuilder();
