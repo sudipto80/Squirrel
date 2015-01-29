@@ -41,6 +41,63 @@ tips
 .PrettyDump(); 
 ```
 
+Example #2 (Iris dataset aggregation)
+-----
+```csharp
+Table iris = DataAcquisition.LoadCSV(@"iris.csv");
+StringBuilder builder = new StringBuilder();
+ 
+builder.AppendLine("<html>");
+ 
+builder.AppendLine("<h2>Range</h2>");
+builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Range).ToHTMLTable());
+ 
+builder.AppendLine("<h2>Average</h2>");
+builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Average).ToHTMLTable());
+ 
+builder.AppendLine("<h2>Max</h2>");
+builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Max).ToHTMLTable());
+ 
+builder.AppendLine("<h2>Min</h2>");
+builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Min).ToHTMLTable());
+ 
+builder.AppendLine("</html>");
+StreamWriter writer = new StreamWriter("temp.html");
+writer.WriteLine(builder.ToString());
+writer.Close();
+ 
+System.Diagnostics.Process.Start("temp.html"); 
+```
+
+Example #3 (Finding Gender-Ratio statistics in North America)
+----
+
+```csharp
+ Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
+var splits = births.SplitOn("sex");
+ 
+var boys = splits["boy"].Aggregate("state").Drop("year");
+var girls = splits["girl"].Aggregate("state").Drop("year");
+ 
+Table combined = new Table();
+ 
+combined.AddColumn("State", boys["state"]);
+combined.AddColumn("Boys", boys["births"]);
+combined.AddColumn("Girls", girls["births"]);
+combined.AddColumn("Difference", "[Boys]-[Girls]", 4);
+combined.AddColumn("GenderRatio", "[Girls]/[Boys]", 4);
+//Showing 5 stats with lowest gender ratio at the end of 2006.
+string tab = combined.Pick("State", "GenderRatio")
+.SortBy("GenderRatio")
+.Top(5)
+.ToHTMLTable();
+ 
+StreamWriter sw = new StreamWriter("temp.htm");
+sw.WriteLine("<html><h2>Gender Ratio in North America by the end of 2006</h2>" + tab + "</html>");
+sw.Close();
+System.Diagnostics.Process.Start("temp.htm"); 
+```
+
 <a href="https://gist.github.com/sudipto80/5c53f9d53c5372cdb4c8"></a>
 
 Squirrel Example: Stock Analytics
