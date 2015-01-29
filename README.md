@@ -16,9 +16,9 @@ Here is a high level block diagram of all the components of Squirrel
 </p>
 </a></br>[`Squirrel logo is designed by Pirog tetyana for The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
-Squirrel (Hello World Example)
+Example #1 (Do women pay more tip than men?)
 ------
-Finding whethere women are more generaous than men when it comes to paying tip</br>
+
 The data from which this analytics has to be calculated is available in tips.csv file and first few rows of that file looks like this 
 <img src="http://gifyu.com/images/tips.gif" border="0">
 Here is how you can use Squirrel to find an answer to that question
