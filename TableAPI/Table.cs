@@ -520,7 +520,20 @@ namespace Squirrel
                 return _rows;
             }
         }
-
+        /// <summary>
+        /// Extracts words from values of a given column 
+        /// and then uses these extracted values to create a new column
+        /// </summary>
+        /// <param name="columnName">New</param>
+        /// <param name="fromColumnName">Name of the column from which values are to be extracted</param>
+        /// <param name="pattern">The regular expression pattern to use to extract values from the column.</param>
+        public void ExtractAndAddAsColumn(string columnName, string fromColumnName, string pattern)
+        {
+            List<string> values = new List<string> ();
+            foreach (var val in this.ValuesOf(fromColumnName))
+                values.Add(Regex.Match(val, pattern).Value);
+            this.AddColumn(columnName, values);
+        }
         /// <summary>
         /// Adds a column for which value gets calculated from a given formula.
         /// </summary>
