@@ -25,7 +25,7 @@ namespace Squirrel
         public static List<string> QuickDashboard(this Table tab)
         {
             List<string> dashboardContents = new List<string>();
-            dashboardContents.Add(tab.Gist().ToHTMLTable().ToBasicBootstrapHTMLTable());
+            dashboardContents.Add(tab.Gist().ToTable().ToBasicBootstrapHTMLTable());
             List<string> stringColumns = tab.ColumnHeaders.Except(tab.NumericColumns).ToList();
             foreach (var stringCol in stringColumns)
                 dashboardContents.Add(tab.ToPieByGoogleDataVisualization(stringCol,"Distribution of " + stringCol));

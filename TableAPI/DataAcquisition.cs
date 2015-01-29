@@ -118,6 +118,7 @@ namespace Squirrel
         /// <param name="fileName">The name of the file</param>
         /// <param name="headersWithLength">Headers with column widths in brackets as shown "name(20),age(2),course(5)"</param>
         /// <returns>A table with all the values loaded.</returns>
+        /// <example>Table data = DataAcquisition.LoadFixedLength("data.txt","name(20),age(2),course(5)");</example>
         public static Table LoadFixedLength(string fileName, string headersWithLength)// "name(20),age(2),course(5)"
         {
             string[] tokens = headersWithLength.Split(',');
@@ -192,29 +193,95 @@ namespace Squirrel
             StreamWriter sw = new StreamWriter("TemporaryFile.csv");
             sw.WriteLine(totalTable);
             sw.Close();
-            Table loadedTable = LoadCSV("TemporaryFile.csv", true);
+            Table loadedTable = LoadCSV("TemporaryFile.csv");
             return loadedTable;
         }        
+        /// <summary>
+        /// Returns a list of values from each CSV row
+        /// </summary>
+        /// <param name="line">The string representation of a CSV row</param>
+        /// <returns>Values of the line</returns>
+        private static List<string> getValues(string line)
+        {
+            string magic = Guid.NewGuid().ToString();
+            //if wrapped with quotes from both sides, ignore and trim
+            //else
+            string[] toks = line.Split(',');
+
+            List<int> startingWithQuote = new List<int>();
+            List<int> endingWithQuote = new List<int>();
+            for (int i = 0; i < toks.Length; i++)
+            {
+                if (toks[i].Length > 0)
+                {
+                    if (toks[i][0] == '"' && toks[i][toks[i].Length - 1] == '"')
+                        continue;
+
+                    if (toks[i].StartsWith("\""))
+                        startingWithQuote.Add(i);
+                    if (toks[i].EndsWith("\""))
+                        endingWithQuote.Add(i);
+                }
+            }
+            List<string> values = new List<string>();
+
+            for (int i = 0; i < toks.Length; i++)
+            {
+                if (toks[i] == magic)
+                    continue;
+                if (!startingWithQuote.Contains(i) && !endingWithQuote.Contains(i))
+                {
+                    values.Add(RemoveDoubleQuoteFromEndIfPossible(toks[i].Replace("\"\"", "\"")));//.Trim(new char[] { ' ', '"' }));
+                }
+
+
+                else
+                {
+                    List<string> innerToks = new List<string>();
+                    if (startingWithQuote.Count > 0)
+                    {
+                        for (int k = startingWithQuote[0]; k <= endingWithQuote[0]; k++)
+                        {
+                            innerToks.Add(toks[k]);
+
+
+                        }
+                        string concatenatedValue = innerToks.Aggregate((m, n) => m + "," + n);
+                        concatenatedValue = concatenatedValue.Substring(1, concatenatedValue.Length - 2);
+                        values.Add(RemoveDoubleQuoteFromEndIfPossible(concatenatedValue.Replace("\"\"", "\"")));
+                        int startingRemoveIndex = startingWithQuote[0];
+                        int endingRemoveIndex = endingWithQuote[0];
+                        startingWithQuote.RemoveAt(0);
+                        endingWithQuote.RemoveAt(0);
+                        for (int m = startingRemoveIndex; m <= endingRemoveIndex; m++)
+                            toks[m] = magic;
+                        continue;
+                    }
+                }
+            }
+            return values.ToList();
+        }
+        
         /// <summary>
         /// Loads a CSV file to a respective Table data structure.
         /// </summary>
         /// <param name="csvFileName">The file for which values has to be loaded into a table data structure.</param>
         /// <param name="wrappedWihDoubleQuotes"></param>
         /// <returns>A table which has all the values in the CSV file</returns>
-        public static Table LoadCSV(string csvFileName, bool wrappedWihDoubleQuotes = false)
+        public static Table LoadCSV(string csvFileName)
         {
-            if (wrappedWihDoubleQuotes)
-            {
-                return LoadFlatFile(csvFileName, new string[] { "\",\"", "\"" });
-            }
-            else
-                return LoadFlatFile(csvFileName, new string[] { "," });
+
+
+            return LoadFlatFile(csvFileName, new string[] { "," });
+            
         }
+
         /// <summary>
-        /// 
+        /// Loads data from a ADO.NET DataTable to a Table
         /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
+        /// <param name="dt">The DataTable</param>
+        /// <returns>A Table</returns>
+        /// <example>Table loadedDataTable = DataAcquisition.LoadDataTable(dt);</example>
         public static Table LoadDataTable(DataTable dt)
         {
             Table temp = new Table();
@@ -238,7 +305,7 @@ namespace Squirrel
         {
             return LoadFlatFile(tsvFileName, new string[] { "\t" });
         }
-
+       
         /// <summary>
         /// Loads data from any flat file
         /// </summary>
@@ -259,8 +326,7 @@ namespace Squirrel
                 {
                     line.Split(delimeters, StringSplitOptions.None)
                         .ToList()
-                        .ForEach(col => columns
-                                           .Add(col.Trim(new char[] { '"', ' ' })));
+                        .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
                     lineNumber++;
                 }
                 else
@@ -268,14 +334,18 @@ namespace Squirrel
                     string[] values = null;
                     if (line.Trim().Length > 0)
                     {
-                        values = line.Split(delimeters, StringSplitOptions.RemoveEmptyEntries);
+                        if (delimeters.Length == 1 && delimeters[0] == ",")
+                            values = getValues(line).ToArray();
+                        else
+
+                            values = line.Split(delimeters, StringSplitOptions.RemoveEmptyEntries);
 
                         Dictionary<string, string> tempRow = new Dictionary<string, string>();
                         for (int i = 0; i < values.Length; i++)
                         {
                             try
                             {
-                                tempRow.Add(columns.ElementAt(i), values[i].Trim(new char[] { '"', ' ' }));
+                                tempRow.Add(columns.ElementAt(i),RemoveDoubleQuoteFromEndIfPossible( values[i].Trim().Replace("\"\"", "\"")));
                             }
                             catch { continue; }
                         }
@@ -285,7 +355,18 @@ namespace Squirrel
             }
             return loadedCSV;
         }
+        private static string RemoveDoubleQuoteFromEndIfPossible(string input)
+        {
+            List<int> indices = new List<int> ();
+            for(int x = 0;x<input.Length;x++)
+                if(input[x]=='"')
+                    indices.Add(x);
 
+            if (indices.Count == 2 && indices[0] == 0 && indices[1] == input.Length - 1)
+                return input.Trim(new char[]{' ','"'});
+            else
+                return input;
+        }
         /// <summary>
         /// Dumps the table in a pretty format to console.
         /// </summary>
@@ -334,16 +415,26 @@ namespace Squirrel
                 Console.WriteLine();
             }
         }
-        
-        public static Table ToHTMLTable(this List<Tuple<string, string, string>> gist)
+      /// <summary>
+      /// Returns the tabular representation of a gist 
+      /// </summary>
+      /// <param name="gist">The pre-calculated gist</param>
+      /// <returns>A table representing the gist</returns>
+      /// <example>Tab gistTab = tab.Gist().ToHtmlTable();</example>
+        public static Table ToTable(this List<Tuple<string, string, string>> gist)
         {
 
-            return  toHTMLTablePrivate(gist);
+            return  toTablePrivate(gist);
 
 
         }
-
-        private static Table toHTMLTablePrivate(List<Tuple<string, string, string>> gist)
+        /// <summary>
+        /// Creates a table out of a gist.
+        /// </summary>
+        /// <param name="gist">The pre-calculated gist</param>
+        /// <returns>A tabular representation of the gist</returns>
+        /// 
+        private static Table toTablePrivate(List<Tuple<string, string, string>> gist)
         {
             var dic = gist.ToLookup(g => g.Item1).Select(g => new KeyValuePair<string, IEnumerable<string>>(g.Key,
                                      g.Select(x => x.Item2 + "=" + x.Item3)));//.Dump();
@@ -447,7 +538,9 @@ namespace Squirrel
 
             foreach (string header in tab.ColumnHeaders)
             {
-                arffBuilder.AppendLine("@attribute " + header + " {" + tab.ValuesOf(header).Distinct().Aggregate((a, b) => a + "," + b) + "}");
+                arffBuilder.AppendLine("@attribute " + header + " {" + tab.ValuesOf(header)
+                                                                          .Distinct()
+                                                                          .Aggregate((a, b) => a + "," + b) + "}");
             }
             arffBuilder.AppendLine("@data");
             for (int i = 0; i < tab.RowCount; i++)
