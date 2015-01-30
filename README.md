@@ -16,6 +16,10 @@ Here is a high level block diagram of all the components of Squirrel
 </p>
 </a></br>[`Squirrel logo is designed by Pirog tetyana for The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
+Dependency
+----
+There is a dependency for [NCalc](https://ncalc.codeplex.com/) for AddColumn() method. 
+
 Example #1 (Do women pay more tip than men?)
 ------
 
@@ -47,7 +51,14 @@ tips
 
 Example #2 (Iris dataset aggregation)
 -----
+<p> The Iris flower data set or Fisher's Iris data set is a multivariate data set introduced by Sir Ronald Fisher (1936) as an example of discriminant analysis.It is sometimes called Anderson's Iris data set because Edgar Anderson collected the data to quantify the morphologic variation of Iris flowers of three related species.[2] Two of the three species were collected in the Gaspé Peninsula "all from the same pasture, and picked on the same day and measured at the same time by the same person with the same apparatus". ]---- Taken from Wikipedia </p>
+
+<p>A botanist might want to find several aggregation reports from this dataset</p>
+
+
 <img src="http://gifyu.com/images/iris.gif" border="0">
+
+Here is the code that uses Squirrel to address these requirements.
 ```csharp
 Table iris = DataAcquisition.LoadCSV(@"iris.csv");
 StringBuilder builder = new StringBuilder();
@@ -76,6 +87,9 @@ System.Diagnostics.Process.Start("temp.html");
 
 Example #3 (Finding Gender-Ratio statistics in North America)
 ----
+<p>Gender Ratio is an important sociological index to gauge the growth of a nation. The following data (only a few are shown here) is a list of "boy" and "girl" birth statistics for different states across North America. The data analysis task a sociologist might be interested to do is to find gender-ratio of North America for different states</p>
+
+<p>The following C# code achieves this using Squirrel</p>
 <img src="http://gifyu.com/images/births.gif" border="0">
 ```csharp
  Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
