@@ -16,6 +16,10 @@ Here is a high level block diagram of all the components of Squirrel
 </p>
 </a></br>[`Squirrel logo is designed by Pirog tetyana for The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
+Dependency
+----
+There is a dependency for [NCalc](https://ncalc.codeplex.com/) for AddColumn() method. 
+
 Example #1 (Do women pay more tip than men?)
 ------
 
@@ -83,6 +87,9 @@ System.Diagnostics.Process.Start("temp.html");
 
 Example #3 (Finding Gender-Ratio statistics in North America)
 ----
+<p>Gender Ratio is an important sociological index to gauge the growth of a nation. The following data (only a few are shown here) is a list of "boy" and "girl" birth statistics for different states across North America. The data analysis task a sociologist might be interested to do is to find gender-ratio of North America for different states</p>
+
+<p>The following C# code achieves this using Squirrel</p>
 <img src="http://gifyu.com/images/births.gif" border="0">
 ```csharp
  Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
