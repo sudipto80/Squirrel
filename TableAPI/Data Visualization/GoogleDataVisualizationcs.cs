@@ -105,6 +105,9 @@ namespace Squirrel
                 dataBuilder.AppendLine(tab[numericColumns[numericColumns.Count-1],i] +"],");
             }
 
+            string data = dataBuilder.ToString();
+            data = data.Substring(0, data.Length - 3);
+
             string html = @"<html>
                       <head>
                         <script type=""text/javascript"" src=""https://www.google.com/jsapi""></script>
@@ -136,7 +139,7 @@ namespace Squirrel
                             .Replace("!LEGEND_TEXT!",legendText)
                             .Replace("!TITLE!",title)
                             .Replace("!COLUMN_HEADERS!",columnHeaders)
-                            .Replace("!DATA!",dataBuilder.ToString());
+                            .Replace("!DATA!",data);
 
             if (type == BarChartType.Bar)
                 html = html.Replace("!CHART_TYPE!", "BarChart");
