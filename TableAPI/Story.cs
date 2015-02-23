@@ -33,6 +33,38 @@ namespace Squirrel
             return dashboardContents;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <returns></returns>
+        public static List<string> AggregationTables(this Table tab,params string[] dropTheseHeads)
+        {
+            List<string> alphaNumericColumns = new List<string>();
+            List<string> generatedTables = new List<string> ();
+            string pattern = "[a-zA-Z ]+";
+            foreach (var col in tab.ColumnHeaders)
+            {
+                if (tab.ValuesOf(col).Any(z => Regex.Match(z, pattern).Success))
+                {
+                    alphaNumericColumns.Add(col);
+                }
+            }
+
+            
+
+            foreach (var col in alphaNumericColumns)
+                generatedTables.Add(tab.Drop(dropTheseHeads).Aggregate(col).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+            foreach (var col in alphaNumericColumns)
+                generatedTables.Add(tab.Drop(dropTheseHeads).Aggregate(col,AggregationMethod.Max).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+            foreach (var col in alphaNumericColumns)
+                generatedTables.Add(tab.Drop(dropTheseHeads).Aggregate(col,AggregationMethod.Min).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+            foreach (var col in alphaNumericColumns)
+                generatedTables.Add(tab.Drop(dropTheseHeads).Aggregate(col,AggregationMethod.Range).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+
+            return generatedTables;
+
+        }
+        /// <summary>
         /// Calculates the gist of values for numeric and currency columns.
         /// </summary>
         /// <param name="tab">The table</param>

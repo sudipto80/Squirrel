@@ -22,6 +22,49 @@ namespace Squirrel
         /// </summary>
         public enum BarChartType { Bar, Column };
         /// <summary>
+        /// Genertes the Histogram using google data visualization.
+        /// </summary>
+        /// <param name="hist">The histogram from which the histogram has to be drawn</param>
+        /// <param name="column1">The column name which will represent the keys</param>
+        /// <param name="column2">The column name which will represent the values</param>
+        /// <param name="title">Title of the histogram</param>
+        /// <returns>a string representation</returns>
+        public static string ToHistogramByGoogleDataVisualization(this Dictionary<string, int> hist, string column1,
+                                       string column2, string title)
+        {
+            string data = string.Empty;
+            data = hist.Select(z => "['" + z.Key + "'," + z.Value.ToString() + "]").Aggregate((f, s) => f + "," + s);
+            string template = @"<html>
+              <head>
+                <script type=""text/javascript"" src=""https://www.google.com/jsapi""></script>
+                <script type=""text/javascript"">
+                  google.load(""visualization"", ""1"", {packages:[""corechart""]});
+                  google.setOnLoadCallback(drawChart);
+                  function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                      [!COLUMN_HEADERS!],
+                      !DATA!]);
+
+                    var options = {
+                      title: '!TITLE!',
+                      legend: { position: 'none' },
+                    };
+
+                    var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+                    chart.draw(data, options);
+                  }
+                </script>
+              </head>
+              <body>
+                <div id=""chart_div"" style=""width: 900px; height: 500px;""></div>
+              </body>
+            </html>".Replace("!DATA!", data)
+                    .Replace("!TITLE!",title)
+                    .Replace("!COLUMN_HEADERS!", "'" + column1 + "','" + column2 + "'");
+
+            return template;
+        }
+        /// <summary>
         /// Generates a pie/3dPie/Donut chart from the given table.
         /// </summary>
         /// <param name="tab">The table</param>
@@ -83,7 +126,11 @@ namespace Squirrel
         /// <param name="legendText">Legend Text</param>
         /// <param name="title">Title of the chart</param>
         /// <returns>Gennerated HTML for the chart</returns>
-        public static string ToBarChartByGoogleDataVisualization(this Table tab, string column, string legendText, string title, BarChartType type = BarChartType.Bar)
+        public static string ToBarChartByGoogleDataVisualization(this Table tab, 
+                                                                 string column, 
+                                                                 string legendText, 
+                                                                 string title, 
+                                                                 BarChartType type = BarChartType.Bar)
         {
             List<string> numericColumns = new List<string>();
             string numericRegex = @"^-?[0-9]\d*(\.\d+)?$";//matches decimals with negative 

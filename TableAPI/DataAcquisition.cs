@@ -190,6 +190,7 @@ namespace Squirrel
                               .Replace("</td></tr>", "\"" + Environment.NewLine)
                               .Replace("</td><td>", "\",\"")
                               .Replace("<tr><td>", "\"" + Environment.NewLine);
+            totalTable = totalTable.Replace("&nbsp;", " ");//Use WebUtilities to get all the html encoding removed.
             StreamWriter sw = new StreamWriter("TemporaryFile.csv");
             sw.WriteLine(totalTable);
             sw.Close();
@@ -206,7 +207,9 @@ namespace Squirrel
             string magic = Guid.NewGuid().ToString();
             //if wrapped with quotes from both sides, ignore and trim
             //else
-            string[] toks = line.Split(',');
+            if (!line.Contains("\""))
+                return line.Split(',').ToList();
+            string[] toks = line.Split(new char[]{','},StringSplitOptions.None);
 
             List<int> startingWithQuote = new List<int>();
             List<int> endingWithQuote = new List<int>();
@@ -221,6 +224,8 @@ namespace Squirrel
                         startingWithQuote.Add(i);
                     if (toks[i].EndsWith("\""))
                         endingWithQuote.Add(i);
+
+                   
                 }
             }
             List<string> values = new List<string>();
@@ -322,11 +327,17 @@ namespace Squirrel
             HashSet<string> columns = new HashSet<string>();
             while ((line = csvReader.ReadLine()) != null)
             {
+                
                 if (lineNumber == 0)//reading the column headers
                 {
-                    line.Split(delimeters, StringSplitOptions.None)
-                        .ToList()
-                        .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
+                    if (line.Contains("\""))
+                        line = "\"" + line + "\"";
+                    //Because sometimes the column header can have a comma in them
+                    //and that can spoil the order
+                    getValues(line).ForEach(col => columns.Add(col));
+                  //  line.Split(delimeters, StringSplitOptions.None)
+                    //    .ToList()
+                      //  .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
                     lineNumber++;
                 }
                 else
@@ -338,18 +349,21 @@ namespace Squirrel
                             values = getValues(line).ToArray();
                         else
 
-                            values = line.Split(delimeters, StringSplitOptions.RemoveEmptyEntries);
+                            values = line.Split(delimeters, StringSplitOptions.None);
 
-                        Dictionary<string, string> tempRow = new Dictionary<string, string>();
-                        for (int i = 0; i < values.Length; i++)
+                        if (values.Length == columns.Count)
                         {
-                            try
+                            Dictionary<string, string> tempRow = new Dictionary<string, string>();
+                            for (int i = 0; i < values.Length; i++)
                             {
-                                tempRow.Add(columns.ElementAt(i),RemoveDoubleQuoteFromEndIfPossible( values[i].Trim().Replace("\"\"", "\"")));
+                                try
+                                {
+                                    tempRow.Add(columns.ElementAt(i), RemoveDoubleQuoteFromEndIfPossible(values[i].Trim().Replace("\"\"", "\"")));
+                                }
+                                catch { continue; }
                             }
-                            catch { continue; }
+                            loadedCSV.AddRow(tempRow);
                         }
-                        loadedCSV.AddRow(tempRow);
                     }
                 }
             }
