@@ -114,13 +114,16 @@ combined.AddColumn("GenderRatio", "[Girls]/[Boys]", 4);
 string tab = combined.Pick("State", "GenderRatio")
 .SortBy("GenderRatio")
 .Top(5)
-.ToHTMLTable();
+.ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped);
  
 StreamWriter sw = new StreamWriter("temp.htm");
 sw.WriteLine("<html><h2>Gender Ratio in North America by the end of 2006</h2>" + tab + "</html>");
 sw.Close();
 System.Diagnostics.Process.Start("temp.htm"); 
 ```
+
+This produces the following result 
+<img src="http://gifyu.com/images/GenderRatioResult.png" alt="GenderRatioResult.png" border="0" />
 
 <a href="https://gist.github.com/sudipto80/5c53f9d53c5372cdb4c8"></a>
 
