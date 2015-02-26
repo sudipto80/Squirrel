@@ -99,7 +99,7 @@ Example #3 (Finding Gender-Ratio statistics in North America)
 <p>The following C# code achieves this using Squirrel</p>
 <img src="http://gifyu.com/images/births.gif" border="0">
 ```csharp
- Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
+Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
 var splits = births.SplitOn("sex");
  
 var boys = splits["boy"].Aggregate("state").Drop("year");
@@ -129,7 +129,28 @@ This produces the following result
 
 <a href="https://gist.github.com/sudipto80/5c53f9d53c5372cdb4c8"></a>
 
+Example #4 (Finding top gold winning nations in Olympics)
+---------------
+From a given data of Olympics records like as shown below, how easy do you think to generate 
+a pie chart for top gold winning nations. 
+<img src="http://gifyu.com/images/OlympicsInput.png" alt="OlympicsInput.png" border="0" />
 
+<p>Here is the code using Squirrel to generate a pie chart for top gold winning nations.</p>
+```csharp 
+Table olympics = DataAcquisition.LoadCSV("C:\\Squirrel\\olympics.csv");
+StreamWriter sw = new StreamWriter("temp.htm");
+
+string html = olympics
+             .SortBy("Gold Medals",how:SortDirection.Descending)
+             .Top(20)
+             .ToPieByGoogleDataVisualization("Country", "Top Gold Winning Nations in Olympics");
+sw.WriteLine(html);
+sw.Close();
+
+System.Diagnostics.Process.Start("temp.htm");
+```
+<p> And here is the output that you shall get.</p>
+<img src="http://gifyu.com/images/OlympicsOut.png" alt="OlympicsOut.png" border="0" />
 API Overview
 ------------
 1. **BasicStatistics** - Basic statistical functions like Median, Range, Standard Deviation, Kurtosis, etc.
