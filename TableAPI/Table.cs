@@ -129,14 +129,19 @@ namespace Squirrel
         [Description("by range")]
         Range 
     }
+
+
     /// <summary>
     /// The Table class. This is the represenation of the ubiquitous Table structure. 
     /// </summary>
     public class Table
     {   
         private HashSet<string> _columnHeaders = new HashSet<string>();
-        private List<Dictionary<string, string>> _rows = new List<Dictionary<string, string>>();      
-
+        private List<Dictionary<string, string>> _rows = new List<Dictionary<string, string>>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool MissingValueHandled { get; set; }
         /// <summary>
         /// Each table can be given a name.
         /// </summary>
@@ -242,8 +247,8 @@ namespace Squirrel
                 sw.WriteLine();
             }
             sw.Close();
-            string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\temp.csv;Extended Properties='text;HDR=YES;'";
-            sql = sql.Replace("[Table]", @"temp.csv");
+            string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='C:\temp.csv';Extended Properties='text;HDR=YES;'";
+            sql = sql.Replace("[Table]", @"C:\temp.csv");
 
             OleDbDataAdapter oleda = new OleDbDataAdapter(sql, strCSVConnString);
             System.Data.DataTable dataTable = new System.Data.DataTable();
@@ -475,6 +480,53 @@ namespace Squirrel
             _rows.Add(row);
         }
         /// <summary>
+        /// Add rows by short hand of common programmatic rules like "columnName++" etc
+        /// </summary>
+        /// <param name="formula">Age[1]=Age[0]+1 is same as "Age++"</param>
+        /// <param name="count">How many rows are needed.</param>
+        public void AddRowsByShortHand(string formula, int count)
+        {
+            //tab.AddRowsByShortHand("Age++",24);//increment age by 24 times
+            //tab.AddRowsByShortHand("Num/=10,3);//
+            //++,--,+=,-=,*=,/=
+            string columnName = Regex.Match(formula, "[a-zA-Z]+").Value;
+            bool plusPlus = formula.EndsWith("++");
+            bool minusMinus = formula.EndsWith("--");
+            bool plusEqual = formula.Contains("+=");
+            bool minusEqual = formula.Contains("-=");
+            bool multiplyEqual = formula.Contains("*=");
+            bool divideEqual = formula.Contains("/=");
+
+            if (plusPlus)
+                AddRows(columnName + "[1]=" + columnName + "[0]+1",count);
+            if (minusMinus)
+                AddRows(columnName + "[1]=" + columnName + "[0]-1", count);
+            if(formula.Contains("="))
+            {
+                //a-=2
+                decimal number = Convert.ToDecimal(formula.Substring(formula.IndexOf('=')+1));
+                if(plusEqual)
+                {
+                    AddRows(columnName + "[1]=" + columnName + "[0]+" + number, count);
+                }
+                if (minusEqual)
+                {
+                    AddRows(columnName + "[1]=" + columnName + "[0]-" + number, count);
+                }
+                if (multiplyEqual)
+                {
+                    AddRows(columnName + "[1]=" + columnName + "[0]*" + number, count);
+                }
+                if (divideEqual)
+                {
+                    AddRows(columnName + "[1]=" + columnName + "[0]/" + number, count);
+                }
+
+            }
+            
+
+        }
+        /// <summary>
         /// Adds values to a column
         /// </summary>
         /// <param name="formula">The formula to create new values</param>
@@ -483,22 +535,29 @@ namespace Squirrel
         {           
             string pattern = "[[0-9]+]";
             string[] tokens = formula.Split('=');
-            string columnName = formula.Trim().Substring(0, formula.IndexOf('['));
+            string[] columnsPresent = Regex.Matches(tokens[1], "[a-zA-Z]+[[0-9]+]").Cast<Match>().Select(z => z.Value.Substring(0,z.Value.IndexOf('['))).ToArray();
+            string columnNameLeft = formula.Trim().Substring(0, formula.IndexOf('['));
             int index = Convert.ToInt32(Regex.Match(tokens[0], pattern).Value.Replace("[", string.Empty).Replace("]", string.Empty));
             int start = Convert.ToInt32(Regex.Match(tokens[1], pattern).Value.Replace("[", string.Empty).Replace("]", string.Empty));
 
             int startCopy = start;
             int j = 0;
             for (int i = start; j < count; i++)
-            {               
-                Expression exp = new Expression(tokens[1].Replace(columnName + "[" + startCopy.ToString() + "]", _rows[i][columnName]));
+            {
+                string statement = tokens[1];
+                foreach (var columnName in columnsPresent)
+                {
+                    statement = statement.Replace(columnName + "[" + startCopy.ToString() + "]", _rows[i][columnName]);
+                }
+                Expression exp = new Expression(statement);
                 if (RowCount <= index)
                 {
                     Dictionary<string, string> temp = new Dictionary<string, string>();
-                    temp.Add(columnName, exp.Evaluate().ToString());
+                    temp.Add(columnNameLeft, exp.Evaluate().ToString());
                     _rows.Add(temp);
                 }
-                _rows[index][columnName] = exp.Evaluate().ToString();
+                _rows[index][columnNameLeft] = exp.Evaluate().ToString();
+
                 start = index;
                 j++;
                 index++;
@@ -860,7 +919,7 @@ namespace Squirrel
 
             List<string> allNumericColumns = new List<string>();
             
-            allNumericColumns.AddRange(ColumnHeaders.Where(col =>  ValuesOf(col).All(m => Char.IsNumber(m,0))));           
+            allNumericColumns.AddRange(ColumnHeaders.Where(col =>  ValuesOf(col).Where(z => z.Trim().Length >0).All(m => Char.IsNumber(m,0))));           
 
             Table aggregatedTable = new Table();
             foreach (string value in allDistinctValues)
@@ -1189,7 +1248,7 @@ namespace Squirrel
         /// This returns 20 random rows to randSamples table from table "t"
         /// </example>
         /// 
-        [Description("Pick random sample,Random sample")]
+        [Description("Pick random sample,Random sample,Generate random sample")]
         public Table RandomSample(int sampleSize)
         {
             return this.Shuffle().Top(sampleSize);
