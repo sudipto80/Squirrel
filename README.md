@@ -37,8 +37,12 @@ API Overview
 Dependency
 ----------
 
-There is a dependency for [NCalc](https://ncalc.codeplex.com/) for ```csharp AddColumn() ```,  ```csharp AddRows()``` and ```csharp AddRowsByShortHand()``` methods. 
-
+There is a dependency for [NCalc](https://ncalc.codeplex.com/) for the following methods 
+```csharp
+AddColumn() 
+AddRows()
+AddRowsByShortHand()
+``` 
 Examples
 --------
 
