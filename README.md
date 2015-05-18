@@ -2,8 +2,7 @@
 Squirrel
 ======== 
 
-<!--<img src="http://gifyu.com/images/T-Shirt.png" border="0" height="250" width="300">-->
-<img src="http://gifyu.com/images/T-Shirt.png" border="0">
+<img src="http://gifyu.com/images/T-Shirt.png" border="0" height="250" width="300">
 
 <!--<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" t="100" width="100" ></a>-->
 
