@@ -2,11 +2,11 @@
 Squirrel
 ======== 
 
+<img src="http://gifyu.com/images/T-Shirt.png" border="0">
+<!--<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" t="100" width="100" ></a>-->
 
-<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" height="100" width="100" ></a>
+[`Squirrel by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
-</br>[`Squirrel by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
-</br>
 ***Agile Data Analytics for .NET***
 
 Get ***MORE*** done with ***less*** code
