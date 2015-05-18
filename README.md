@@ -1,9 +1,9 @@
 
 Squirrel
 ======== 
-</br>
 
-<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" height="100" width="100" ></a>[`Squirrel by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
+
+<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" height="100" width="100" ></a></br>[`Squirrel by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
 ***Agile Data Analytics for .NET***
 
