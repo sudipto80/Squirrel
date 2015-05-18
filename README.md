@@ -24,9 +24,7 @@ API Overview
 4. **DatabaseConnectors** - Data can be loaded from popular DB repositories by using the connectors for SQL Server and MongoDB.
 5. **DataCleansers** - Extraction/Removal of outliers or data that matches specific boolean criteria.
 6. **OrderedTable** - A data structure to hold sort results temporarily.
-7. **SmartDefaults** - Defaults values for various use cases and data sets.
-8. **Story** - Query generator for various use cases and data sets.
-9. **Table** - An ubiquitous data structure used to encapsulate the data. Several APIs are part of the *Table* -
+7. **Table** - An ubiquitous data structure used to encapsulate the data. Several APIs are part of the *Table* -
    * Filter data using regular expressions or SQL clause.
    * Sort data based on columns and their values.
    * Programmatic manipulation i.e. deletion, updation and insertion of data.
@@ -39,7 +37,7 @@ API Overview
 Dependency
 ----------
 
-There is a dependency for [NCalc](https://ncalc.codeplex.com/) for AddColumn() method. 
+There is a dependency for [NCalc](https://ncalc.codeplex.com/) for AddColumn(), AddRows() and AddRowsByShortHand() methods. 
 
 Examples
 --------
