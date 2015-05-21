@@ -48,6 +48,14 @@ AddColumn()
 AddRows()
 AddRowsByShortHand()
 ``` 
+NuGet Package
+-------------
+<img src="http://cdn.ws.citrix.com/wp-content/uploads/2011/09/NugetIcon.png"/>
+You can integrate the package using NuGet by giving the following command at the Package Manager Console</br>
+```
+PM> Install-Package TableAPI 
+```
+[Here is the NuGet Package page](https://www.nuget.org/packages/TableAPI/)
 Examples
 --------
 
