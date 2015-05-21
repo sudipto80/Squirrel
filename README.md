@@ -51,7 +51,7 @@ AddRowsByShortHand()
 NuGet Package
 -------------
 <img src="http://cdn.ws.citrix.com/wp-content/uploads/2011/09/NugetIcon.png"/>
-You can integrate the package using NuGet by giving the following command at the Package Manager Console</br>
+You can integrate the package using NuGet by giving the following command</br>
 ```
 PM> Install-Package TableAPI 
 ```
