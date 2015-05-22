@@ -87,7 +87,7 @@ There following Aggregation schemes are now supported
         [Description("by range")]
         Range 
     }
-    ```
+```
 
 The default scheme is to sum all the values for all the numeric columns. 
 
