@@ -147,6 +147,10 @@ namespace Squirrel
         /// </summary>
         public string Name { get; set; }
         #region Filtering
+        public double GetPercentage(string column,string value)
+        {
+            return Convert.ToDouble(this.ValuesOf(column).Count(z => z == value)) / Convert.ToDouble(this.ValuesOf(column).Count);
+        }
         /// <summary>
         /// Basic filtering based on the given predicate.
         /// </summary>
