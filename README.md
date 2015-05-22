@@ -1,7 +1,12 @@
-<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" height="100" width="100" ></a>[`Squirrel by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
 Squirrel
-========
+======== 
+
+<img src="http://gifyu.com/images/T-Shirt.png" border="0" height="250" width="300">
+
+<!--<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" t="100" width="100" ></a>-->
+
+[`Squirrel by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
 ***Agile Data Analytics for .NET***
 
@@ -24,9 +29,7 @@ API Overview
 4. **DatabaseConnectors** - Data can be loaded from popular DB repositories by using the connectors for SQL Server and MongoDB.
 5. **DataCleansers** - Extraction/Removal of outliers or data that matches specific boolean criteria.
 6. **OrderedTable** - A data structure to hold sort results temporarily.
-7. **SmartDefaults** - Defaults values for various use cases and data sets.
-8. **Story** - Query generator for various use cases and data sets.
-9. **Table** - An ubiquitous data structure used to encapsulate the data. Several APIs are part of the *Table* -
+7. **Table** - An ubiquitous data structure used to encapsulate the data. Several APIs are part of the *Table* -
    * Filter data using regular expressions or SQL clause.
    * Sort data based on columns and their values.
    * Programmatic manipulation i.e. deletion, updation and insertion of data.
@@ -39,8 +42,20 @@ API Overview
 Dependency
 ----------
 
-There is a dependency for [NCalc](https://ncalc.codeplex.com/) for AddColumn() method. 
-
+There is a dependency for [NCalc](https://ncalc.codeplex.com/) for the following methods 
+```csharp
+AddColumn() 
+AddRows()
+AddRowsByShortHand()
+``` 
+NuGet Package
+-------------
+<img src="http://cdn.ws.citrix.com/wp-content/uploads/2011/09/NugetIcon.png"/>
+You can integrate the package using NuGet by giving the following command</br>
+```
+PM> Install-Package TableAPI 
+```
+[Here is the NuGet Package page](https://www.nuget.org/packages/TableAPI/)
 Examples
 --------
 
