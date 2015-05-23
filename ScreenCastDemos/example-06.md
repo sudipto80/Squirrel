@@ -22,6 +22,7 @@ for (int pClass = 1; pClass <= 3;pClass++ )
 result.PrettyDump();
 ```
 This produces the following output 
+
 <img src="http://gifyu.com/images/titanic_survival_op.png" border="0">
 
 This uses the function ```GetPercentage``` which returns the percentage of values of the given column that match with the given value. For example here it returns the percentage of values in "Survived" column that is "0" for calculating "Died(%)" column. 
