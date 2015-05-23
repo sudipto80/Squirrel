@@ -91,10 +91,8 @@ There following Aggregation schemes are now supported
 
 The default scheme is to sum all the values for all the numeric columns. 
 
-```csharp
-Aggregate 
-``` 
-has another overloaded version that takes a user defined scheme instead of pre-defined ones from the AggregationMethod enum. Here is how that overload looks 
+```Aggregate ``` has another overloaded version that takes a user defined scheme instead of pre-defined ones from the AggregationMethod enum. Here is how that overload looks 
+
 ```csharp
 public Table Aggregate(string columnName, Func<List<string>, string> how)
 ```
