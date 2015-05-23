@@ -20,6 +20,13 @@ For a quick start take a look at the [CheatSheet] (http://www.slideshare.net/sud
 Here is a high level block diagram of all the components of Squirrel.
 ![Block Diagram](http://gifyu.com/images/blocks.png "High Level Block Diagram")
 
+Key Design Philosophy
+---------------------
+Here are couple of design decisions that have been the guiding principle for the choice of internal data structure for Squirrel ```Table``` data structure to make data accessing/manipulating more intuitive and efficient at the same time.
+* Each row in the table should be available by zero based integer indexing as we do in arrays and ```List<T>``` So if a table ```birthRates``` exists then we should be able to get to 10th row by the syntax ```birthRates[9]```
+* A column at a given index should be available by the column name index. So if we have a table ```StockValues``` that stores average stock values in a year of different companies where the row depicts the year and the column depicts the company for which the stock price is stored, then we should be able to get the stock price for Microsoft (Symbol “MSFT”) for 5th year as ```StockValues[4][“MSFT”]```
+* Value at row ```“k”``` (Expressed as an integer) and column ```“m”``` (Expressed as a string) has to be accessible by either of the syntax ```table[k][“m”]``` or ```table[“m”][k]```.
+
 API Overview
 ------------
 
