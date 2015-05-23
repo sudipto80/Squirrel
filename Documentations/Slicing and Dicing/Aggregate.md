@@ -1,6 +1,6 @@
 Aggregate
 ====
-Aggregate has two overloaded versions and it is used to flatten a given table as per the given scheme. 
+```Aggregate``` has two overloaded versions and it is used to flatten a given table as per the given scheme. 
 ```csharp
 public Table Aggregate(string columnName, AggregationMethod how = AggregationMethod.Sum)
 ```
