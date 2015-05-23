@@ -4,7 +4,7 @@ First few rows of the titanic dataset looks like this
 
 <img src="http://gifyu.com/images/titanic_survival.png" border="0">
 
-Survived "0" means the person didn't survive and "1" means that the person survived. THe question posed is what is the percentage of people in each class that survived and died. "Pclass" column depicts the class of the person boarded. "1" means first class, "2" means second class and "3" means third class. 
+Survived "0" means the person didn't survive and "1" means that the person survived. The question posed is what is the percentage of people in each class that survived and died. "Pclass" column depicts the class of the person boarded. "1" means first class, "2" means second class and "3" means third class. 
 
 The following code uses Squirrel to solve it. 
 ```csharp
