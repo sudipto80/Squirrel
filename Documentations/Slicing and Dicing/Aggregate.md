@@ -4,7 +4,8 @@ Aggregate
 ```csharp
 public Table Aggregate(string columnName, AggregationMethod how = AggregationMethod.Sum)
 ```
-Aggregate does flatten a table as per the given rule. It takes has two parameters. The first one is the name of the non-numeric column that has to be present in the final result and a scheme depicted as an enum that will be used to flatten the table.
+
+```Aggregate``` does flatten a table as per the given rule. It takes has two parameters. The first one is the name of the non-numeric column that has to be present in the final result and a scheme depicted as an enum that will be used to flatten the table.
 
 Consider you have the following table.
 
