@@ -11,12 +11,13 @@ The following code uses Squirrel to solve it.
 Table titanic = DataAcquisition.LoadCSV(@"titanic.csv");
 var classes = titanic.SplitOn("Pclass");
 Table result = new Table ();
-for (int pClass = 1; pClass <= 3;pClass++ )
+string[] pClasses = {"1","2","3"};
+foreach(pClass in pClasses)
 {
     Dictionary<string,string> thisRow = new Dictionary<string,string> ();
     thisRow.Add("Class",pClass.ToString());
-    thisRow.Add("Died(%)", (100 * classes[pClass.ToString()].GetPercentage("Survived", "0")).ToString());
-    thisRow.Add("Survived(%)", (100 * classes[pClass.ToString()].GetPercentage("Survived", "1")).ToString());
+    thisRow.Add("Died(%)", (100 * classes[pClass].GetPercentage("Survived", "0")).ToString());
+    thisRow.Add("Survived(%)", (100 * classes[pClass].GetPercentage("Survived", "1")).ToString());
     result.AddRow(thisRow);
 }
 result.PrettyDump();
