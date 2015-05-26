@@ -32,13 +32,7 @@ docum
 BasicStatistics
 =======
 [**```Median```**]()
-**[```IQRRange```]**()
-**[```Range```]**()
-**[```Kurtosis```]**()
-**[```StandardDeviation```]**()
-**[```AverageCount```]**()
-**[```AboveAverageCount```]**()
-**[```BelowAverageCount```]**()
+[**```IQRRange```**]()
 
 API Overview
 ------------
