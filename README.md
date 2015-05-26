@@ -237,9 +237,8 @@ RoundOffTo
 ```
 AggregateColumns
 ```
-```
-[Aggregate](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Slicing%20and%20Dicing/Aggregate.md)
-```
+[```Aggregate ```](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Slicing%20and%20Dicing/Aggregate.md)
+
 ```
 Aggregate
 ```
