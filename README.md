@@ -31,7 +31,7 @@ docum
 ---
 BasicStatistics
 =======
-**[```Median```]**()
+[**```Median```**]()
 **[```IQRRange```]**()
 **[```Range```]**()
 **[```Kurtosis```]**()
