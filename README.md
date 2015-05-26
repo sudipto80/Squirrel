@@ -32,6 +32,7 @@ docum
 BasicStatistics
 =======
 [**```Median```**]()
+
 [**```IQRRange```**]()
 
 API Overview
