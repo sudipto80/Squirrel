@@ -53,7 +53,7 @@ docum
 Table
 =======
 [**```GetPercentage```**](GetPercentage.md)
-[**```Filter```**](Filter.md)
+[<h1>```Filter```**</h1>](Filter.md)
 [**```FilterByRegex```**](FilterByRegex.md)
 [**```Filter```**](Filter.md)
 [**```Filter```**](Filter.md)
