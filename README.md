@@ -77,7 +77,7 @@ Examples
 Table
 =======
 |Method Name|Summary|
---------------
+-----------|-------
 |[**```GetPercentage```**](GetPercentage.md)|Summary|
 |[**```Filter```**](Filter.md)|Summary|
 |[**```FilterByRegex```**](FilterByRegex.md)|Summary|
