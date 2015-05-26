@@ -74,7 +74,48 @@ Examples
 5. [How much money someone will accumulate at retirement](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-05.md)
 6. [Titanic Survivor Analysis per class](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-06.md)
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+Table
+=======
+|Method Name|Summary|
+--------------
+|[**```GetPercentage```**](GetPercentage.md)|Summary|
+|[**```Filter```**](Filter.md)|Summary|
+|[**```FilterByRegex```**](FilterByRegex.md)|Summary|
+|[**```RunSQLQuery```**](RunSQLQuery.md)|Summary|
+|[**```SortInThisOrder```**](SortInThisOrder.md)|Summary|
+|[**```SortBy```**](SortBy.md)|Summary|
+|[**```ModifyColumnName```**](ModifyColumnName.md)|Summary|
+|[**```ValuesOf```**](ValuesOf.md)|Summary|
+|[**```AddRow```**](AddRow.md)|Summary|
+|[**```AddRowsByShortHand```**](AddRowsByShortHand.md)|Summary|
+|[**```AddRows```**](AddRows.md)|Summary|
+|[**```ExtractAndAddAsColumn```**](ExtractAndAddAsColumn.md)|Summary|
+|[**```AddColumn```**](AddColumn.md)|Summary|
+|[**```TransformCurrencyToNumeric```**](TransformCurrencyToNumeric.md)|Summary|
+|[**```RemoveColumn```**](RemoveColumn.md)|Summary|
+|[**```Transpose```**](Transpose.md)|Summary|
+|[**```RoundOffTo```**](RoundOffTo.md)|Summary|
+|[**```AggregateColumns```**](AggregateColumns.md)|Summary|
+|[**```Aggregate```**](Aggregate.md)|Summary|
+|[**```Transform```**](Transform.md)|Summary|
+|[**```Histogram```**](Histogram.md)|Summary|
+|[**```SplitOn```**](SplitOn.md)|Summary|
+|[**```MergeByColumns```**](MergeByColumns.md)|Summary|
+|[**```Merge```**](Merge.md)|Summary|
+|[**```Exclusive```**](Exclusive.md)|Summary|
+|[**```Common```**](Common.md)|Summary|
+|[**```IsSubset```**](IsSubset.md)|Summary|
+|[**```MergeColumns```**](MergeColumns.md)|Summary|
+|[**```Drop```**](Drop.md)|Summary|
+|[**```Pick```**](Pick.md)|Summary|
+|[**```RandomSample```**](RandomSample.md)|Summary|
+|[**```Top```**](Top.md)|Summary|
+|[**```Bottom```**](Bottom.md)|Summary|
+|[**```TopNPercent```**](TopNPercent.md)|Summary|
+|[**```BottomNPercent```**](BottomNPercent.md)|Summary|
+|[**```Middle```**](Middle.md)|Summary|
+|[**```SplitByRows```**](SplitByRows.md)|Summary|
+|[**```SplitByColumns```**](SplitByColumns.md)|Summary|
+|[**```Shuffle```**](Shuffle.md)|Summary|
+|[**```ShowMe```**](ShowMe.md)|Summary|
+|[**```HowMany```**](HowMany.md)|Summary|
