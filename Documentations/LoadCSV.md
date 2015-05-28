@@ -8,3 +8,4 @@ This takes the name of the file and returns all the content of the CSV file load
  public static Table LoadCSV(string csvFileName)
  ```
 
+To see how it is used check out [Example #1](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-01.md)
