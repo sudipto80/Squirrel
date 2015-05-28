@@ -22,11 +22,11 @@ namespace Squirrel
     public enum Alignment 
     { 
         /// <summary>
-        /// 
+        /// Alligns the content to left
         /// </summary>
         Left,
         /// <summary>
-        /// 
+        /// Alligns the content to right
         /// </summary>
         Right 
     }
@@ -50,11 +50,11 @@ namespace Squirrel
     public enum OutlierDetectionAlgorithm 
     {
         /// <summary>
-        /// 
+        /// Inter Quantile Range
         /// </summary>
         IQR_Interval, 
         /// <summary>
-        /// 
+        /// Z Score
         /// </summary>
         Z_Score 
     };
@@ -147,17 +147,32 @@ namespace Squirrel
         /// </summary>
         public string Name { get; set; }
         #region Filtering
+        /// <summary>
+        /// Returns the percentage of the value "value" from all the values of the given column
+        /// </summary>
+        /// <param name="column">The column for which the percentage has to be obtained</param>
+        /// <param name="value">The value for which the percentage has to be obtained </param>
+        /// <returns>Percentage value of how many times the given value "value" appears in the column "column"</returns>
+        /// <example>
+        /// //Find how many times the value "0" appears in the "Survived" column in titanic dataset
+        /// titanic.GetPercentage("Survived","0");
+        /// </example>
+        /// <remarks>See this example https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-06.md
+        /// This will show you how to use this method.</remarks>
         public double GetPercentage(string column,string value)
         {
-            return Convert.ToDouble(this.ValuesOf(column).Count(z => z == value)) / Convert.ToDouble(this.ValuesOf(column).Count);
+            return Convert.ToDouble(this.ValuesOf(column).Count(z => z == value)) 
+                 / Convert.ToDouble(this.ValuesOf(column).Count);
         }
         /// <summary>
         /// Basic filtering based on the given predicate.
         /// </summary>
         /// <param name="predicate">The predicate takes a row and returns a bool.</param>
         /// <returns>The result table with filtered values</returns>
-        /// <example>Table filtered  = iris.Filter(x => Convert.ToDouble(x["SepalWidth"])>3.0);//Finds all iris flowers where the SepalWidth is more than 3.0
-        /// </example>
+        /// <example>
+        /////Finds all iris flowers where the SepalWidth is more than 3.0
+        ///Table filtered = iris.Filter(x => Convert.ToDouble(x["SepalWidth"]) > 3.0);
+        ///</example>
         public Table Filter(Func<Dictionary<string, string>, bool> predicate)
         {
             Table result  = new Table ();
@@ -170,6 +185,12 @@ namespace Squirrel
         /// <param name="column">The column where the values has to be sought</param>
         /// <param name="regexPattern">The regex pattern</param>
         /// <returns>A table filled with rows that has a column with matching value.</returns>
+        /// <example>
+        /// //Returns a table which matches different spellings of my name 
+        /// //Sometimes people write my name as "Sudipto". 
+        /// //So the following call will return all the rows that has either "Sudipta" or "Sudipto" in the "Name" column.
+        /// Table filtered = tab.FilterByRegex("Name","Sudipt[a|o]");
+        /// </example>
         public Table FilterByRegex(string column, string regexPattern)
         {
             Table filteredTable = new Table();
@@ -182,6 +203,20 @@ namespace Squirrel
       
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_fieldSearchValuesMap"></param>
+        /// <returns></returns>
+        public Table Filter(Dictionary<string,List<string>> fieldSearchValuesMap)
+        {
+            Table result = this;
+            foreach (var key in fieldSearchValuesMap.Keys)
+            {
+                result = result.Filter(key, fieldSearchValuesMap[key].ToArray());
+            }
+            return result;
+        }
+        /// <summary>
         /// Finds all the matching rows from the source table
         /// </summary>
         /// <param name="_fieldSearchValueMap">Key value pair by which the filtering will be performed</param>
@@ -189,6 +224,7 @@ namespace Squirrel
         /// </returns>
         public Table Filter(Dictionary<string, string> _fieldSearchValueMap)
         {
+            
             Table filteredTable = new Table();
             for (int i = 0; i < _rows.Count; i++)
             {
@@ -225,6 +261,7 @@ namespace Squirrel
             }
             return filteredTable;
         }
+       
         /// <summary>
         /// Runs SQL Query against the Table
         /// </summary>
@@ -309,8 +346,8 @@ namespace Squirrel
         /// <param name="smartSort"></param>
         /// <param name="smartDefaultFile"></param>
         /// <param name="how">Whether the sorting has to be done in ascending or in descending order or not.</param>
-        /// <returns></returns>
-        /// 
+        /// <returns>An ordered table where rows are ordered by the given column.</returns>
+        /// <example>var sortedTable = tab.SortBy("Age");//Sorts the table by the column "Age"</example>
         [Description("sort by")]
         public OrderedTable SortBy(string columnName, bool smartSort = false, string smartDefaultFile = @"SmartDefaults.xml", SortDirection how = SortDirection.Ascending)
         {
@@ -335,9 +372,8 @@ namespace Squirrel
             }
             
 
-            string dateRegex = @"^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$";
-            string numericRegex = @"^-?[0-9]\d*(\.\d+)?$";//matches decimals with negative 
-         
+            string dateRegex = @"^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$";//matches date with regular expression.
+            string numericRegex = @"^-?[0-9]\d*(\.\d+)?$";//matches decimals with negative          
             string currencyRegex = @"[$£€¥][0-9]\d*(\.\d+)?$";//matches currencies
             
             bool isDateColumn = ValuesOf(columnName).All(m=>Regex.IsMatch(m,dateRegex));
@@ -388,7 +424,9 @@ namespace Squirrel
         /// <param name="oldName">Old/Current name of the column</param>
         /// <param name="newName">New/Proposed name of the column</param>
         /// <returns>A table with modified column header names</returns>
-        /// 
+        /// <example>
+        /// //Changes the name of the column "First_Name" to "FirstName"
+        /// Table modCols = tab.ModifyColumnName("First_Name","FirstName");</example>
         [Description("Change column name")]
         public Table ModifyColumnName(string oldName, string newName)
         {
@@ -411,6 +449,11 @@ namespace Squirrel
         /// <typeparam name="T">The type of the column.</typeparam>
         /// <param name="columnName">The name of the column.</param>
         /// <returns>A list of values with all the values of the column.</returns>
+        /// <remarks>
+        /// //Returns the list of names as a list of strings
+        /// //the values are casted to the given type
+        /// //In this case the type is "string"
+        /// List&lt;string&gt; names = tab.ValuesOf&lt;string&gt;("Name");</remarks>
         public List<T> ValuesOf<T>(string columnName)
         {
             try
@@ -426,7 +469,11 @@ namespace Squirrel
         /// Returns all the values of the given column 
         /// </summary>
         /// <param name="columnName">column for which we want to extract all values</param>
-        /// <returns></returns>
+        /// <returns>All the values of the given column as a list of string.</returns>
+        /// <example>
+        /// //List of string codes will hold all the values of
+        /// //
+        /// List&lt;string&gt; codes  = tab.ValuesOf("Code");</example>
         public List<string> ValuesOf(string columnName)
         {
             try
@@ -488,10 +535,13 @@ namespace Squirrel
         /// </summary>
         /// <param name="formula">Age[1]=Age[0]+1 is same as "Age++"</param>
         /// <param name="count">How many rows are needed.</param>
+        /// <example>
+        /// //Increment age by 24 times
+        /// tab.AddRowsByShortHand("Age++",24); 
+        /// </example>
+        /// <seealso cref="Table.AddRows"/>
         public void AddRowsByShortHand(string formula, int count)
-        {
-            //tab.AddRowsByShortHand("Age++",24);//increment age by 24 times
-            //tab.AddRowsByShortHand("Num/=10,3);//
+        {          
             //++,--,+=,-=,*=,/=
             string columnName = Regex.Match(formula, "[a-zA-Z]+").Value;
             bool plusPlus = formula.EndsWith("++");
@@ -525,10 +575,7 @@ namespace Squirrel
                 {
                     AddRows(columnName + "[1]=" + columnName + "[0]/" + number, count);
                 }
-
-            }
-            
-
+            }           
         }
         /// <summary>
         /// Adds values to a column
@@ -539,7 +586,10 @@ namespace Squirrel
         {           
             string pattern = "[[0-9]+]";
             string[] tokens = formula.Split('=');
-            string[] columnsPresent = Regex.Matches(tokens[1], "[a-zA-Z]+[[0-9]+]").Cast<Match>().Select(z => z.Value.Substring(0,z.Value.IndexOf('['))).ToArray();
+            string[] columnsPresent = Regex.Matches(tokens[1], "[a-zA-Z]+[[0-9]+]")
+                                           .Cast<Match>()
+                                           .Select(z => z.Value.Substring(0,z.Value.IndexOf('[')))
+                                           .ToArray();
             string columnNameLeft = formula.Trim().Substring(0, formula.IndexOf('['));
             int index = Convert.ToInt32(Regex.Match(tokens[0], pattern).Value.Replace("[", string.Empty).Replace("]", string.Empty));
             int start = Convert.ToInt32(Regex.Match(tokens[1], pattern).Value.Replace("[", string.Empty).Replace("]", string.Empty));
@@ -609,12 +659,9 @@ namespace Squirrel
         /// <param name="formula">Formula to calculate values of the new column</param>
         /// <param name="decimalDigits"></param>
         public void AddColumn(string columnName, string formula, int decimalDigits)
-        {
-            
+        {            
             string copyFormula = formula;
-         
-
-            //List<string> values = new List<string>();
+           
             string[] columns = formula.Split(new char[] { '+', '-', '*', '/', '(', ')',' ' },StringSplitOptions.RemoveEmptyEntries);
 
             columns = columns.Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty))
@@ -631,15 +678,9 @@ namespace Squirrel
                 }
          
 
-              //  values.Add(formula);
                 _rows[i].Add(columnName, Math.Round(Convert.ToDecimal(new Expression(formula).Evaluate().ToString()),decimalDigits).ToString());         
             }
         }
-        //public Table TransformToCurrency(params string[] columns)
-        //{
-            
-            
-        //}
         /// <summary>
         /// Removes all currency symbol and comma from the values of the given column.
         /// </summary>
@@ -665,6 +706,8 @@ namespace Squirrel
         /// </summary>
         /// <param name="columnName">column name</param>
         /// <param name="values">given values</param>
+        /// <example></example>
+        /// <remarks>This is an in-place algorithm that modifies the current table.</remarks>
         public void AddColumn(string columnName, List<string> values)
         {
             if (_rows.Count == 0)
@@ -692,14 +735,12 @@ namespace Squirrel
         {
             get
             {
-
                 return _rows[index];
             }
             set
             {
                 _rows[index] = value;
             }
-
         }
       
         /// <summary>
@@ -724,6 +765,7 @@ namespace Squirrel
         /// <param name="columnName">The name of the column</param>
         /// <param name="index">The index</param>
         /// <returns>The value of the given column at the given index as a string</returns>
+        /// <example>string stockValue = stocks["MSFT",4];</example>
         public string this[string columnName, int index]
         {
             get
@@ -732,14 +774,14 @@ namespace Squirrel
             }
         }
         /// <summary>
-        /// A generic folder method. This helps to generate 
+        /// A generic folder method. This helps to generate a cumulative fold
         /// </summary>
         /// <param name="columnName"></param>
         /// <param name="how"></param>
         /// <returns></returns>
         /// 
         [Description("Fold cumulatively")]
-        private Table CumulativeFold(string columnName, AggregationMethod how)
+        public Table CumulativeFold(string columnName, AggregationMethod how = AggregationMethod.Sum)
         {
             Table result = new Table();
             List<string> allNumericColumns = new List<string>();
@@ -761,6 +803,12 @@ namespace Squirrel
                             case AggregationMethod.Average:
                                 currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Average().ToString());
                                 break;
+                            case AggregationMethod.Max:
+                                currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Max().ToString());
+                                break;
+                            case AggregationMethod.Min:
+                                currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Min().ToString());
+                                break;
                         }
                     }
                 }
@@ -768,28 +816,7 @@ namespace Squirrel
             }
             return result;
         }
-        /// <summary>
-        /// Calculates cumulative summation of values in the given column
-        /// </summary>
-        /// <param name="columnName">The given column</param>
-        /// <returns>A table with cumulative sums for the given column</returns>
-        /// 
-        [Description("Show cumulative summation,Show cumulative sum,Sum cumulatively and show")]
-        public Table CumulativeSum(string columnName)
-        {
-            return CumulativeFold(columnName, AggregationMethod.Sum);
-        }
-        /// <summary>
-        /// Calculates cumulative average of values in the given column
-        /// </summary>
-        /// <param name="columnName">The given column</param>
-        /// <returns>A table with cumulative averages for the given column.</returns>
-        /// 
-        [Description("Cumulative average,Find average cumulatively")]
-        public Table CumulativeAverage(string columnName)
-        {
-            return CumulativeFold(columnName, AggregationMethod.Average);
-        }
+        
         /// <summary>
         /// Change rows as columns
         /// </summary>
@@ -1035,11 +1062,16 @@ namespace Squirrel
             return histogram;
         }
         /// <summary>
-        /// Splits a table on the values of a given column
+        /// Splits a table on the distinct values of a given column
         /// </summary>
         /// <param name="columnName">The column; depending on values of which we want to perform the split</param>
         /// <returns>A mapping between values of the column and their corresponding table</returns>
+        /// <github>
+        /// SplitOn
+        /// =======
+        /// Splits a table on the distinct values of a given column.
         /// 
+        /// </github>
         [Description("Split by,Split on,Break by,Partition by,Divide by")]
         public Dictionary<string, Table> SplitOn(string columnName)
         {
@@ -1064,28 +1096,33 @@ namespace Squirrel
         /// <param name="anotherTable">The other table</param>
         /// <param name="connectorColumn">The column based on which the index of the matching rows has to be found.
         /// The connector column has to be non numeric.</param>
-        /// <returns>A Table with merged columns</returns>        
+        /// <returns>A Table with merged columns</returns>       
+        /// <example>
+        /// //This is an example use case of this method.
+        ////Table 1 Columns
+        ////Name  | Age | Gender 
+        ////Sam   | 23  | M
+        ////Jane  | 19  | F
+        ////Raskin| 14  | M
+
+        ////Table 2 Columns
+        ////Name | Course 
+        ////Jane | C#
+        ////Sam  | F#
+        ////Raskin| Python
+
+
+        ////Merged Columns in the resultant Table.
+        ////Name | Age | Gender | Course
+        ////Sam  | 23  | M      | F#
+        ////Jane | 19  | F      | C#
+        ////Raskin| 14 | M      | Python
+        /// Table merged = t1.MergeByColumns(t2);//Uses the first column to perform the join
+        /// Table mergedByName = t1.MergeByColumns(t2,"Name");//Uses the column "Name" to perform the join</example>
+        /// 
         public Table MergeByColumns(Table anotherTable, string connectorColumn = "Not Provided")
         {
-            //This is an example use case of this method.
-            //Table 1 Columns
-            //Name  | Age | Gender 
-            //Sam   | 23  | M
-            //Jane  | 19  | F
-            //Raskin| 14  | M
-
-            //Table 2 Columns
-            //Name | Course 
-            //Jane | C#
-            //Sam  | F#
-            //Raskin| Python
-
             
-            //Merged Columns in the resultant Table.
-            //Name | Age | Gender | Course
-            //Sam  | 23  | M      | F#
-            //Jane | 19  | F      | C#
-            //Raskin| 14 | M      | Python
 
 
             if (connectorColumn == "Not Provided")
@@ -1129,6 +1166,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="anotherTable">The other table with which we have to compare.</param>
         /// <returns>A new table with rows that are only available in the current table, not in the other one.</returns>
+        /// <example>Table exclusive = t1.Exclusive(t2);//Find rows that are exclusively available in table "t1"</example>
         public Table Exclusive(Table anotherTable)
         {
             Table result = new Table ();
@@ -1144,6 +1182,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="anotherTable">The other table with which we want to find common rows</param>
         /// <returns>A table with only common rows</returns>
+        /// <example>Table comRows = t1.Common(t2);//returns common rows that are available in "t1" and "t2"</example>
         public Table Common(Table anotherTable)
         {
             if (anotherTable == null)
@@ -1194,6 +1233,10 @@ namespace Squirrel
         /// <param name="separator">The character separator to use between values of participating columns</param>
         /// <param name="columns">Columns to merge</param>
         /// <returns>Returns a table with the merged column</returns>
+        /// <example>
+        /// //Merges two columns "First_Name" and "Last_Name" 
+        /// //and the new column is named "Full_Name"
+        /// Table mergedColumns = t1.MergeColumns("Full_Name", ' ',"First_Name","Last_Name");</example>
         public Table MergeColumns(string newColumnName, char separator = ' ',params string[] columns)
         {
             List<string> mergedValues = new List<string>();
@@ -1209,7 +1252,11 @@ namespace Squirrel
         /// </summary>
         /// <param name="columns">List of column names</param>
         /// <returns>A table with all the columns except the mentioned ones</returns>
-        /// 
+        /// <example>
+        /// //Assuming that there is a Table instance called 
+        /// //tab and it has a column "Sex" 
+        /// //The following dumps the table to console except the "Sex" column.
+        /// tab.Drop("Sex").PrettyDump();</example>
         [Description("Hide,Don't show")]
         public Table Drop(params string[] columns)
         {
@@ -1220,7 +1267,9 @@ namespace Squirrel
         /// </summary>
         /// <param name="columns">Name of the columns that we want to show.</param>
         /// <returns>A table with only the columns mentioned in the parameter </returns>
-        /// 
+        /// <example>t.Pick("Name","Age")
+        ///           .PrettyDump();//dumps the table with only two columns</example>
+        /// <seealso cref="Table.Drop"/>          
         [Description("Pick only,Show only,Show just,Just,Show me only,Just show,Only show")]
         public Table Pick(params string[] columns)
         {
@@ -1251,7 +1300,7 @@ namespace Squirrel
         /// <example>Table randSamples = t.RandomSample(20);
         /// This returns 20 random rows to randSamples table from table "t"
         /// </example>
-        /// 
+        /// <seealso cref="Table.Shuffle"/>
         [Description("Pick random sample,Random sample,Generate random sample")]
         public Table RandomSample(int sampleSize)
         {
@@ -1264,7 +1313,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="n">number of rows from top.</param>
         /// <returns>A table with top n rows</returns>
-        /// 
+        /// <example>tab.Top(10);//Returns a table with only the first 10 rows of the current Table.</example>
         [Description("First,Top,From the beginning,From top")]
         public Table Top(int n)
         {
@@ -1280,7 +1329,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="n">number of rows from bottom</param>
         /// <returns>A table with n rows from bottom</returns>
-        /// 
+        /// <example>t.Bottom(10);//returns a table with last 10 rows of the table instance "t"</example>
         [Description("Last,Bottom,From the end,From bottom")]
         public Table Bottom(int n)
         {
@@ -1296,7 +1345,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="n">The percentage of rows to pick from top</param>
         /// <returns>A table with n% rows from top</returns>
-        /// 
+        /// <example>Table topFewPerc = tab.TopNPercent(12);//returns top 12% rows from "tab" to "topFewPerc" Table</example>
         [Description("Top percent")]
         public Table TopNPercent(int n)
         {
@@ -1368,7 +1417,7 @@ namespace Squirrel
         /// Random shuffle. Returns a shuffled table. 
         /// This can be very handy while generating a random sample
         /// </summary>
-        ///
+        /// <seealso cref="Table.RandomSample"/>
         [Description("Shuffle,Random shuffle,Randomize,Un order")]
         public Table Shuffle()
         {            
@@ -1383,7 +1432,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="firstRow">The first row</param>
         /// <param name="secondRow">The second row</param>
-        /// <returns></returns>
+        /// <returns>True if both rows are same, else returns false.</returns>
         private bool IsSameRow(Dictionary<string, string> firstRow, Dictionary<string, string> secondRow)
         {
             return firstRow.Keys.All(k => secondRow.Keys.Contains(k)) &&
