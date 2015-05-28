@@ -1,30 +1,10 @@
-BasicStatistics
-============
-|Method Name|Summary|
-|:-------------|:---------|
 
-|[**```Median```**](Median.md)||
-|[**```IQRRange```**](IQRRange.md)|This must go to the Math API|
-|[**```Range```**](Range.md)|Returns the range of values for the given columns.|
-|[**```Kurtosis```**](Kurtosis.md)|Returns the kurtosis of a data set. Kurtosis characterizes the relative peakedness or flatness of a distribution compared with the normal distribution. Positive kurtosis indicates a relatively peaked distribution. Negative kurtosis indicates a relatively flat distribution.|
-|[**```StandardDeviation```**](StandardDeviation.md)||
-|[**```AverageCount```**](AverageCount.md)||
-|[**```AboveAverageCount```**](AboveAverageCount.md)|Returns a number of|
-|[**```BelowAverageCount```**](BelowAverageCount.md)|Returns the number of instances that are below average value|
-BootstrapTableDecorators
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```ToBootstrapHTMLTableWithColoredRows```**](ToBootstrapHTMLTableWithColoredRows.md)|Bootstrap offers functionalities to color rows of a given table.|
-|[**```ToBasicBootstrapHTMLTable```**](ToBasicBootstrapHTMLTable.md)|Returns a basic HTML table in bootstrap format.|
-CustomComparers
-============
 DataAcquisition
 ============
+Methods for acquiring data from several data formats and databases. Work is in progress to add more connectors. 
+
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```LoadXLS```**](LoadXLS.md)|Loads the data from an Excel workbook to a table|
 |[**```LoadFixedLength```**](LoadFixedLength.md)|Loads data from fixed column length files.|
 |[**```LoadARFF```**](LoadARFF.md)|Loads data from .arff format Data in Weka toolkit is from .arff source|
@@ -41,29 +21,13 @@ DataAcquisition
 |[**```ToTSV```**](ToTSV.md)|Generates a TSV representation of the table|
 |[**```ToDataTable```**](ToDataTable.md)|Generates a DataTable out of the current Table|
 |[**```ToARFF```**](ToARFF.md)|Returns the string representations of the table as a ARFF file.|
-RelationalDatabaseConnectors
-============
-|Method Name|Summary|
-|:-------------|:---------|
 
-|[**```LoadFromSQLServer2008```**](LoadFromSQLServer2008.md)||
-|[**```LoadFromMongoDB```**](LoadFromMongoDB.md)||
-GoogleDataVisualizationcs
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```ToHistogramByGoogleDataVisualization```**](ToHistogramByGoogleDataVisualization.md)|Genertes the Histogram using google data visualization.|
-|[**```ToPieByGoogleDataVisualization```**](ToPieByGoogleDataVisualization.md)|Generates a pie/3dPie/Donut chart from the given table.|
-|[**```ToBarChartByGoogleDataVisualization```**](ToBarChartByGoogleDataVisualization.md)|Generates a bar/column chart from the given table for the given column|
-|[**```ToPieFromHistogramByGoogleDataVisualization```**](ToPieFromHistogramByGoogleDataVisualization.md)|TODO|
-|[**```ToBarChartFromHistogramByGoogleDataVisualization```**](ToBarChartFromHistogramByGoogleDataVisualization.md)|TODO|
-|[**```ToBubbleChartByGoogleVisualization```**](ToBubbleChartByGoogleVisualization.md)|TODO|
 Table
 ============
+Sweet home for all the core slicing and dicing tasks. 
+
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```GetPercentage```**](GetPercentage.md)|Returns the percentage of the value "value" from all the values of the given column|
 |[**```Filter```**](Filter.md)|Finding a value by regular expression|
 |[**```FilterByRegex```**](FilterByRegex.md)|Finding a value by regular expression|
@@ -110,101 +74,15 @@ OrderedTable
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```ThenBy```**](ThenBy.md)|Sorts an already sorted table by another column|
-|[**```GetPercentage```**](GetPercentage.md)||
-|[**```Filter```**](Filter.md)||
-|[**```FilterByRegex```**](FilterByRegex.md)||
-|[**```RunSQLQuery```**](RunSQLQuery.md)||
-|[**```SortInThisOrder```**](SortInThisOrder.md)||
-|[**```SortBy```**](SortBy.md)||
-|[**```ModifyColumnName```**](ModifyColumnName.md)||
-|[**```ValuesOf```**](ValuesOf.md)||
-|[**```AddRow```**](AddRow.md)||
-|[**```AddRowsByShortHand```**](AddRowsByShortHand.md)||
-|[**```AddRows```**](AddRows.md)||
-|[**```ExtractAndAddAsColumn```**](ExtractAndAddAsColumn.md)||
-|[**```AddColumn```**](AddColumn.md)||
-|[**```TransformCurrencyToNumeric```**](TransformCurrencyToNumeric.md)||
-|[**```RemoveColumn```**](RemoveColumn.md)||
-|[**```CumulativeFold```**](CumulativeFold.md)||
-|[**```Transpose```**](Transpose.md)||
-|[**```RoundOffTo```**](RoundOffTo.md)||
-|[**```AggregateColumns```**](AggregateColumns.md)||
-|[**```Aggregate```**](Aggregate.md)||
-|[**```Transform```**](Transform.md)||
-|[**```Histogram```**](Histogram.md)||
-|[**```SplitOn```**](SplitOn.md)||
-|[**```MergeByColumns```**](MergeByColumns.md)||
-|[**```Merge```**](Merge.md)||
-|[**```Exclusive```**](Exclusive.md)||
-|[**```Common```**](Common.md)||
-|[**```IsSubset```**](IsSubset.md)||
-|[**```MergeColumns```**](MergeColumns.md)||
-|[**```Drop```**](Drop.md)||
-|[**```Pick```**](Pick.md)||
-|[**```RandomSample```**](RandomSample.md)||
-|[**```Top```**](Top.md)||
-|[**```Bottom```**](Bottom.md)||
-|[**```TopNPercent```**](TopNPercent.md)||
-|[**```BottomNPercent```**](BottomNPercent.md)||
-|[**```Middle```**](Middle.md)||
-|[**```SplitByRows```**](SplitByRows.md)||
-|[**```SplitByColumns```**](SplitByColumns.md)||
-|[**```Shuffle```**](Shuffle.md)||
-|[**```ShowMe```**](ShowMe.md)||
-|[**```HowMany```**](HowMany.md)||
-SmartDefaults
-============
-|Method Name|Summary|
-|:-------------|:---------|
 
-|[**```DoesMatchingEntryExist```**](DoesMatchingEntryExist.md)||
-|[**```GetSmartDefaultValues```**](GetSmartDefaultValues.md)||
-Story
-============
-|Method Name|Summary|
-|:-------------|:---------|
 
-|[**```ColumnNamesInvolved```**](ColumnNamesInvolved.md)||
-|[**```MethodInvolved```**](MethodInvolved.md)||
-|[**```ToDescription```**](ToDescription.md)||
-|[**```ToChart```**](ToChart.md)||
-|[**```HandleIt```**](HandleIt.md)||
-|[**```GetCommand```**](GetCommand.md)||
-|[**```QuickDashboard```**](QuickDashboard.md)|Returns the HTML content for a quick dashboard for a given table|
-|[**```AggregationTables```**](AggregationTables.md)||
-|[**```Gist```**](Gist.md)|Calculates the gist of values for numeric and currency columns.|
-|[**```PseudoNaturalQuery```**](PseudoNaturalQuery.md)||
-Alignment
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```HasFlag```**](HasFlag.md)||
-SortDirection
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```HasFlag```**](HasFlag.md)||
-OutlierDetectionAlgorithm
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```HasFlag```**](HasFlag.md)||
-AggregationMethod
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```HasFlag```**](HasFlag.md)||
 DataCleansers
 ============
+This is home of all the methods that help perform data cleansing tasks. 
+
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```RemoveImpssibleCombinations```**](RemoveImpssibleCombinations.md)|Replaces missing values by the given scheme.|
 |[**```ReplaceMissingValues```**](ReplaceMissingValues.md)|Replaces missing values by the given scheme.|
 |[**```KeepJustNumbersAndDecimal```**](KeepJustNumbersAndDecimal.md)|Removes every other character from the given string except numbers|
@@ -226,3 +104,35 @@ DataCleansers
 |[**```RemoveIf```**](RemoveIf.md)|Removes those rows at which the value of the given column falls under the given range|
 |[**```RemoveIfNot```**](RemoveIfNot.md)|Removes rows from the table that are not between the given values. This is only for the numeric columns.|
 |[**```ConvertOnesAndZerosToBoolean```**](ConvertOnesAndZerosToBoolean.md)|Converts to|
+
+BasicStatistics
+============
+|Method Name|Summary|
+|:-------------|:---------|
+|[**```Median```**](Median.md)|Finds the median of the given numbers|
+|[**```IQRRange```**](IQRRange.md)|This must go to the Math API|
+|[**```Range```**](Range.md)|Returns the range of values for the given columns.|
+|[**```Kurtosis```**](Kurtosis.md)|Returns the kurtosis of a data set. Kurtosis characterizes the relative peakedness or flatness of a distribution compared with the normal distribution. Positive kurtosis indicates a relatively peaked distribution. Negative kurtosis indicates a relatively flat distribution.|
+|[**```StandardDeviation```**](StandardDeviation.md)|Finds the standard deviation of the list|
+|[**```AverageCount```**](AverageCount.md)|Returns number of elements that are equal to average|
+|[**```AboveAverageCount```**](AboveAverageCount.md)|Returns a number of elements above average|
+|[**```BelowAverageCount```**](BelowAverageCount.md)|Returns the number of instances that are below average value|
+
+BootstrapTableDecorators
+============
+|Method Name|Summary|
+|:-------------|:---------|
+|[**```ToBootstrapHTMLTableWithColoredRows```**](ToBootstrapHTMLTableWithColoredRows.md)|Bootstrap offers functionalities to color rows of a given table.|
+|[**```ToBasicBootstrapHTMLTable```**](ToBasicBootstrapHTMLTable.md)|Returns a basic HTML table in bootstrap format.|
+
+
+GoogleDataVisualizationcs
+============
+|Method Name|Summary|
+|:-------------|:---------|
+|[**```ToHistogramByGoogleDataVisualization```**](ToHistogramByGoogleDataVisualization.md)|Genertes the Histogram using google data visualization.|
+|[**```ToPieByGoogleDataVisualization```**](ToPieByGoogleDataVisualization.md)|Generates a pie/3dPie/Donut chart from the given table.|
+|[**```ToBarChartByGoogleDataVisualization```**](ToBarChartByGoogleDataVisualization.md)|Generates a bar/column chart from the given table for the given column|
+|[**```ToPieFromHistogramByGoogleDataVisualization```**](ToPieFromHistogramByGoogleDataVisualization.md)|TODO|
+|[**```ToBarChartFromHistogramByGoogleDataVisualization```**](ToBarChartFromHistogramByGoogleDataVisualization.md)|TODO|
+|[**```ToBubbleChartByGoogleVisualization```**](ToBubbleChartByGoogleVisualization.md)|TODO|
