@@ -72,7 +72,7 @@ Here is a list of methods and their summaries
 BasicStatistics
 ============
 |Method Name|Summary|
------------|-------
+-----------------------------------------------------|------------------------------
 |[**```Median```**](Median.md)|Summary|
 
 |[**```IQRRange```**](IQRRange.md)|Summary|
