@@ -1,10 +1,11 @@
 Aggregate
 ====
-Aggregate has two overloaded versions and it is used to flatten a given table as per the given scheme. 
+```Aggregate``` has two overloaded versions and it is used to flatten a given table as per the given scheme. 
 ```csharp
 public Table Aggregate(string columnName, AggregationMethod how = AggregationMethod.Sum)
 ```
-Aggregate does flatten a table as per the given rule. It takes has two parameters. The first one is the name of the non-numeric column that has to be present in the final result and a scheme depicted as an enum that will be used to flatten the table.
+
+```Aggregate``` does flatten a table as per the given rule. It takes has two parameters. The first one is the name of the non-numeric column that has to be present in the final result and a scheme depicted as an enum that will be used to flatten the table.
 
 Consider you have the following table.
 
@@ -16,7 +17,8 @@ And you want to find range of values for all the fields. Since there is only one
 iris.Aggregate("Name",AggregationMethod.Range)
     .PrettyDump();
 ```
-
+This will result in the following output 
+<img src="http://gifyu.com/images/iris_aggregate.png" border="0">
 There following Aggregation schemes are now supported
 ```csharp
    public enum AggregationMethod 
@@ -91,10 +93,8 @@ There following Aggregation schemes are now supported
 
 The default scheme is to sum all the values for all the numeric columns. 
 
-```csharp
-Aggregate 
-``` 
-has another overloaded version that takes a user defined scheme instead of pre-defined ones from the AggregationMethod enum. Here is how that overload looks 
+```Aggregate ``` has another overloaded version that takes a user defined scheme instead of pre-defined ones from the AggregationMethod enum. Here is how that overload looks 
+
 ```csharp
 public Table Aggregate(string columnName, Func<List<string>, string> how)
 ```
