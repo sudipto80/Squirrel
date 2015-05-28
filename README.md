@@ -71,10 +71,10 @@ Here is a list of methods and their summaries
 
 BasicStatistics
 ============
-|Method Name|Summary|
------------|-------
+|Method Name|Summary                                        |
+-----------|-------------------------------------------------
 
-|[**```Median```**](Median.md)||
+|[**```Median```**](Median.md)|       |
 
 |[**```IQRRange```**](IQRRange.md)|This must go to the Math API|
 
