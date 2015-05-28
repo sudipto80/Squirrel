@@ -72,22 +72,23 @@ Here is a list of methods and their summaries
 BasicStatistics
 ============
 |Method Name|Summary|
------------------------------------------------------|------------------------------
-|[**```Median```**](Median.md)|Summary|
+-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-|[**```IQRRange```**](IQRRange.md)|Summary|
+|[**```Median```**](Median.md)                                               |                                                                                                                                                                                                                                                                                 |
 
-|[**```Range```**](Range.md)|Summary|
+|[**```IQRRange```**](IQRRange.md)                                               |This must go to the Math API                                                                                                                                                                                                                                                     |
 
-|[**```Kurtosis```**](Kurtosis.md)|Summary|
+|[**```Range```**](Range.md)                                               |Returns the range of values for the given columns.                                                                                                                                                                                                                               |
 
-|[**```StandardDeviation```**](StandardDeviation.md)|Summary|
+|[**```Kurtosis```**](Kurtosis.md)                                               |Returns the kurtosis of a data set. Kurtosis characterizes the relative peakedness or flatness of a distribution compared with the normal distribution. Positive kurtosis indicates a relatively peaked distribution. Negative kurtosis indicates a relatively flat distribution.|
 
-|[**```AverageCount```**](AverageCount.md)|Summary|
+|[**```StandardDeviation```**](StandardDeviation.md)                                               |                                                                                                                                                                                                                                                                                 |
 
-|[**```AboveAverageCount```**](AboveAverageCount.md)|Summary|
+|[**```AverageCount```**](AverageCount.md)                                               |                                                                                                                                                                                                                                                                                 |
 
-|[**```BelowAverageCount```**](BelowAverageCount.md)|Summary|
+|[**```AboveAverageCount```**](AboveAverageCount.md)                                               |Returns a number of                                                                                                                                                                                                                                                              |
+
+|[**```BelowAverageCount```**](BelowAverageCount.md)                                               |Returns the number of instances that are below average value                                                                                                                                                                                                                     
 
 Examples
 --------
