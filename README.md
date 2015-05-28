@@ -71,24 +71,23 @@ Here is a list of methods and their summaries
 
 BasicStatistics
 ============
-|Method Name|Summary                                        |
------------|-------------------------------------------------
+|Method Name|Summary|
+-----------|-------
+|[**```Median```**](Median.md)|Summary|
 
-|[**```Median```**](Median.md)|       |
+|[**```IQRRange```**](IQRRange.md)|Summary|
 
-|[**```IQRRange```**](IQRRange.md)|This must go to the Math API|
+|[**```Range```**](Range.md)|Summary|
 
-|[**```Range```**](Range.md)|Returns the range of values for the given columns.|
+|[**```Kurtosis```**](Kurtosis.md)|Summary|
 
-|[**```Kurtosis```**](Kurtosis.md)|Returns the kurtosis of a data set. Kurtosis characterizes the relative peakedness or flatness of a distribution compared with the normal distribution. Positive kurtosis indicates a relatively peaked distribution. Negative kurtosis indicates a relatively flat distribution.|
+|[**```StandardDeviation```**](StandardDeviation.md)|Summary|
 
-|[**```StandardDeviation```**](StandardDeviation.md)||
+|[**```AverageCount```**](AverageCount.md)|Summary|
 
-|[**```AverageCount```**](AverageCount.md)||
+|[**```AboveAverageCount```**](AboveAverageCount.md)|Summary|
 
-|[**```AboveAverageCount```**](AboveAverageCount.md)|Returns a number of|
-
-|[**```BelowAverageCount```**](BelowAverageCount.md)|Returns the number of instances that are below average value|
+|[**```BelowAverageCount```**](BelowAverageCount.md)|Summary|
 
 Examples
 --------
