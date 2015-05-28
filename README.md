@@ -67,28 +67,9 @@ PM> Install-Package TableAPI
 
 Documentation
 -------------
-Here is a list of methods and their summaries
+coming soon.
 
-DataAcquisition
-============
-|Method Name|Summary|
-|:-------------|:---------|
-|[**```LoadXLS```**](LoadXLS.md)|Loads the data from an Excel workbook to a table|
-|[**```LoadFixedLength```**](LoadFixedLength.md)|Loads data from fixed column length files.|
-|[**```LoadARFF```**](LoadARFF.md)|Loads data from .arff format Data in Weka toolkit is from .arff source|
-|[**```LoadHTMLTable```**](LoadHTMLTable.md)|Loads a HTML table to the corresponding Table container|
-|[**```LoadLinearEntries```**](LoadLinearEntries.md)||
-|[**```LoadCSV```**](LoadCSV.md)|Loads a CSV file to a respective Table data structure.|
-|[**```LoadDataTable```**](LoadDataTable.md)|Loads data from a ADO.NET DataTable to a Table|
-|[**```LoadTSV```**](LoadTSV.md)|Loads Data from Tab Separated File|
-|[**```LoadFlatFile```**](LoadFlatFile.md)|Loads data from any flat file|
-|[**```PrettyDump```**](PrettyDump.md)|Dumps the table in a pretty format to console.|
-|[**```ToTable```**](ToTable.md)|Returns the tabular representation of a gist|
-|[**```ToHTMLTable```**](ToHTMLTable.md)|Returns the html table representation of the table.|
-|[**```ToCSV```**](ToCSV.md)|Generates a CSV representation of the table|
-|[**```ToTSV```**](ToTSV.md)|Generates a TSV representation of the table|
-|[**```ToDataTable```**](ToDataTable.md)|Generates a DataTable out of the current Table|
-|[**```ToARFF```**](ToARFF.md)|Returns the string representations of the table as a ARFF file.|                                                                                                                                                                                                                   
+                                                                                                                                                                                                           
 
 Examples
 --------
