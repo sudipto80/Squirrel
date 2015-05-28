@@ -2,7 +2,6 @@ BasicStatistics
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```Median```**](Median.md)||
 |[**```IQRRange```**](IQRRange.md)|This must go to the Math API|
 |[**```Range```**](Range.md)|Returns the range of values for the given columns.|
@@ -15,16 +14,13 @@ BootstrapTableDecorators
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```ToBootstrapHTMLTableWithColoredRows```**](ToBootstrapHTMLTableWithColoredRows.md)|Bootstrap offers functionalities to color rows of a given table.|
 |[**```ToBasicBootstrapHTMLTable```**](ToBasicBootstrapHTMLTable.md)|Returns a basic HTML table in bootstrap format.|
-CustomComparers
-============
+
 DataAcquisition
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```LoadXLS```**](LoadXLS.md)|Loads the data from an Excel workbook to a table|
 |[**```LoadFixedLength```**](LoadFixedLength.md)|Loads data from fixed column length files.|
 |[**```LoadARFF```**](LoadARFF.md)|Loads data from .arff format Data in Weka toolkit is from .arff source|
@@ -41,18 +37,11 @@ DataAcquisition
 |[**```ToTSV```**](ToTSV.md)|Generates a TSV representation of the table|
 |[**```ToDataTable```**](ToDataTable.md)|Generates a DataTable out of the current Table|
 |[**```ToARFF```**](ToARFF.md)|Returns the string representations of the table as a ARFF file.|
-RelationalDatabaseConnectors
-============
-|Method Name|Summary|
-|:-------------|:---------|
 
-|[**```LoadFromSQLServer2008```**](LoadFromSQLServer2008.md)||
-|[**```LoadFromMongoDB```**](LoadFromMongoDB.md)||
 GoogleDataVisualizationcs
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```ToHistogramByGoogleDataVisualization```**](ToHistogramByGoogleDataVisualization.md)|Genertes the Histogram using google data visualization.|
 |[**```ToPieByGoogleDataVisualization```**](ToPieByGoogleDataVisualization.md)|Generates a pie/3dPie/Donut chart from the given table.|
 |[**```ToBarChartByGoogleDataVisualization```**](ToBarChartByGoogleDataVisualization.md)|Generates a bar/column chart from the given table for the given column|
@@ -63,7 +52,6 @@ Table
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```GetPercentage```**](GetPercentage.md)|Returns the percentage of the value "value" from all the values of the given column|
 |[**```Filter```**](Filter.md)|Finding a value by regular expression|
 |[**```FilterByRegex```**](FilterByRegex.md)|Finding a value by regular expression|
@@ -110,50 +98,8 @@ OrderedTable
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```ThenBy```**](ThenBy.md)|Sorts an already sorted table by another column|
-|[**```GetPercentage```**](GetPercentage.md)||
-|[**```Filter```**](Filter.md)||
-|[**```FilterByRegex```**](FilterByRegex.md)||
-|[**```RunSQLQuery```**](RunSQLQuery.md)||
-|[**```SortInThisOrder```**](SortInThisOrder.md)||
-|[**```SortBy```**](SortBy.md)||
-|[**```ModifyColumnName```**](ModifyColumnName.md)||
-|[**```ValuesOf```**](ValuesOf.md)||
-|[**```AddRow```**](AddRow.md)||
-|[**```AddRowsByShortHand```**](AddRowsByShortHand.md)||
-|[**```AddRows```**](AddRows.md)||
-|[**```ExtractAndAddAsColumn```**](ExtractAndAddAsColumn.md)||
-|[**```AddColumn```**](AddColumn.md)||
-|[**```TransformCurrencyToNumeric```**](TransformCurrencyToNumeric.md)||
-|[**```RemoveColumn```**](RemoveColumn.md)||
-|[**```CumulativeFold```**](CumulativeFold.md)||
-|[**```Transpose```**](Transpose.md)||
-|[**```RoundOffTo```**](RoundOffTo.md)||
-|[**```AggregateColumns```**](AggregateColumns.md)||
-|[**```Aggregate```**](Aggregate.md)||
-|[**```Transform```**](Transform.md)||
-|[**```Histogram```**](Histogram.md)||
-|[**```SplitOn```**](SplitOn.md)||
-|[**```MergeByColumns```**](MergeByColumns.md)||
-|[**```Merge```**](Merge.md)||
-|[**```Exclusive```**](Exclusive.md)||
-|[**```Common```**](Common.md)||
-|[**```IsSubset```**](IsSubset.md)||
-|[**```MergeColumns```**](MergeColumns.md)||
-|[**```Drop```**](Drop.md)||
-|[**```Pick```**](Pick.md)||
-|[**```RandomSample```**](RandomSample.md)||
-|[**```Top```**](Top.md)||
-|[**```Bottom```**](Bottom.md)||
-|[**```TopNPercent```**](TopNPercent.md)||
-|[**```BottomNPercent```**](BottomNPercent.md)||
-|[**```Middle```**](Middle.md)||
-|[**```SplitByRows```**](SplitByRows.md)||
-|[**```SplitByColumns```**](SplitByColumns.md)||
-|[**```Shuffle```**](Shuffle.md)||
-|[**```ShowMe```**](ShowMe.md)||
-|[**```HowMany```**](HowMany.md)||
+
 SmartDefaults
 ============
 |Method Name|Summary|
@@ -176,35 +122,11 @@ Story
 |[**```AggregationTables```**](AggregationTables.md)||
 |[**```Gist```**](Gist.md)|Calculates the gist of values for numeric and currency columns.|
 |[**```PseudoNaturalQuery```**](PseudoNaturalQuery.md)||
-Alignment
-============
-|Method Name|Summary|
-|:-------------|:---------|
 
-|[**```HasFlag```**](HasFlag.md)||
-SortDirection
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```HasFlag```**](HasFlag.md)||
-OutlierDetectionAlgorithm
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```HasFlag```**](HasFlag.md)||
-AggregationMethod
-============
-|Method Name|Summary|
-|:-------------|:---------|
-
-|[**```HasFlag```**](HasFlag.md)||
 DataCleansers
 ============
 |Method Name|Summary|
 |:-------------|:---------|
-
 |[**```RemoveImpssibleCombinations```**](RemoveImpssibleCombinations.md)|Replaces missing values by the given scheme.|
 |[**```ReplaceMissingValues```**](ReplaceMissingValues.md)|Replaces missing values by the given scheme.|
 |[**```KeepJustNumbersAndDecimal```**](KeepJustNumbersAndDecimal.md)|Removes every other character from the given string except numbers|
