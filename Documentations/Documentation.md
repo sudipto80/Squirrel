@@ -2,6 +2,7 @@
 DataAcquisition
 ============
 Methods for acquiring data from several data formats and databases. Work is in progress to add more connectors. 
+
 |Method Name|Summary|
 |:-------------|:---------|
 |[**```LoadXLS```**](LoadXLS.md)|Loads the data from an Excel workbook to a table|
