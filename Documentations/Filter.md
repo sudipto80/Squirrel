@@ -1,14 +1,16 @@
 Filter
 ==========
+Filter helps find out the values sought from different columns of the table. 
+
 ```Filter``` has 4 overloaded versions
 
 Here are different overload signatures of the method
 
 ```csharp
-Table Filter(Func`2[Dictionary<string,string>,bool] predicate)
+Table Filter(Func<Dictionary<string,string>,bool> predicate)
 ```
 ```csharp
-Table Filter(Dictionary`2[string,List<string>] fieldSearchValuesMap)
+Table Filter(Dictionary<string,List<string>> fieldSearchValuesMap)
 ```
 ```csharp
 Table Filter(Dictionary<string,string> _fieldSearchValueMap)
