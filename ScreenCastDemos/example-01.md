@@ -1,5 +1,6 @@
 Example #1 (Do women pay more tip than men?)
 ------
+<img src="http://www.miamidentalsolutions.com/images/women_dining.jpg" border="0">
 ***data*** for this example is available at ***../Data/tips.csv***
 
 The data from which this analytics has to be calculated is available in tips.csv file and first few rows of that file looks like this 
