@@ -1,5 +1,6 @@
 Example #3 (Finding Gender-Ratio statistics in North America)
 ----
+<img src="http://alivecampus.com/wp-content/uploads/2013/12/male-female-ratio1.jpg"/>
 ***data*** for this example is available at ***../Data/births.csv***
 
 <p>Gender Ratio is an important sociological index to gauge the growth of a nation. The following data (only a few are shown here) is a list of "boy" and "girl" birth statistics for different states across North America. The data analysis task a sociologist might be interested to do is to find gender-ratio of North America for different states</p>
