@@ -1,6 +1,6 @@
 Example #4 (Finding top gold winning nations in Olympics)
 ---------------
-<img src="http://www.mytchett.surrey.sch.uk/assets/images/olympics/Olympic%20Medals.jpg" /></img>
+<img src="http://www.mytchett.surrey.sch.uk/assets/images/olympics/Olympic%20Medals.jpg" width="300" /></img>
 From a given data of Olympics records like as shown below, how easy do you think to generate 
 a pie chart for top gold winning nations. 
 <img src="http://gifyu.com/images/OlympicsInput.png" alt="OlympicsInput.png" border="0" />
