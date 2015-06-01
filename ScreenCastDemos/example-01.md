@@ -31,3 +31,11 @@ tips
 //Dump the result to console.
 .PrettyDump(); 
 ```
+This produces the following result as shown here in tabular format
+
+| sex |     tip%|
+|:-----|------:|
+|   F  |   16.65|    
+|M     |15.77|
+
+This proves that women actually pays more tip than men!
