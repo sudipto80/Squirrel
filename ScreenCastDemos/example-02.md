@@ -1,5 +1,7 @@
 Example #2 (Iris dataset aggregation)
 -----
+<img src="http://www.mrwallpaper.com/wallpapers/Iris-Flowers-851x315.jpg"/>
+
 ***data*** for this example is available at ***../Data/iris.csv***
 
 <p> The Iris flower data set or Fisher's Iris data set is a multivariate data set introduced by Sir Ronald Fisher (1936) as an example of discriminant analysis.It is sometimes called Anderson's Iris data set because Edgar Anderson collected the data to quantify the morphologic variation of Iris flowers of three related species.[2] Two of the three species were collected in the Gaspé Peninsula "all from the same pasture, and picked on the same day and measured at the same time by the same person with the same apparatus". ]---- Taken from Wikipedia </p>

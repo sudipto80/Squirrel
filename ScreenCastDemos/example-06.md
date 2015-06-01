@@ -1,5 +1,7 @@
 Example #6 (Titanic Survivor Statistics)
 ====================
+<img src="http://www.titanicuniverse.com/wp-content/uploads/2009/11/titanic-newspaper-article-3.jpg"/>
+
 First few rows of the titanic dataset looks like this 
 
 <img src="http://gifyu.com/images/titanic_survival.png" border="0">
