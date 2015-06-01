@@ -21,6 +21,8 @@ tanh() or hyperbolic tan can be caclualted from the following formula
 
 <img src="http://www.sciweavers.org/upload/Tex2Img_1433141473/render.png"/> 
 
+NCalc has the function ```Exp``` to calculate exponentiation. 
+
 ```csharp 
 Table bungee = new Table();
 
