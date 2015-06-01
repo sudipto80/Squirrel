@@ -40,9 +40,6 @@ Data analytics solution development using **Squirrel** follows a templatized des
 Here is a high level block diagram of all the components of Squirrel.
 ![Block Diagram](http://gifyu.com/images/blocks.png "High Level Block Diagram")
 
-Here is an example in action
-
-<img src="http://gifyu.com/images/tips_final721af.gif" border="0">
 
 Key Design Philosophy
 ---------------------
