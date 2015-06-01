@@ -17,8 +17,8 @@ where
 ```t``` is time measured in seconds. 
 
 The following code calculates the speed of a jumper whose weight is 68.1 Kg and for an air drag of 0.25
-tanh() or hyperbolic tan can be caclualted from the following formula. I found this from this helpful reference 
-http://math2.org/math/trig/hyperbolics.htm 
+tanh() or hyperbolic tan can be caclualted from the following formula. I found this from this [helpful reference]( 
+http://math2.org/math/trig/hyperbolics.htm) 
 
 <img src="http://www.sciweavers.org/upload/Tex2Img_1433141473/render.png"/> 
 
