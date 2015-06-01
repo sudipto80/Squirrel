@@ -29,7 +29,7 @@ Table bungee = new Table();
 
 bungee.AddColumn("Time", Enumerable.Range(1, 60).Select(x => x.ToString()).ToList());
 //Adding a column called "X" to facilitate the calculation
-bungee.AddColumn("X", "Sqrt(9.81*0.25/68.1)*[Time]", 4);
+bungee.[AddColumn](https://github.com/sudipto80/Squirrel/blob/master/Documentations/AddColumn.md)("X", "Sqrt(9.81*0.25/68.1)*[Time]", 4);
 //Adding a column "Speed" to hold the values of speed at any given time
 bungee.AddColumn("Speed", @"Sqrt (9.81*68.1/0.25) * (Exp([X])-Exp(-[X]))/(Exp([X])+Exp(-[X]))", 5);
             
