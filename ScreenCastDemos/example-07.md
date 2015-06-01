@@ -53,3 +53,4 @@ This produces the following plot
 
 <img src="http://gifyu.com/images/bungeeop.png" border="0">
 
+From this plot we can see that the jumper attained his terminal speed within the first minute. 
