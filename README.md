@@ -130,7 +130,9 @@ namespace HelloWorldSolution
 
 This will generate the following output
 
-<img src="https://pbs.twimg.com/media/CGb0i9qUkAAaloi.png" border ="0"/>                                                                                                                                                                                                          
+<img src="https://pbs.twimg.com/media/CGb0i9qUkAAaloi.png" border ="0"/>                                              
+
+Some functionalities may not work on Ubuntu yet. If not, please report them by creating an issue. 
 
 Examples
 --------
