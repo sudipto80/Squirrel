@@ -20,7 +20,7 @@ The following code calculates the speed of a jumper whose weight is 68.1 Kg and 
 tanh() or hyperbolic tan can be caclualted from the following formula. I found this from this [helpful reference]( 
 http://math2.org/math/trig/hyperbolics.htm) 
 
-<img src="http://www.sciweavers.org/tex2img.php?eq=%20%5Cfrac%7B%5Cexp%28x%29-%5Cexp%28-x%29%7D%7B%5Cexp%28x%29%2Bexp%28-x%29%7D%20&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt=" \frac{\exp(x)-\exp(-x)}{\exp(x)+exp(-x)} " width="150" height="47" />
+http://www.sciweavers.org/tex2img.php?eq=%20%5Csqrt%7Bg%2Am%2FCd%7D%20%2A%20%5Ctanh%28%5Csqrt%7Bg%2ACd%2Fm%7D%2At%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0
 
 NCalc has the function ```Exp``` to calculate exponentiation. 
 
