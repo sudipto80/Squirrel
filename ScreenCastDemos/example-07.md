@@ -5,7 +5,7 @@ Example #7 (Calculating speed of a bungee jumper)
 
 Calculating the speed of a bungee jumper as a function of time is goverened by the following formula 
 
-```sqrt (g*m/Cd) * tanh(sqrt(g*Cd/m)*t)```
+<img src="http://www.sciweavers.org/tex2img.php?eq=%20%5Csqrt%7Bg%2Am%2FCd%7D%20%2A%20%5Ctanh%28%5Csqrt%7Bg%2ACd%2Fm%7D%2At%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt=" \sqrt{g*m/Cd} * \tanh(\sqrt{g*Cd/m}*t)" width="296" height="26" />
 
 where 
 ```g``` is the gravitational constant 9.81 m/s^2 
