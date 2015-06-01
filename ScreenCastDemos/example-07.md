@@ -5,7 +5,7 @@ Example #7 (Calculating speed of a bungee jumper)
 
 Calculating the speed of a bungee jumper as a function of time is goverened by the following formula 
 
-<img src="http://bit.ly/1KyRSfG" align="center" border="0" alt=" \sqrt{g*m/Cd} * \tanh(\sqrt{g*Cd/m}*t)" width="296" height="26" />
+<img src="https://pbs.twimg.com/media/CGb_sywUQAAIk2z.png" border="0"/>
 
 where 
 ```g``` is the gravitational constant 9.81 m/s^2 
@@ -20,7 +20,7 @@ The following code calculates the speed of a jumper whose weight is 68.1 Kg and 
 tanh() or hyperbolic tan can be caclualted from the following formula. I found this from this [helpful reference]( 
 http://math2.org/math/trig/hyperbolics.htm) 
 
-<img src="https://pbs.twimg.com/media/CGb_sywUQAAIk2z.png" border="0"/>
+<img src="https://pbs.twimg.com/media/CGcAU-1UgAAk_2E.png" border="0" />
 
 NCalc has the function ```Exp``` to calculate exponentiation. 
 
