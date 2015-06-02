@@ -78,11 +78,6 @@ AddRows()
 AddRowsByShortHand()
 ``` 
 
-See it in action
-------------
-<img src="http://g.recordit.co/6AMTWQBFNO.gif" border ="0"/> 
-
-
 NuGet Package
 -------------
 <img src="http://cdn.ws.citrix.com/wp-content/uploads/2011/09/NugetIcon.png"/>
