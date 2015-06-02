@@ -22,7 +22,7 @@ System.Diagnostics.Process.Start("temp.htm");
 <p> And here is the output that you shall get.</p>
 <!-- In case the gif breaks lot of browsers we must go back to this static image -->
 <!--<img src="http://gifyu.com/images/OlympicsOut.png" alt="OlympicsOut.png" border="0" />-->
-<img src="http://gifyu.com/images/goldWinPie.gif" border="0">
+<img src="http://g.recordit.co/Tt4M6OlUYI.gif" border="0"/>
 
 Changing this Pie chart to a donut chart is a simple enum change. Just change the call 
 ```csharp
