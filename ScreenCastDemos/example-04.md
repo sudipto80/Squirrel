@@ -34,4 +34,5 @@ to
 ```
 
 and you shall get the following chart. Changing the Enum to Pie3D will generate a 3D Pie chart.
-<img src="http://gifyu.com/images/OlympicGoldDonut.png" alt="OlympicGoldDonut.png" border="0" />
+<!--<img src="http://gifyu.com/images/OlympicGoldDonut.png" alt="OlympicGoldDonut.png" border="0" />-->
+<img src="http://g.recordit.co/LcWTLxy6zM.gif" border="0"/>
