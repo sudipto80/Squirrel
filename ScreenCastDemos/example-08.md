@@ -72,11 +72,13 @@ Returns a new map with the binding added to the given map.
 ```
 : 'Key -> 'T -> Map<'Key,'T> -> Map<'Key,'T>
 ```
+Example
 ```fsharp
 Map.ofList [ (1,  "one" ); (2,  "two" ); (3,  "three" ) ]
 |> Map.add(0)  "zero" 
 |> Map.iter ( fun  key value -> printfn  "key: %d value: %s"  key value)
- 
+ ```
+Output
 ```
 key: 0 value: zero
 key: 1 value: one
@@ -91,6 +93,7 @@ Tests if an element is in the domain of the map.
 ```
 : 'Key -> Map<'Key,'T> -> bool
 ```
+Example
 ```fsharp
 let  map1 = Map.ofList [ (1,  "one" ); (2,  "two" ); (3,  "three" ) ]
  let  findKeyAndPrint key map =
@@ -100,9 +103,11 @@ let  map1 = Map.ofList [ (1,  "one" ); (2,  "two" ); (3,  "three" ) ]
         printfn  "The specified map does not contain the key %d."  key
 findKeyAndPrint 1 map1
 findKeyAndPrint 0 map1
- 
+ ```
+Output
 ```
 The specified map contains the key 1.
 The specified map does not contain the key 0. 
 ```
  
+
