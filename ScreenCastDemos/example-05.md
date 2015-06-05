@@ -50,3 +50,30 @@ System.Diagnostics.Process.Start("temp.htm");
 This produces the following output. Cr meanse "Crores" . 1 Crore = 10 million
 
 <img src="http://gifyu.com/images/retirement.png" border="0">
+
+With following canges the table can be tranformed with an interactive column chart using Google Data Visualization. 
+
+Comment this line
+```csharp
+book = book.Transform("Investment", x => Math.Round(Convert.ToDecimal(x) / 10000000, 4).ToString());
+```
+and change the line
+```csharp
+book.Bottom(10).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped)
+```
+with the following line
+```csharp
+.Pick("Year","Investment")
+.Bottom(10)
+.ToBarChartByGoogleDataVisualization("Year", 
+                                     "Retirement returns", 
+                                     "How much money will be there for retirement",
+                                     GoogleDataVisualizationcs.BarChartType.Column);
+```
+
+And you get the following result
+
+<img src="http://g.recordit.co/9kDCXxkFYM.gif" border="0">
+
+We are working on other types of data providers so that you can draw similar charts targetting other data visualization APIs like D3.js/HightCharts.js etc. 
+
