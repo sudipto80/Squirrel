@@ -2,7 +2,7 @@ LoadARFF
 ===============
 Loads ARFF file. ARFF files are the file formats for the Weka project. 
 
-Here is a sample arff file
+Here is a sample arff file. The name of this file is "weather.arff"
 
 ```
 @relation weather
@@ -28,5 +28,11 @@ sunny,75,70,TRUE,yes
 overcast,72,90,TRUE,yes
 overcast,81,75,FALSE,yes
 rainy,71,91,TRUE,no
+```
+
+To load this arff file in the internal Table data structure, use the following code 
+
+```csharp 
+Table playTennis = DataAcquisition.LoadARFF(@"weather.arff")
 ```
 
