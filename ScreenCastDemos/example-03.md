@@ -22,7 +22,7 @@ combined.AddColumn("Boys", boys["births"]);
 combined.AddColumn("Girls", girls["births"]);
 combined.AddColumn("Difference", "[Boys]-[Girls]", 4);
 combined.AddColumn("GenderRatio", "[Girls]/[Boys]", 4);
-//Showing 5 stats with lowest gender ratio at the end of 2006.
+//Showing 5 states with lowest gender ratio at the end of 2006.
 string tab = combined.Pick("State", "GenderRatio")
 .SortBy("GenderRatio")
 .Top(5)

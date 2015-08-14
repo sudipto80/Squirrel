@@ -6,7 +6,7 @@ Squirrel
 
 <!--<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" t="100" width="100" ></a>-->
 
-[`Squirrel by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
+[`Squirrel LOGO is designed by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
 Why Squirrel
 ------------
@@ -40,7 +40,10 @@ Data analytics solution development using **Squirrel** follows a templatized des
 Here is a high level block diagram of all the components of Squirrel.
 ![Block Diagram](http://gifyu.com/images/blocks.png "High Level Block Diagram")
 
-[See Squirrel in action](http://recordit.co/6AMTWQBFNO) 
+Squirrel in action (Under 5 minutes)
+------------------
+[![Squirrel in action](http://gifyu.com/images/ActionDemoShot.jpg)](https://youtu.be/jv1znNEq5h4)
+
 
 Key Design Philosophy
 ---------------------
@@ -143,4 +146,5 @@ Examples
 5. [How much money someone will accumulate at retirement](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-05.md)
 6. [Titanic Survivor Analysis per class](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-06.md)
 7. [Calculating speed of a bungee jumper](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-07.md)
+8. [Finding most popular baby names in centuries](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-08.md)
 
