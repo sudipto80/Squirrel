@@ -13,6 +13,7 @@ namespace Squirrel
     /// </summary>
     public static class DataAcquisition
     {         
+     
         /// <summary>
         /// Deletes the tags from a HTML line
         /// </summary>
@@ -43,6 +44,28 @@ namespace Squirrel
                 html = html + k + " ";
 
             return html;
+        }
+        
+        /// <summary>
+        /// Creates a table out of a list of anonynous type objects. 
+        /// </summary>
+        /// <typeparam name="T">Type of the anonynous type</typeparam>
+        /// <param name="list">list of anonynous objects</param>
+        /// <returns>A table with rows created from a list of anonymnous objects</returns>
+        public static Table ToTableFromAnonList<T>(this IEnumerable<T> list) where T : class
+        {
+            Table result = new Table();
+            
+            List<string> props = list.ElementAt(0).GetType().GetProperties().Select(l => l.Name).ToList();
+            Type anon = list.ElementAt(0).GetType();
+            foreach (var l in list)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>();
+                foreach (var p in props)
+                    row.Add(p, anon.GetProperty(p).GetValue(l).ToString());
+                result.Rows.Add(row);
+            }
+            return result;
         }
         /// <summary>
         /// Loads the data from an Excel workbook to a table
