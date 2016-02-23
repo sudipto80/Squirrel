@@ -6,7 +6,8 @@ Stock Price Analysis
 //Stock symbols of companies for which you want to run this 
 string[] symbols = { "AAPL", "GOOG", "MSFT" };
 Dictionary<string, Table> stocks = new Dictionary<string, Table>();
-string template = @"http://real-chart.finance.yahoo.com/table.csv?s=[Symbol]&d=8&e=4&f=2014&g=d&a=0&b=2&c=1962&ignore=.csv";
+string template = @"http://real-chart.finance.yahoo.com/table.csv?s=[Symbol]&d=8&e=4&f=2014
+                    &g=d&a=0&b=2&c=1962&ignore=.csv";
 foreach (var symb in symbols)
 {
     WebClient wc = new WebClient();
@@ -38,15 +39,17 @@ string htmlTable = allStocks
                     //Pick only these columns
                     .Pick("Symbol", "Diff", "High", "Close")
                     .ToBootstrapHTMLTableWithColoredRows
-					(infoPredicate: greatValues,
-                     warningPredicate: warnings,
-                     dangerPredicate: worries);
+					(
+							infoPredicate: greatValues,
+							warningPredicate: warnings,
+							dangerPredicate: worries
+					);
 
 sw.WriteLine(htmlTable);
 sw.Close();
 System.Diagnostics.Process.Start("temp.htm");
 ```
 
-This produces the following output 
+This produces an output similar to this one. 
 
 <img src="stock_analysis.png"/>
