@@ -55,5 +55,6 @@ System.Diagnostics.Process.Start("temp.htm");
 ```
 
 This produces an output similar to this one. Here Bootstraps colored row is used to highlight some of the rows that are of interest. For example stock prices above 500 is a great value. The Func<> definitions are used to determine the colors. 
+The value of the Diff column doesn't match the exact diffrene between Open and Close because the differences are taken till 4 decimal digits. If you change it to 6 then it will match up exactly.  
 
 <img src="stock_analysis.png"/>
