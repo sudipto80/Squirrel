@@ -1,12 +1,16 @@
 Stock Price Analysis 
 ----------------------
+Yahoo finance provides historical data about stock prices for a given symbol like this. This data is for Apple Computers. Symbol is "AAPL". However Yahoo doesn't include the Symbol in the result. 
+
 <img src="aapl.png"/>
+
+Using the following code we can query data from yahoo finance for multiple stock symbols and run some analysis for the last 30 days data. In this case I have queried for "AAPL" (Apple Computers), "GOOG" (Google) and "MSFT" (Microsoft). The result you shall get might vary but it will be similar. 
 
 ```csharp
 //Stock symbols of companies for which you want to run this 
 string[] symbols = { "AAPL", "GOOG", "MSFT" };
 Dictionary<string, Table> stocks = new Dictionary<string, Table>();
-string template = @"http://real-chart.finance.yahoo.com/table.csv?s=[Symbol]&d=8&e=4&f=2014
+string template = @"http://real-chart.finance.yahoo.com/table.csv?s=[Symbol]&d=8&e=4&f=2016
                     &g=d&a=0&b=2&c=1962&ignore=.csv";
 foreach (var symb in symbols)
 {
@@ -50,6 +54,6 @@ sw.Close();
 System.Diagnostics.Process.Start("temp.htm");
 ```
 
-This produces an output similar to this one. 
+This produces an output similar to this one. Here Bootstraps colored row is used to highlight some of the rows that are of interest. For example stock prices above 500 is a great value. The Func<> definitions are used to determine the colors. 
 
 <img src="stock_analysis.png"/>
