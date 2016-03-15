@@ -15,12 +15,36 @@ namespace Squirrel
         /// <summary>
         /// Type of Pie Chart supported by Google Data Visualization.
         /// </summary>
-        public enum PieChartType { Pie, Pie3D, Donut };
+        public enum PieChartType
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            Pie,
+            /// <summary>
+            /// 
+            /// </summary>
+            Pie3D,
+            /// <summary>
+            /// 
+            /// </summary>
+            Donut
+        };
         /// <summary>
         /// Type of Bar Chart supported by Google Data Visualization
         /// Horizontal bar is called bar chart and vertical bar is called Column chart.
         /// </summary>
-        public enum BarChartType { Bar, Column };
+        public enum BarChartType
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            Bar,
+            /// <summary>
+            /// 
+            /// </summary>
+            Column
+        };
         /// <summary>
         /// Genertes the Histogram using google data visualization.
         /// </summary>
@@ -74,18 +98,35 @@ namespace Squirrel
         /// <returns>A full html document with the chart.</returns>
         public static string ToPieByGoogleDataVisualization(this Table tab, string column, string title,PieChartType type = PieChartType.Pie)
         {
-            string data = "[[" + "'" + column + "','Count']," +
-                            tab.Histogram(column)
-                                     .Select(z => "['" + z.Key + "' , " + z.Value + "]")
-                                     .Aggregate((first, second) => first + "," + Environment.NewLine + second)
-                                     + "]";
+            if(tab == null)
+            {
+                throw new ArgumentNullException(nameof(tab));
+            }
+            if(String.IsNullOrEmpty(column))
+            {
+                throw new ArgumentNullException(nameof(column));
+            }
+            if(String.IsNullOrEmpty(title))
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+            if(!tab.ColumnHeaders.Contains(column))
+            {
+                throw new ArgumentOutOfRangeException("Column name " + nameof(column) + " doesn't exist in the table");
+            }
+            try {
+                string data = "[[" + "'" + column + "','Count']," +
+                                tab.Histogram(column)
+                                         .Select(z => "['" + z.Key.Replace("'", "\'") + "' , " + z.Value + "]")
+                                         .Aggregate((first, second) => first + "," + Environment.NewLine + second)
+                                         + "]";
 
-            string template = @" <html>
+                string template = @" <html>
                                   <head>
-                                    <script type=""text/javascript"" src=""https://www.google.com/jsapi""></script>
+                                    <script type=""text/javascript"" src=""https://www.gstatic.com/charts/loader.js""></script>
                                     <script type=""text/javascript"">
-                                      google.load(""visualization"", ""1"", {packages:[""corechart""]});
-                                      google.setOnLoadCallback(drawChart);
+                                      google.charts.load('current',  { packages:['corechart']});
+                                      google.charts.setOnLoadCallback(drawChart);
                                       function drawChart() {
 
                                         var data = google.visualization.arrayToDataTable(!DATA!);
@@ -108,15 +149,24 @@ namespace Squirrel
                                   </body>
                                 </html>".Replace("!TITLE!", title).Replace("!DATA!", data);
 
-            if (type == PieChartType.Pie)
-                template = template.Replace("!CHART_TYPE!", "piechart");
-            if (type == PieChartType.Pie3D)
-                template = template.Replace("!CHART_TYPE!", "piechart_3d").Replace("//,", ",").Replace("//is3D:true", "is3D:true");
-            if (type == PieChartType.Donut)
-                template = template.Replace("!CHART_TYPE!", "donutchart").Replace("//,", ",").Replace("//pieHole:0.4", "pieHole:0.4");
+                if (type == PieChartType.Pie)
+                    template = template.Replace("!CHART_TYPE!", "piechart");
+                if (type == PieChartType.Pie3D)
+                    template = template.Replace("!CHART_TYPE!", "piechart_3d").Replace("//,", ",").Replace("//is3D:true", "is3D:true");
+                if (type == PieChartType.Donut)
+                    template = template.Replace("!CHART_TYPE!", "donutchart").Replace("//,", ",").Replace("//pieHole:0.4", "pieHole:0.4");
 
-            return template;
+                return template;
+            }
+            catch(InvalidOperationException ex)
+            {
+                throw ex;
+            }
 
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
         /// <summary>
         /// Generates a bar/column chart from the given table for the given column
@@ -125,6 +175,7 @@ namespace Squirrel
         /// <param name="column">The column</param>
         /// <param name="legendText">Legend Text</param>
         /// <param name="title">Title of the chart</param>
+        /// <param name="type"></param>
         /// <returns>Gennerated HTML for the chart</returns>
         public static string ToBarChartByGoogleDataVisualization(this Table tab, 
                                                                  string column, 
@@ -143,13 +194,13 @@ namespace Squirrel
                                                                         .Aggregate((m, n) => m + "," + n) + "]";
             StringBuilder dataBuilder = new StringBuilder ();
             for (int i = 0; i < tab.RowCount; i++)
-            {
+            {//['Kids' Menu',34],
                 dataBuilder.Append("['" + tab[column, i] + "',");
                 for (int j = 0; j < numericColumns.Count - 1; j++)
                 {
                     dataBuilder.Append(tab[numericColumns[j], i] + ",");
                 }
-                dataBuilder.AppendLine(tab[numericColumns[numericColumns.Count-1],i] +"],");
+                dataBuilder.AppendLine(tab[numericColumns[numericColumns.Count-1],i]+ "],");
             }
 
             string data = dataBuilder.ToString();
@@ -157,10 +208,10 @@ namespace Squirrel
 
             string html = @"<html>
                       <head>
-                        <script type=""text/javascript"" src=""https://www.google.com/jsapi""></script>
-                        <script type=""text/javascript"">
-                          google.load(""visualization"", ""1"", {packages:[""corechart""]});
-                          google.setOnLoadCallback(drawChart);
+                      <script type=""text/javascript"" src=""https://www.gstatic.com/charts/loader.js""></script>
+                        <script type = ""text/javascript"" >
+                        google.charts.load('current',  { packages:['corechart', 'bar']});
+                        google.charts.setOnLoadCallback(drawChart);
                           function drawChart() {
                             var data = google.visualization.arrayToDataTable([
                               !COLUMN_HEADERS!,
@@ -202,7 +253,9 @@ namespace Squirrel
         /// <param name="title"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string ToPieFromHistogramByGoogleDataVisualization(this Dictionary<string, int> histogram, string title, PieChartType type = PieChartType.Pie)
+        public static string ToPieFromHistogramByGoogleDataVisualization(this Dictionary<string, int> histogram,
+                                                                         string title, 
+                                                                         PieChartType type = PieChartType.Pie)
         {
             return "TO:DO";
         }
@@ -213,7 +266,9 @@ namespace Squirrel
         /// <param name="title"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string ToBarChartFromHistogramByGoogleDataVisualization(this Dictionary<string, int> histogram, string title, BarChartType type = BarChartType.Bar)
+        public static string ToBarChartFromHistogramByGoogleDataVisualization(this Dictionary<string, int> histogram, 
+                                                                              string title, 
+                                                                              BarChartType type = BarChartType.Bar)
         {
             return "TO:DO";
         }
@@ -224,7 +279,8 @@ namespace Squirrel
         /// <param name="hAxisColumn"></param>
         /// <param name="vAxisColumn"></param>
         /// <returns></returns>
-        public static string ToBubbleChartByGoogleVisualization(this Table tab, string hAxisColumn, string vAxisColumn)
+        public static string ToBubbleChartByGoogleVisualization(this Table tab, 
+                                                                string hAxisColumn, string vAxisColumn)
         {
             return "TO:DO";
         }

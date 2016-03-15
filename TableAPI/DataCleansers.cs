@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Squirrel
+namespace Squirrel.Cleansing
 {
     /// <summary>
     /// Home of all the different data cleansing methods. 
@@ -95,12 +95,34 @@ namespace Squirrel
         /// So this can be a bottleneck for a table with many columns.</remarks>
         public static Table Distinct(this Table tab)
         {
+            if (tab == null)
+            {
+                throw new ArgumentNullException("tab", "The Table instance is null");
+            }
+            if(tab.Rows == null)
+            {
+                throw new ArgumentNullException("Rows", "The Table instance has no rows");
+            }
             Dictionary<string, List<Dictionary<string, string>>> noDups =
                 new Dictionary<string, List<Dictionary<string, string>>>();
 
             for (int i = 0; i < tab.RowCount; i++)
             {
-                string hash = tab.Rows[i].OrderBy(m => m.Key).Select(m => m.Value).Aggregate((x, y) => x + y);
+                string hash = string.Empty;
+                try
+                {
+                    hash = tab.Rows[i].OrderBy(m => m.Key).Select(m => m.Value).Aggregate((x, y) => x + y);
+                }
+                catch (NullReferenceException ex)
+                {
+                    //When Rows is null 
+
+                }
+                catch (InvalidOperationException ex)//When sequence contains no element Aggregate will throw this exception
+                {
+
+                }
+
                 if (!noDups.ContainsKey(hash))
                     noDups.Add(hash, new List<Dictionary<string, string>>() {tab.Rows[i]});
                 else
@@ -122,9 +144,24 @@ namespace Squirrel
         /// <returns>A table with rows which are believed to be having values in the outlier range for the given column.</returns>
         public static Table ExtractOutliers(this Table tab, string columnName, OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
         {
+            if (tab == null)
+            {
+                throw new ArgumentNullException("tab", "The Table instance is null");
+            }
+            if (String.IsNullOrEmpty(columnName) || String.IsNullOrWhiteSpace(columnName))
+            {
+                throw new ArgumentNullException("columnName", "The columnName is not provided or it doesn't exist");
+            }
             Table outliers = new Table();
-            List<decimal> allValues = tab.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
-
+            List<decimal> allValues = new List<decimal>();
+            try
+            {
+                allValues = tab.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
+            }
+            catch(FormatException ex)
+            {
+                throw new FormatException(String.Format("some values of column {0} can't be converted to decimal ", columnName));
+            }
             Tuple<decimal, decimal> iqrRange = BasicStatistics.IQRRange(allValues);
             for (int i = 0; i < allValues.Count; i++)
             {

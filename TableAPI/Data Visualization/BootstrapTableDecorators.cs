@@ -131,7 +131,8 @@ namespace Squirrel
         /// <example>//Let's say you have a column called "StockPrice"</example>
         /// <example>//Func&lt;Dictionary&lt;string,string&gt;,bool&gt; warning = x => Convert.ToDouble(x["StockPrice"])>10.5;</example>
         /// <example>//tab.ToBootstrapHTMLTableWithColoredRows(warningPredicate:warning);</example>
-        /// <remarks>Watch this video to understand it better: </remarks>
+        /// <remarks>Watch this video to understand it better: 
+        /// TODO: Video to go </remarks>
         public static string ToBootstrapHTMLTableWithColoredRows(this Table tab,                                                                    
                                                                       //All are optional. Use any number of predicates you want.
                                                                       Func<Dictionary<string,string>,bool> successPredicate  = null,

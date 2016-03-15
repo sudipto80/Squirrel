@@ -139,7 +139,7 @@ namespace Squirrel
         private HashSet<string> _columnHeaders = new HashSet<string>();
         private List<Dictionary<string, string>> _rows = new List<Dictionary<string, string>>();
         /// <summary>
-        /// 
+        /// Marks whether the missing values have been handled or not for a given Table instance
         /// </summary>
         public bool MissingValueHandled { get; set; }
         /// <summary>
@@ -161,8 +161,26 @@ namespace Squirrel
         /// This will show you how to use this method.</remarks>
         public double GetPercentage(string column,string value)
         {
-            return Convert.ToDouble(this.ValuesOf(column).Count(z => z == value)) 
-                 / Convert.ToDouble(this.ValuesOf(column).Count);
+            if(this == null)
+            {
+                throw new ArgumentNullException("this", "The Table instance is null");
+            }
+            if(column == null)
+            {
+                throw new ArgumentNullException("column", "The provided column is null");
+            }
+            if(value == null)
+            {
+                throw new ArgumentNullException("value", "The vlue provided to search is null");
+            }
+            try {
+                return Convert.ToDouble(this.ValuesOf(column).Count(z => z == value))
+                     / Convert.ToDouble(this.ValuesOf(column).Count);
+            }
+            catch(DivideByZeroException ex)
+            {
+                throw new DivideByZeroException("There was no value for the given colmun. Thus a divided by zero exception occured.");
+            }
         }
         /// <summary>
         /// Basic filtering based on the given predicate.
@@ -175,6 +193,14 @@ namespace Squirrel
         ///</example>
         public Table Filter(Func<Dictionary<string, string>, bool> predicate)
         {
+            if (this == null)
+            {
+                throw new ArgumentNullException("this", "The Table instance is null");
+            }
+            if(predicate == null)
+            {
+                throw new ArgumentNullException("predicate", "The predicate provided is null");
+            }
             Table result  = new Table ();
             result.Rows.AddRange(this.Rows.Where(t => predicate.Invoke(t)));
             return result;
@@ -193,11 +219,32 @@ namespace Squirrel
         /// </example>
         public Table FilterByRegex(string column, string regexPattern)
         {
+
+            if (this == null)
+            {
+                throw new ArgumentNullException("this", "The Table instance is null");
+            }
+            if (column == null)
+            {
+                throw new ArgumentNullException("column", "The provided column name is null");
+            }
+            if (regexPattern == null)
+            {
+                throw new ArgumentNullException ("regexPattern", "The regular expression pattern provided is null");
+            }
             Table filteredTable = new Table();
             for (int i = 0; i < _rows.Count; i++)
             {
-                if (Regex.IsMatch(_rows[i][column], regexPattern))
-                    filteredTable.AddRow(_rows[i]);
+                try
+                {
+                    if (Regex.IsMatch(_rows[i][column], regexPattern))
+                        filteredTable.AddRow(_rows[i]);
+                }
+                catch(KeyNotFoundException ex)
+                {
+                    throw new KeyNotFoundException("The provided column name [" + column + "] doesn't exist." +
+                        Environment.NewLine + ex.Message +  Environment.NewLine + ex.StackTrace);
+                }
             }
             return filteredTable;
       
@@ -205,24 +252,40 @@ namespace Squirrel
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="_fieldSearchValuesMap"></param>
+        /// <param name="fieldSearchValuesMap"></param>
         /// <returns></returns>
         public Table Filter(Dictionary<string,List<string>> fieldSearchValuesMap)
         {
+
+            if (this == null)
+            {
+                throw new ArgumentNullException("this", "The Table instance is null");
+            }
+            if(fieldSearchValuesMap == null)
+            {
+                throw new ArgumentNullException("fieldSearchValuesMap", "No value is provided to filter on");
+            }
             Table result = this;
             foreach (var key in fieldSearchValuesMap.Keys)
             {
-                result = result.Filter(key, fieldSearchValuesMap[key].ToArray());
+                try
+                {
+                    result = result.Filter(key, fieldSearchValuesMap[key].ToArray());
+                }
+                catch(KeyNotFoundException ex)//If key "key" is not found in fieldSearchValueMap 
+                {
+                    throw ex;
+                }
             }
             return result;
         }
         /// <summary>
         /// Finds all the matching rows from the source table
         /// </summary>
-        /// <param name="_fieldSearchValueMap">Key value pair by which the filtering will be performed</param>
+        /// <param name="fieldSearchValueMap">Key value pair by which the filtering will be performed</param>
         /// <returns>A table with all the filtered rows. If no matching row is found, a table with 0 row is returned
         /// </returns>
-        public Table Filter(Dictionary<string, string> _fieldSearchValueMap)
+        public Table Filter(Dictionary<string, string> fieldSearchValueMap)
         {
             
             Table filteredTable = new Table();
@@ -231,7 +294,7 @@ namespace Squirrel
                 bool matching = false;
                 foreach (string key in _rows[i].Keys)
                 {
-                    if (_fieldSearchValueMap.ContainsKey(key) && _rows[i][key] == _fieldSearchValueMap[key])
+                    if (fieldSearchValueMap.ContainsKey(key) && _rows[i][key] == fieldSearchValueMap[key])
                         matching = true;
                     else
                     {
@@ -443,28 +506,7 @@ namespace Squirrel
             modTab._rows = newRows;
             return modTab;
         }
-        /// <summary>
-        /// The generic version of the values of method.
-        /// </summary>
-        /// <typeparam name="T">The type of the column.</typeparam>
-        /// <param name="columnName">The name of the column.</param>
-        /// <returns>A list of values with all the values of the column.</returns>
-        /// <remarks>
-        /// //Returns the list of names as a list of strings
-        /// //the values are casted to the given type
-        /// //In this case the type is "string"
-        /// List&lt;string&gt; names = tab.ValuesOf&lt;string&gt;("Name");</remarks>
-        public List<T> ValuesOf<T>(string columnName)
-        {
-            try
-            {
-                return _rows.Select(t => t[columnName]).Cast<T>().ToList();
-            }
-            catch
-            {
-                return new List<T>() { };
-            }
-        }
+       
         /// <summary>
         /// Returns all the values of the given column 
         /// </summary>
@@ -478,12 +520,15 @@ namespace Squirrel
         {
             try
             {
+
                 return _rows.Select(t => t[columnName]).ToList();
             }
-            catch
+            catch(KeyNotFoundException ex)
             {
-                return new List<string>() { string.Empty };
+                throw new KeyNotFoundException("The column " + columnName +" is not found " + ex.Message);
+                
             }
+
         }
         /// <summary>
         /// Returns only the numeric columns
@@ -624,7 +669,14 @@ namespace Squirrel
         {
             get
             {
-                return _rows.Count;
+                try
+                {
+                    return _rows.Count;
+                }
+                catch(NullReferenceException ex)
+                {
+                    throw new NullReferenceException("Rows of the Table instance is null.");
+                }
             }
 
         }
@@ -645,6 +697,9 @@ namespace Squirrel
         /// <param name="columnName">New</param>
         /// <param name="fromColumnName">Name of the column from which values are to be extracted</param>
         /// <param name="pattern">The regular expression pattern to use to extract values from the column.</param>
+        /// <example></example>
+        ///<exception cref="ArgumentNullException"></exception>
+        
         public void ExtractAndAddAsColumn(string columnName, string fromColumnName, string pattern)
         {
             List<string> values = new List<string> ();
@@ -659,7 +714,12 @@ namespace Squirrel
         /// <param name="formula">Formula to calculate values of the new column</param>
         /// <param name="decimalDigits"></param>
         public void AddColumn(string columnName, string formula, int decimalDigits)
-        {            
+        {
+            if (columnName == null)
+                throw new ArgumentNullException(nameof(columnName));
+            if (formula == null)
+                throw new ArgumentNullException(nameof(formula));
+            
             string copyFormula = formula;
            
             string[] columns = formula.Split(new char[] { '+', '-', '*', '/', '(', ')',' ' },StringSplitOptions.RemoveEmptyEntries);
@@ -674,13 +734,27 @@ namespace Squirrel
                 formula = copyFormula;
                 foreach (string column in columns)
                 {
-                    formula = formula.Replace(column, _rows[i][column.Replace("[",string.Empty).Replace("]",string.Empty)]);
+                    try
+                    {
+                        formula = formula.Replace(column, _rows[i][column.Replace("[", string.Empty)
+                                         .Replace("]", string.Empty)]);
+                    }
+                    
+                    catch(KeyNotFoundException ex)//Occurs when the column name is not found
+                    {
+                 //       throw new KeyNotFoundException(nameof())                        
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
                 }
          
 
                 _rows[i].Add(columnName, Math.Round(Convert.ToDecimal(new Expression(formula).Evaluate().ToString()),decimalDigits).ToString());         
             }
         }
+        
         /// <summary>
         /// Removes all currency symbol and comma from the values of the given column.
         /// </summary>
@@ -691,8 +765,11 @@ namespace Squirrel
         public Table TransformCurrencyToNumeric(params string[] columns)
         {
             Table newTable = this;
+            
             foreach (string col in columns)
             {
+
+                
                 newTable =  Transform(col, x => x.Replace(",",string.Empty)
                                                  .Replace("$",string.Empty)//Remove US Dollar symbol
                                                  .Replace("£",string.Empty)//Remove GBP Pound symbol
@@ -858,13 +935,28 @@ namespace Squirrel
         /// 
         [Description("Round off to,Round the digits to")]
         public Table RoundOffTo(int decimalDigits)
-        {
-
+        {          
+            if (decimalDigits > 10 || decimalDigits < 0)
+                throw new ArgumentOutOfRangeException(nameof(decimalDigits), "RoundOffTo() requires a non negative number less than 10");
             for (int r = 0; r < this.RowCount; r++)
+            {
                 foreach (string col in this.ColumnHeaders)
-                    if (Regex.IsMatch(this[r][col], @"^-?[0-9]\d*(\.\d+)?$"))
-                        this[r][col] = Math.Round(Convert.ToDecimal(this[r][col]), decimalDigits).ToString();
+                {
+                    try
+                    {
+                        if (Regex.IsMatch(this[r][col], @"^-?[0-9]\d*(\.\d+)?$"))
+                            this[r][col] = Math.Round(Convert.ToDecimal(this[r][col]), decimalDigits).ToString();
+                    }
+                    catch (KeyNotFoundException ex)
+                    {
+                        throw new KeyNotFoundException(nameof(col) +  "The following column wasn't found");
+                    }
+                    catch (Exception ex)
+                    {
 
+                    }
+                }
+            }
             return this;
         }
         /// <summary>
@@ -876,8 +968,6 @@ namespace Squirrel
         /// <example>salesReport.RoundOffTo("Q1(4),Q2(3),AverageSales(4)").PrettyDump();//Assume that there are these columns Q1,Q2 and AverageSales
         /// //and you want to round off Q1 to 4 digits, Q2 to 3 digits and AverageSales to 4 digits after decimal.</example>
         /// <returns>A table with specified number of digits after decimal for each of the column as mentioned.</returns>
-        /// 
-        
         public Table RoundOffTo(string decimalDigitsForEachColumn)
         {
             //Q1(4),Q4(5),Q2(3)
@@ -935,6 +1025,7 @@ namespace Squirrel
         
         /// <summary>
         /// Aggregates values of a column
+        /// This can also be achieved by CumulativeFold () method 
         /// </summary>
         /// <param name="columnName">Aggregate values for each distinct value in this column</param>
         /// <param name="how">The aggregation scheme to be used</param>
@@ -1122,9 +1213,6 @@ namespace Squirrel
         /// 
         public Table MergeByColumns(Table anotherTable, string connectorColumn = "Not Provided")
         {
-            
-
-
             if (connectorColumn == "Not Provided")
                 connectorColumn = this.ColumnHeaders.First();
 
@@ -1134,7 +1222,8 @@ namespace Squirrel
             
             anotherTable.ColumnHeaders.Where(t=>t!=connectorColumn)
                        .ToList().ForEach(m =>
-                                    mergedColumnsTable.AddColumn(m, anotherTable.SortInThisOrder(connectorColumn, this.ValuesOf(connectorColumn)).ValuesOf(m)));
+                                    mergedColumnsTable.AddColumn(m, anotherTable.SortInThisOrder(connectorColumn, 
+                                    this.ValuesOf(connectorColumn)).ValuesOf(m)));
 
 
             return mergedColumnsTable.SortBy(connectorColumn);
@@ -1156,10 +1245,11 @@ namespace Squirrel
 
                 mergedTable._rows.AddRange(anotherTable._rows);
                 if (removeDups)
-                    return mergedTable.Distinct();
-                else
+               //     return mergedTable.Distinct();
+             //   else
                     return mergedTable;
             }
+            return mergedTable;
         }
         /// <summary>
         /// Extracts those rows from the table which are not present in the another one.
@@ -1167,6 +1257,9 @@ namespace Squirrel
         /// <param name="anotherTable">The other table with which we have to compare.</param>
         /// <returns>A new table with rows that are only available in the current table, not in the other one.</returns>
         /// <example>Table exclusive = t1.Exclusive(t2);//Find rows that are exclusively available in table "t1"</example>
+        /// <github>
+        /// 
+        /// </github>
         public Table Exclusive(Table anotherTable)
         {
             Table result = new Table ();
@@ -1186,7 +1279,7 @@ namespace Squirrel
         public Table Common(Table anotherTable)
         {
             if (anotherTable == null)
-                throw new ArgumentNullException("Table");
+                throw new ArgumentNullException(nameof(anotherTable));
 
             Table result = new Table();
             for (int i = 0; i < RowCount; i++)
@@ -1420,7 +1513,11 @@ namespace Squirrel
         /// <seealso cref="Table.RandomSample"/>
         [Description("Shuffle,Random shuffle,Randomize,Un order")]
         public Table Shuffle()
-        {            
+        {
+            if (this == null)
+            {
+                throw new ArgumentNullException("this", "The Table instance is null");
+            }
             Table shuffledTable = new Table();
             shuffledTable._rows = _rows.OrderBy(r => Guid.NewGuid()).ToList();
             return shuffledTable;

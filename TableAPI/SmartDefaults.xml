@@ -17,9 +17,11 @@
   <SmartDefault Name = "Spanish-Month-Names" Value=""/>
   <SmartDefault Name = "Spanish-Month-Names-Short" Value=""/>
   <SmartDefault Name = "T-Shirt-Sizes" Values="XS,S,M,L,XL,XXL"/>
+  <SmartDefault Name = "Sense-of-Time" Values="Hourly,Weekly,Monthly,Quaterly,Yearly"/>
+  
   <SmartDefault Name = "Roman-Numerals-1-To-10" Values="I,II,III,IV,V,VI,VII,VIII,IX,X"/>
   <SmartDefault Name = "SizesCommon" Values ="Small,Medium,Large"/>
   <SmartDefault Name = "CarSizes" Values = "Compact,Sedan,SUV"/>
-  <SmartDefault Name = "FormFactors" Values="Phone,Tablet,Laptop,Desktop,PC,Workstation"/>
+  <SmartDefault Name = "FormFactors" Values="Phone,Tablet,Laptop,Desktop,PC,Workstation,Server,Cluster"/>
 </SmartDefaultEntries>
 

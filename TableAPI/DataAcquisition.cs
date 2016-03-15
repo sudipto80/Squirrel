@@ -461,20 +461,8 @@ namespace Squirrel
         public static Table ToTable(this List<Tuple<string, string, string>> gist)
         {
 
-            return  toTablePrivate(gist);
-
-
-        }
-        /// <summary>
-        /// Creates a table out of a gist.
-        /// </summary>
-        /// <param name="gist">The pre-calculated gist</param>
-        /// <returns>A tabular representation of the gist</returns>
-        /// 
-        private static Table toTablePrivate(List<Tuple<string, string, string>> gist)
-        {
             var dic = gist.ToLookup(g => g.Item1).Select(g => new KeyValuePair<string, IEnumerable<string>>(g.Key,
-                                     g.Select(x => x.Item2 + "=" + x.Item3)));//.Dump();
+                                    g.Select(x => x.Item2 + "=" + x.Item3)));//.Dump();
             Table gistTable = new Table();
             foreach (var v in dic)
             {
@@ -488,7 +476,10 @@ namespace Squirrel
                 gistTable.Rows.Add(row);
             }
             return gistTable;
+
+
         }
+     
         /// <summary>
         /// Returns the html table representation of the table.
         /// </summary>
