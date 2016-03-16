@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Squirrel by sudipto80</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Squirrel</h1>
+      <h2 class="project-tagline">Agile Data Analytics for .NET</h2>
+      <a href="https://github.com/sudipto80/Squirrel" class="btn">View on GitHub</a>
+      <a href="https://github.com/sudipto80/Squirrel/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/sudipto80/Squirrel/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="squirrel" class="anchor" href="#squirrel" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Squirrel</h1>
+
+<p><img src="http://gifyu.com/images/T-Shirt.png" border="0" height="250" width="300"></p>
+
+
+
+<p><a href="https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt"><code>Squirrel LOGO is designed by Pirog tetyana from The Noun Project</code></a></p>
+
+<h2>
+<a id="why-squirrel" class="anchor" href="#why-squirrel" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why Squirrel</h2>
+
+<p>Data Analytics and Big Data, are now the buzz words of the industry. Today many Businesses want to drive their businesses using Data Analytics – by gaining insights from their data. Aesthetically pleasing data visualizations with agility are key for effective discovery of insights. And better insight requires a bunch of special skills – an expertise in the field of <a href="http://en.wikipedia.org/wiki/Data_science">Data Science</a>. But are Data Scientists easy to come by?
+Most of the datasets used by the businesses are not anywhere near Big. Actually they are Tiny to Medium. A typical dataset has only few thousand rows! Professor <a href="https://www.linkedin.com/in/smola">Alex Smola</a> has named datasets based on their sizes as follows:</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">Dataset Size</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Dataset that can fit in your mobile phone</td>
+<td align="left">Tiny</td>
+</tr>
+<tr>
+<td align="left">Dataset that can fit in your laptop (1GB)</td>
+<td align="left">Small</td>
+</tr>
+<tr>
+<td align="left">Dataset that can fit in your workstation (4 GB)</td>
+<td align="left">Medium</td>
+</tr>
+<tr>
+<td align="left">Dataset that can fit in your server Large When clusters of your servers struggle</td>
+<td align="left">Big</td>
+</tr>
+</tbody>
+</table>
+
+<p>Businesses are so sold up to the idea of Big data (it has almost become a status symbol) that they ignore the power of small data tools developed in-house in deriving their insights. So could software developers replace the need of the Data Scientist in answering most questions that involve Tiny or Medium datasets?
+Business users (Operational Managers, System Engineers, Financial and Planning Analysts, DevOps, etc.), often want to initiate the analysis and gain insight into the
+business on their personal devices. But they cannot because of the special skills and training needed to perform such actions. Their outlook thus remains limited by the canned reports/insights offered by their backend. Could a Business user acquire, generate and visualize data of his choice, without knowing the details of data organization or query syntax?</p>
+
+<p><strong>Squirrel</strong> not only answers the above questions but also tries to fulfill the lack of a good data processing and analytics tool or framework to the large .NET developer ecosystem.</p>
+
+<p><strong>Squirrel</strong> seeks to simplify the task of discovering insights by bringing to the software developer a templatized design style for answering most common problems in data science. Squirrel’s readymade functions bring the agility in developing a solution or a storyline from any data.</p>
+
+<p><strong>Squirrel</strong> brings the application closer to the Business user by delivering the ability to acquire and visualize data from a variety of sources to their personal devices. We envision smart abilities in Squirrel that would bring agile data analytic solution development and delivery to near real time.</p>
+
+<p>The <strong>Squirrel</strong> framework development is very active right now and early adopters can benefit by shaping up the design by requesting features. Squirrel is a simple and easy to use interface for querying and reporting of data. APIs for Data acquisition, Data filtering, Data cleansing, etc. provide simple solution, often in one step, for many real world problems. </p>
+
+<p>For a quick start take a look at the <a href="http://www.slideshare.net/sudipto80/squirrel-do-morewithlesscodelightcheatsheet">CheatSheet</a></p>
+
+<p>Data analytics solution development using <strong>Squirrel</strong> follows a templatized design style. As a Data Scientist would, a software developer using Squirrel too would solve a data analytics problem by stacking his solution starting with Data acquisition, followed by Data modeling &amp; cleansing and then topping up with appropriate Data visualization. Applying Bootstrap to the visualization is automatic, bringing agility to development without compromising on quality of user experience. The following figure describes a stacked template of function blocks that aptly summarizes solution development using <strong>Squirrel</strong></p>
+
+<p>Here is a high level block diagram of all the components of Squirrel.
+<img src="http://gifyu.com/images/blocks.png" alt="Block Diagram" title="High Level Block Diagram"></p>
+
+<h2>
+<a id="squirrel-in-action-under-5-minutes" class="anchor" href="#squirrel-in-action-under-5-minutes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Squirrel in action (Under 5 minutes)</h2>
+
+<p><a href="https://youtu.be/jv1znNEq5h4"><img src="http://gifyu.com/images/ActionDemoShot.jpg" alt="Squirrel in action"></a></p>
+
+<h2>
+<a id="key-design-philosophy" class="anchor" href="#key-design-philosophy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Key Design Philosophy</h2>
+
+<p>Here are couple of design decisions that have been the guiding principle for the choice of internal data structure for Squirrel <code>Table</code> data structure to make data accessing/manipulating more intuitive and efficient at the same time.</p>
+
+<ul>
+<li>Each row in the table should be available by zero based integer indexing as we do in arrays and <code>List&lt;T&gt;</code> So if a table <code>birthRates</code> exists then we should be able to get to 10th row by the syntax <code>birthRates[9]</code>
+</li>
+<li>A column at a given index should be available by the column name index. So if we have a table <code>StockValues</code> that stores average stock values in a year of different companies where the row depicts the year and the column depicts the company for which the stock price is stored, then we should be able to get the stock price for Microsoft (Symbol “MSFT”) for 5th year as <code>StockValues[4][“MSFT”]</code>
+</li>
+<li>Value at row <code>“k”</code> (Expressed as an integer) and column <code>“m”</code> (Expressed as a string) has to be accessible by either of the syntax <code>table[k][“m”]</code> or <code>table[“m”][k]</code>.</li>
+</ul>
+
+<h2>
+<a id="api-overview" class="anchor" href="#api-overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Overview</h2>
+
+<ol>
+<li>
+<strong>BasicStatistics</strong> - Basic statistical functions like Median, Range, Standard Deviation, Kurtosis, etc.</li>
+<li>
+<strong>CustomComparers</strong> - Several customized comparators for sorting data.</li>
+<li>
+<strong>DataAcqusition</strong> - Data loaded/dumped from/to various formats, e.g. CSV, TSV, HTML, ARFF, etc.</li>
+<li>
+<strong>DatabaseConnectors</strong> - Data can be loaded from popular DB repositories by using the connectors for SQL Server and MongoDB.</li>
+<li>
+<strong>DataCleansers</strong> - Extraction/Removal of outliers or data that matches specific boolean criteria.</li>
+<li>
+<strong>OrderedTable</strong> - A data structure to hold sort results temporarily.</li>
+<li>
+<strong>Table</strong> - An ubiquitous data structure used to encapsulate the data. Several APIs are part of the <em>Table</em> -
+
+<ul>
+<li>Filter data using regular expressions or SQL clause.</li>
+<li>Sort data based on columns and their values.</li>
+<li>Programmatic manipulation i.e. deletion, updation and insertion of data.</li>
+<li>Merge data columns; Find subsets and exclusive or common rows in tables.</li>
+<li>Other utilities to split or drop data columns; Find rows that meet a specific statistical critieria, e.g. top 10, below average, etc.</li>
+<li>Natural queries</li>
+</ul>
+</li>
+</ol>
+
+<p><a href="https://raw.github.com/sudipto80/Squirrel/newb/doc/TableAPI.chm">Here</a> is the detailed API documentation.</p>
+
+<h2>
+<a id="dependency" class="anchor" href="#dependency" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependency</h2>
+
+<p>There is a dependency for <a href="https://ncalc.codeplex.com/">NCalc</a> for the following methods </p>
+
+<div class="highlight highlight-source-cs"><pre>AddColumn() 
+AddRows()
+AddRowsByShortHand()</pre></div>
+
+<h2>
+<a id="nuget-package" class="anchor" href="#nuget-package" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NuGet Package</h2>
+
+<p><img src="http://cdn.ws.citrix.com/wp-content/uploads/2011/09/NugetIcon.png">
+You can integrate the package using NuGet by giving the following command</p>
+
+<pre><code>PM&gt; Install-Package TableAPI 
+</code></pre>
+
+<p><a href="https://www.nuget.org/packages/TableAPI/">Here is the NuGet Package page</a></p>
+
+<h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p><a href="https://github.com/sudipto80/Squirrel/blob/master/Documentations/Documentation.md">Here is a very high level list of functions and their summaries</a>. The documentation will be perpetually in-progress as the development is very active right now. Also this is a place where you can contribute. If you are looking for example, take a look at the documentation for <a href="https://github.com/sudipto80/Squirrel/blob/master/Documentations/Aggregate.md">Aggregate</a> </p>
+
+<h2>
+<a id="running-squirrel-on-ubuntu" class="anchor" href="#running-squirrel-on-ubuntu" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running Squirrel on Ubuntu</h2>
+
+<p>You can use Squirrel on Linux/Ubuntu by installing <a href="http://www.monodevelop.com/">MonoDevelop</a>. Installing MonoDevelop installs all the required assemblies to run Squirrel. Here are the steps and they are not far from what would expect. In fact getting up to speed with Squirrel on Ubuntu is a breeze as you would see now. </p>
+
+<h3>
+<a id="steps" class="anchor" href="#steps" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Steps</h3>
+
+<ol>
+<li>Get MonoDevelop </li>
+</ol>
+
+<div class="highlight highlight-source-shell"><pre>$ sudo apt-get install monodevelop</pre></div>
+
+<ol>
+<li>Step #2 You will be prompted to give your password.</li>
+<li>Let it run and install monodevelop </li>
+<li>Once the installation is over, launch MonoDevelop by typing <code>monodevelop</code> in the console </li>
+<li>Download Squirrel by clicking on the "Download Zip" button </li>
+<li>Extract the content of this folder in a folder. I did it on desktop in a folder called "Squirrel".</li>
+<li>Create a new project in Mono Develop and add the reference of TableAPI.dll and NCalc.dll </li>
+<li>Write the following code. It will work assuming you have saved Squirrel on desktop and the solution you created is named "HelloWorldSolution"</li>
+</ol>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">using</span> System<span class="pl-k">;</span>
+<span class="pl-k">using</span> Squirrel<span class="pl-k">;</span>
+
+<span class="pl-k">namespace</span> <span class="pl-en">HelloWorldSolution</span>
+{
+    <span class="pl-k">class</span> <span class="pl-en">MainClass</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Main</span> (<span class="pl-k">string[]</span> <span class="pl-smi">args</span>)
+        {
+            Table iris = DataAcquisition.LoadCSV(<span class="pl-s"><span class="pl-pds">@"/home/sudipta/Desktop/Squirrel/Squirrel-master/TableAPI/Data/iris.csv"</span></span>);
+            iris.RandomSample(<span class="pl-c1">10</span>)   
+                .PrettyDump();
+        }
+    }
+}</pre></div>
+
+<p>This will generate the following output</p>
+
+<p><img src="https://pbs.twimg.com/media/CGb0i9qUkAAaloi.png" border="0">                                              </p>
+
+<p>Some functionalities may not work on Ubuntu yet. If not, please report them by creating an issue. </p>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
+
+<ol>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-01.md">Do women pay more tip than men?</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-02.md">Iris dataset aggregation</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-03.md">Finding Gender-Ratio statistics in North America</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-04.md">Finding top gold winning nations in Olympics</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-05.md">How much money someone will accumulate at retirement</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-06.md">Titanic Survivor Analysis per class</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-07.md">Calculating speed of a bungee jumper</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-08.md">Finding most popular baby names in centuries</a></li>
+<li><a href="https://github.com/sudipto80/Squirrel/blob/master/example-09.md">Stock Price Analysis</a></li>
+</ol>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/sudipto80/Squirrel">Squirrel</a> is maintained by <a href="https://github.com/sudipto80">sudipto80</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
