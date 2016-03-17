@@ -18,7 +18,8 @@ Most of the datasets used by the businesses are not anywhere near Big. Actually 
 |Dataset that can fit in your mobile phone |Tiny |
 |Dataset that can fit in your laptop (1GB) |Small |
 |Dataset that can fit in your workstation (4 GB) |Medium |
-|Dataset that can fit in your server Large When clusters of your servers struggle| Big|
+|Dataset that can fit in your server | Large |
+|When clusters of your servers struggle| Big|
 
 
 Businesses are so sold up to the idea of Big data (it has almost become a status symbol) that they ignore the power of small data tools developed in-house in deriving their insights. So could software developers replace the need of the Data Scientist in answering most questions that involve Tiny or Medium datasets?
