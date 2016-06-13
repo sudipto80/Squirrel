@@ -73,7 +73,7 @@ namespace Squirrel
         /// <param name="fileName">The name of the Excel file</param>
         /// <param name="workbookName">The name of the workbook</param>
         /// <returns>A table which holds the values from the workbook.</returns>
-        public static Table LoadXLS(string fileName, string workbookName)
+        public static Table LoadXls(string fileName, string workbookName)
         {
             Table tab = new Table();
             //Use this open source project to read data from Excel.
@@ -162,7 +162,7 @@ namespace Squirrel
         /// <param name="fileName">The arff filename</param>
         /// <returns>Returns a table with the loaded values from the .arff files</returns>
         /// <example>Table play = Table.LoadARFF(".\data\play.arff");</example>
-        public static Table LoadARFF(string fileName)
+        public static Table LoadArff(string fileName)
         {
             Table result = new Table();
             List<string> columnHeaders = new List<string>();
@@ -197,7 +197,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="htmlTable">The HTML code that creates the table</param>
         /// <returns>A table with all the data from the html table</returns>
-        public static Table LoadHTMLTable(string htmlTable)
+        public static Table LoadHtmlTable(string htmlTable)
         {
             StreamReader htmlReader = new StreamReader(htmlTable);
             string totalTable = htmlReader.ReadToEnd();
@@ -217,7 +217,7 @@ namespace Squirrel
             StreamWriter sw = new StreamWriter("TemporaryFile.csv");
             sw.WriteLine(totalTable);
             sw.Close();
-            Table loadedTable = LoadCSV("TemporaryFile.csv");
+            Table loadedTable = LoadCsv("TemporaryFile.csv");
             return loadedTable;
         }        
         /// <summary>
@@ -225,7 +225,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="line">The string representation of a CSV row</param>
         /// <returns>Values of the line</returns>
-        private static List<string> getValues(string line)
+        private static List<string> GetValues(string line)
         {
             string magic = Guid.NewGuid().ToString();
             //if wrapped with quotes from both sides, ignore and trim
@@ -266,7 +266,7 @@ namespace Squirrel
                 else
                 {
                     List<string> innerToks = new List<string>();
-                    if (startingWithQuote.Count > 0)
+                    if (startingWithQuote.Count > 0 && endingWithQuote.Count > 0)
                     {
                         for (int k = startingWithQuote[0]; k <= endingWithQuote[0]; k++)
                         {
@@ -296,7 +296,7 @@ namespace Squirrel
         /// <param name="csvFileName">The file for which values has to be loaded into a table data structure.</param>
         /// <param name="wrappedWihDoubleQuotes"></param>
         /// <returns>A table which has all the values in the CSV file</returns>
-        public static Table LoadCSV(string csvFileName)
+        public static Table LoadCsv(string csvFileName)
         {
 
 
@@ -315,12 +315,12 @@ namespace Squirrel
             Table temp = new Table();
             foreach (DataRow row in dt.Rows)
             {
-                Dictionary<string, string> _rowRep = new Dictionary<string, string>();
+                Dictionary<string, string> rowRep = new Dictionary<string, string>();
                 foreach (var col in dt.Columns.Cast<DataColumn>().Select(z=>z.ColumnName))
                 {
-                    _rowRep.Add(col, row[col].ToString());
+                    rowRep.Add(col, row[col].ToString());
                 }
-                temp.AddRow(_rowRep);
+                temp.AddRow(rowRep);
             }
             return temp;
         }
@@ -329,7 +329,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="tsvFileName">The file name to read from</param>
         /// <returns>A table loaded with these values</returns>
-        public static Table LoadTSV(string tsvFileName)
+        public static Table LoadTsv(string tsvFileName)
         {
             return LoadFlatFile(tsvFileName, new string[] { "\t" });
         }
@@ -343,7 +343,7 @@ namespace Squirrel
         public static Table LoadFlatFile(string fileName, string[] delimeters)
         {
 
-            Table loadedCSV = new Table();
+            Table loadedCsv = new Table();
             StreamReader csvReader = new StreamReader(fileName);
             string line = string.Empty;
             int lineNumber = 0;
@@ -357,7 +357,7 @@ namespace Squirrel
                         line = "\"" + line + "\"";
                     //Because sometimes the column header can have a comma in them
                     //and that can spoil the order
-                    getValues(line).ForEach(col => columns.Add(col));
+                    GetValues(line).ForEach(col => columns.Add(col));
                   //  line.Split(delimeters, StringSplitOptions.None)
                     //    .ToList()
                       //  .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
@@ -369,7 +369,7 @@ namespace Squirrel
                     if (line.Trim().Length > 0)
                     {
                         if (delimeters.Length == 1 && delimeters[0] == ",")
-                            values = getValues(line).ToArray();
+                            values = GetValues(line).ToArray();
                         else
 
                             values = line.Split(delimeters, StringSplitOptions.None);
@@ -385,12 +385,12 @@ namespace Squirrel
                                 }
                                 catch { continue; }
                             }
-                            loadedCSV.AddRow(tempRow);
+                            loadedCsv.AddRow(tempRow);
                         }
                     }
                 }
             }
-            return loadedCSV;
+            return loadedCsv;
         }
         private static string RemoveDoubleQuoteFromEndIfPossible(string input)
         {
@@ -485,7 +485,7 @@ namespace Squirrel
         /// </summary>
         /// <param name="tab"></param>
         /// <returns>A string representing the table in HTML format.</returns>
-        public static string ToHTMLTable(this Table tab)
+        public static string ToHtmlTable(this Table tab)
         {
             StringBuilder tableBuilder = new StringBuilder();
             tableBuilder.AppendLine("<table>");
@@ -507,7 +507,7 @@ namespace Squirrel
         /// Generates a CSV representation of the table
         /// </summary>
         /// <returns>a string with the table as csv</returns>
-        public static string ToCSV(this Table tab)
+        public static string ToCsv(this Table tab)
         {
             return tab.ToValues(',');
         }
@@ -515,24 +515,24 @@ namespace Squirrel
         /// Generates a TSV representation of the table
         /// </summary>
         /// <returns>a string with the table as TSV value</returns>
-        public static string ToTSV(this Table tab)
+        public static string ToTsv(this Table tab)
         {
             return tab.ToValues('\t');
         }
         private static string ToValues(this Table tab, char delim)
         {
-            Func<string, string> Quote = x => "\"" + x + "\"";
+            Func<string, string> quote = x => "\"" + x + "\"";
             StringBuilder csvOrtsvBuilder = new StringBuilder();
             //Append column headers 
-            csvOrtsvBuilder.Append(tab.ColumnHeaders.Aggregate((a, b) => Quote(a) + delim.ToString() + Quote(b)));
+            csvOrtsvBuilder.Append(tab.ColumnHeaders.Aggregate((a, b) => quote(a) + delim.ToString() + quote(b)));
             //Append rows 
             for (int i = 0; i < tab.RowCount - 1; i++)
             {
                 foreach (string header in tab.ColumnHeaders)
                 {
-                    csvOrtsvBuilder.Append(Quote(tab[header, i]));
+                    csvOrtsvBuilder.Append(quote(tab[header, i]));
                 }
-                csvOrtsvBuilder.Append(Quote(tab[tab.ColumnHeaders.ElementAt(tab.ColumnHeaders.Count - 1), tab.RowCount - 1]));
+                csvOrtsvBuilder.Append(quote(tab[tab.ColumnHeaders.ElementAt(tab.ColumnHeaders.Count - 1), tab.RowCount - 1]));
                 csvOrtsvBuilder.AppendLine();//Push in a new line.
             }
             return csvOrtsvBuilder.ToString();
@@ -560,7 +560,7 @@ namespace Squirrel
         /// Returns the string representations of the table as a ARFF file. 
         /// </summary>
         /// <returns></returns>
-        public static string ToARFF(this Table tab)
+        public static string ToArff(this Table tab)
         {
             StringBuilder arffBuilder = new StringBuilder();
 

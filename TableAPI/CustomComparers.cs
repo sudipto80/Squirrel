@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace Squirrel
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CustomComparers
     {
-        
-        public static List<string> sortInThisOrder = new List<string>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static List<string> SortInThisOrder = new List<string>();
         /// <summary>
         /// 
         /// </summary>
@@ -64,8 +69,8 @@ namespace Squirrel
         {
             public int Compare(string x, string y)
             {
-                return sortInThisOrder.IndexOf(x).CompareTo(
-                sortInThisOrder.IndexOf(y));
+                return SortInThisOrder.IndexOf(x).CompareTo(
+                SortInThisOrder.IndexOf(y));
             }
         }
         /// <summary>

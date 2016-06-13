@@ -20,7 +20,7 @@ namespace Squirrel.Cleansing
             /// <summary>
             /// 
             /// </summary>
-            MarkWithNA,
+            MarkWithNa,
             /// <summary>
             /// 
             /// </summary>
@@ -162,7 +162,7 @@ namespace Squirrel.Cleansing
             {
                 throw new FormatException(String.Format("some values of column {0} can't be converted to decimal ", columnName));
             }
-            Tuple<decimal, decimal> iqrRange = BasicStatistics.IQRRange(allValues);
+            Tuple<decimal, decimal> iqrRange = BasicStatistics.IqrRange(allValues);
             for (int i = 0; i < allValues.Count; i++)
             {
                 if (allValues[i] < iqrRange.Item1 || allValues[i] > iqrRange.Item2)
@@ -188,7 +188,7 @@ namespace Squirrel.Cleansing
                                          .Select(m => Convert.ToDecimal(m))
                                          .ToList();
             //Get the IQR Range
-            Tuple<decimal, decimal> iqrRange = BasicStatistics.IQRRange(allValues);
+            Tuple<decimal, decimal> iqrRange = BasicStatistics.IqrRange(allValues);
             for (int i = 0; i < allValues.Count; i++)
             {
                 //Any value which is less or more than the given range is a possible outlier

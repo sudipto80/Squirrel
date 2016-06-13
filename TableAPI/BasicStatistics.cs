@@ -13,32 +13,37 @@ namespace Squirrel
     /// </summary>
     public static class BasicStatistics
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numbers"></param>
+        /// <returns></returns>
         public static decimal Median(List<decimal> numbers)
         {
             numbers = numbers.OrderBy(m => m).ToList();
-            if (numbers.Count % 2 == 0)
+            if (numbers.Count%2 == 0)
             {
-                return (numbers[numbers.Count / 2] + numbers[numbers.Count / 2 - 1]) / 2;
+                return (numbers[numbers.Count/2] + numbers[numbers.Count/2 - 1])/2;
             }
-            else
-            {
-                return numbers[numbers.Count / 2];
-            }
+
+            return numbers[numbers.Count/2];
+
         }
+
         /// <summary>
         /// This must go to the Math API
         /// </summary>
         /// <param name="numbers"></param>
         /// <returns></returns>
-        public static Tuple<decimal, decimal> IQRRange(List<decimal> numbers)
+        public static Tuple<decimal, decimal> IqrRange(List<decimal> numbers)
         {
             decimal median = Median(numbers);
             List<decimal> smaller = numbers.Where(n => n < median).ToList();
             List<decimal> bigger = numbers.Where(n => n > median).ToList();
-            decimal Q1 = Median(smaller);
-            decimal Q3 = Median(bigger);
-            decimal IQR = Q3 - Q1;
-            return new Tuple<decimal, decimal>(Q1 - 1.5M * IQR, Q3 + 1.5M * IQR);
+            decimal q1 = Median(smaller);
+            decimal q3 = Median(bigger);
+            decimal iqr = q3 - q1;
+            return new Tuple<decimal, decimal>(q1 - 1.5M * iqr, q3 + 1.5M * iqr);
         }
 
         /// <summary>
@@ -62,11 +67,11 @@ namespace Squirrel
         public static double Kurtosis(this IList<double> values)
         {
             double count = values.Count;
-            double N1 = count + 1;
-            double N2 = count;
-            double D1 = count - 1;
-            double D2 = count - 2;
-            double D3 = count - 3;
+            double n1 = count + 1;
+            double n2 = count;
+            double d1 = count - 1;
+            double d2 = count - 2;
+            double d3 = count - 3;
 
             double sum = 0;
             double v = values.Average();
@@ -75,16 +80,26 @@ namespace Squirrel
             for (int i = 0; i < count; i++)
                 sum += Math.Pow((values[i] - v) / s, 4);
 
-            return (N1 * N2 * sum) / (D1 * D2 * D3) - (3 * (Math.Pow(count - 1, 2))) / (D2 * D3);
+            return (n1 * n2 * sum) / (d1 * d2 * d3) - (3 * (Math.Pow(count - 1, 2))) / (d2 * d3);
 
 
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public static double StandardDeviation(IList<double> values)
         {
             return 0.0;
             //  return Math.Sqrt(Variance(values));
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public static int AverageCount(this IEnumerable<decimal> values)
         {
             return values.Count(s => s >= values.Average());

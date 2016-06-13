@@ -23,19 +23,19 @@ namespace Squirrel
             /// <summary>
             /// table-striped class of Bootstrap table
             /// </summary>
-            Table_Striped,
+            TableStriped,
             /// <summary>
             /// table-bordered class of Bootstrap table
             /// </summary>
-            Table_Bordered,
+            TableBordered,
             /// <summary>
             /// table-hover class of Bootstrap table
             /// </summary>
-            Table_Hover,
+            TableHover,
             /// <summary>
             /// table-condensed class of Bootstrap table
             /// </summary>
-            Table_Condensed 
+            TableCondensed 
         };
         /// <summary>
         /// Bootstrap classes for table rows 
@@ -133,7 +133,7 @@ namespace Squirrel
         /// <example>//tab.ToBootstrapHTMLTableWithColoredRows(warningPredicate:warning);</example>
         /// <remarks>Watch this video to understand it better: 
         /// TODO: Video to go </remarks>
-        public static string ToBootstrapHTMLTableWithColoredRows(this Table tab,                                                                    
+        public static string ToBootstrapHtmlTableWithColoredRows(this Table tab,                                                                    
                                                                       //All are optional. Use any number of predicates you want.
                                                                       Func<Dictionary<string,string>,bool> successPredicate  = null,
                                                                       Func<Dictionary<string, string>, bool> activePredicate = null,
@@ -167,13 +167,13 @@ namespace Squirrel
             tableBuilder.AppendLine("<html>");
             tableBuilder.AppendLine(content);
             tableBuilder.AppendLine(@"<div class=""bs-example"">");
-            if (tableClass == BootstrapTableClasses.Table_Bordered)
+            if (tableClass == BootstrapTableClasses.TableBordered)
                 tableBuilder.AppendLine(@"<table class = ""table table-bordered"">");
-            else if (tableClass == BootstrapTableClasses.Table_Hover)
+            else if (tableClass == BootstrapTableClasses.TableHover)
                 tableBuilder.AppendLine(@"<table class = ""table table-hover"">");
-            else if (tableClass == BootstrapTableClasses.Table_Condensed)
+            else if (tableClass == BootstrapTableClasses.TableCondensed)
                 tableBuilder.AppendLine(@"<table class = ""table table-condensed"">");
-            else if (tableClass == BootstrapTableClasses.Table_Striped)
+            else if (tableClass == BootstrapTableClasses.TableStriped)
                 tableBuilder.AppendLine(@"<table class = ""table table-striped"">");
             else
                 tableBuilder.AppendLine(@"<table class = ""table"">");
@@ -225,7 +225,7 @@ namespace Squirrel
         /// Table, Table_Striped, Table_Bordered, Table_Hover, Table_Condensed.
         /// The default class is "Table"</param>
         /// <returns>A table in Bootstrap format with the given table class.</returns>
-        public static string ToBasicBootstrapHTMLTable(this Table tab, BootstrapTableClasses tableClass = BootstrapTableClasses.Table)
+        public static string ToBasicBootstrapHtmlTable(this Table tab, BootstrapTableClasses tableClass = BootstrapTableClasses.Table)
         {
             if (tab == null)
                 throw new ArgumentNullException("tab");
@@ -245,13 +245,13 @@ namespace Squirrel
             tableBuilder.AppendLine("<html>");
             tableBuilder.AppendLine(content);
             tableBuilder.AppendLine(@"<div class=""bs-example"">");
-            if (tableClass == BootstrapTableClasses.Table_Bordered)
+            if (tableClass == BootstrapTableClasses.TableBordered)
                 tableBuilder.AppendLine(@"<table class = ""table table-bordered"">");
-            else if (tableClass == BootstrapTableClasses.Table_Hover)
+            else if (tableClass == BootstrapTableClasses.TableHover)
                 tableBuilder.AppendLine(@"<table class = ""table table-hover"">");
-            else if (tableClass == BootstrapTableClasses.Table_Condensed)
+            else if (tableClass == BootstrapTableClasses.TableCondensed)
                 tableBuilder.AppendLine(@"<table class = ""table table-condensed"">");
-            else if (tableClass == BootstrapTableClasses.Table_Striped)
+            else if (tableClass == BootstrapTableClasses.TableStriped)
                 tableBuilder.AppendLine(@"<table class = ""table table-striped"">");
             else
                 tableBuilder.AppendLine(@"<table class = ""table"">");

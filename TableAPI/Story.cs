@@ -13,8 +13,8 @@ namespace Squirrel
 {
     public static class Story
     {
-        private static Dictionary<string, List<string>> methodTagMap = new Dictionary<string, List<string>>();
-        private static Dictionary<string, string> mapping = 
+        private static Dictionary<string, List<string>> _methodTagMap = new Dictionary<string, List<string>>();
+        private static Dictionary<string, string> _mapping = 
             new Dictionary<string, string>();
         public static List<string> ColumnNamesInvolved( Table tab, string nql)
         {
@@ -93,6 +93,13 @@ namespace Squirrel
 
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="command"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public static Table HandleIt(Table tab, string command, int n)
         {
             switch (command)
@@ -101,7 +108,6 @@ namespace Squirrel
                     return tab.RandomSample(n);
                 case ".Top":
                     return tab.Top(n);
-                    break;
                 case ".Bottom":
                     return tab.Bottom(n);
                     break;
@@ -110,10 +116,22 @@ namespace Squirrel
                     return tab;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public static KeyValuePair<string, string[]> GetCommand(string command, Stack<string> values)
         {
             return new KeyValuePair<string, string[]>(command, values.Select(t => t).ToArray());
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public static KeyValuePair<string, int> GetCommand(string command, int n)
         {
             return new KeyValuePair<string, int>(command, n);
@@ -126,7 +144,7 @@ namespace Squirrel
         /// <returns></returns>
         public static Table PseudoNaturalQuery(this Table tab,string storyScript)
         {
-            methodTagMap.Clear();
+            _methodTagMap.Clear();
             Table result = tab;
             typeof(Table).GetMembers().Select(t =>
                 {
@@ -137,15 +155,15 @@ namespace Squirrel
                     catch { return new KeyValuePair<string, List<string>>(Guid.NewGuid().ToString(), new List<string>()); }
                 })
                 .ToList()
-                .ForEach(m => methodTagMap.Add(m.Key, m.Value));
+                .ForEach(m => _methodTagMap.Add(m.Key, m.Value));
 
-            methodTagMap = methodTagMap.Where(t => !Regex.Match(t.Key, "[a-zA-Z0-9-]{36}").Success).ToDictionary(t => t.Key, t => t.Value);
+            _methodTagMap = _methodTagMap.Where(t => !Regex.Match(t.Key, "[a-zA-Z0-9-]{36}").Success).ToDictionary(t => t.Key, t => t.Value);
 
             Dictionary<string, string> trasformedMap = new Dictionary<string, string>();
 
-            foreach (var m in methodTagMap.Keys)
+            foreach (var m in _methodTagMap.Keys)
             {
-                foreach (var z in methodTagMap[m])
+                foreach (var z in _methodTagMap[m])
                 {
                     try
                     {
