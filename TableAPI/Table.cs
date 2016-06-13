@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Data.OleDb;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using NCalc;
-using System.Data;
-using System.Globalization;
-using System.ComponentModel;
 using Squirrel.Cleansing;
 using TableAPI;
-
 
 // ReSharper disable once CheckNamespace
 namespace Squirrel
@@ -59,7 +56,7 @@ namespace Squirrel
 		/// Z Score
 		/// </summary>
 		Z_Score 
-	};
+	}
 	/// <summary>
 	/// Method to be used for aggregation/consolidation
 	/// </summary>
@@ -201,7 +198,7 @@ namespace Squirrel
 				throw new ArgumentNullException("predicate", "The predicate provided is null");
 			}
 			var result = new Table();
-			result.Rows.AddRange(this.Rows.Where(t => predicate.Invoke(t)));
+			result.Rows.AddRange(Rows.Where(t => predicate.Invoke(t)));
 			return result;
 		}
 
@@ -323,7 +320,7 @@ namespace Squirrel
 		/// <param name="sql">The query in the form Select * from [Table] Where A = 'a'</param>
 		public Table RunSQLQuery(string sql)
 		{
-			HashSet<string> columns = this.ColumnHeaders;
+			HashSet<string> columns = ColumnHeaders;
 			StreamWriter sw = new StreamWriter(@"C:\temp.csv");
 			sw.WriteLine(columns.Aggregate((a, b) => a + "," + b));
 			string numberRegex = "[0-9]+.*[0-9]+";
@@ -347,7 +344,7 @@ namespace Squirrel
 			sql = sql.Replace("[Table]", @"C:\temp.csv");
 
 			OleDbDataAdapter oleda = new OleDbDataAdapter(sql, strCSVConnString);
-			System.Data.DataTable dataTable = new System.Data.DataTable();
+			DataTable dataTable = new DataTable();
 			oleda.Fill(dataTable);
 
 
@@ -361,7 +358,8 @@ namespace Squirrel
 					{
 						currentRow.Add(column, dataTable.Rows[i][column].ToString());
 					}
-					catch { continue; }
+					catch {
+					}
 				}
 				resultTable.AddRow(currentRow);
 			}
@@ -408,21 +406,21 @@ namespace Squirrel
 		{
 			var sortedTable = new OrderedTable();
 			
-			Squirrel.CustomComparers.NumericComparer comp = new Squirrel.CustomComparers.NumericComparer();
-			Squirrel.CustomComparers.DateComparer dateComp = new Squirrel.CustomComparers.DateComparer();
-			Squirrel.CustomComparers.CurrencyCustomSorter currencyComp = new CustomComparers.CurrencyCustomSorter();
+			CustomComparers.NumericComparer comp = new CustomComparers.NumericComparer();
+			CustomComparers.DateComparer dateComp = new CustomComparers.DateComparer();
+			CustomComparers.CurrencyCustomSorter currencyComp = new CustomComparers.CurrencyCustomSorter();
 
 			if (smartSort)
 			{
 				SmartDefaults.Instance.GetSmartDefaultValues(smartDefaultFile);//Populate and keep it ready once. 
 
-				KeyValuePair<bool, string> matchingEntriesIfAny = SmartDefaults.Instance.DoesMatchingEntryExist(this.ValuesOf(columnName));
+				KeyValuePair<bool, string> matchingEntriesIfAny = SmartDefaults.Instance.DoesMatchingEntryExist(ValuesOf(columnName));
 
 				//Smart Sort the day and month names 
-				if (matchingEntriesIfAny.Key == true)
+				if (matchingEntriesIfAny.Key)
 				{
 					List<string> sortingOrder = SmartDefaults.DefaultValues[matchingEntriesIfAny.Value];
-					return this.SortInThisOrder(columnName, sortingOrder, how);
+					return SortInThisOrder(columnName, sortingOrder, how);
 				}
 			}
 			
@@ -580,7 +578,7 @@ namespace Squirrel
 		public void AddRowsByShortHand(string formula, int count)
 		{          
 			//++,--,+=,-=,*=,/=
-			if(String.IsNullOrWhiteSpace(formula))
+			if(string.IsNullOrWhiteSpace(formula))
 				throw new ArgumentNullException(nameof(formula) + " is null");
 			if(count <= 0)
 				throw new ArgumentOutOfRangeException($"Value for {count} should be non-zero");
@@ -647,7 +645,7 @@ namespace Squirrel
 				string statement = tokens[1];
 				foreach (var columnName in columnsPresent)
 				{
-					statement = statement.Replace(columnName + "[" + startCopy.ToString() + "]", _rows[i][columnName]);
+					statement = statement.Replace(columnName + "[" + startCopy + "]", _rows[i][columnName]);
 				}
 				Expression exp = new Expression(statement);
 				if (RowCount <= index)
@@ -711,7 +709,7 @@ namespace Squirrel
 			if (String.IsNullOrWhiteSpace(pattern))
 				throw new ArgumentNullException($"The regular expression pattern provided is to extract values is null or empty or whitespace");
 			var values = new List<string> ();
-			foreach (var val in this.ValuesOf(fromColumnName))
+			foreach (var val in ValuesOf(fromColumnName))
 				values.Add(Regex.Match(val, pattern).Value);
 			AddColumn(columnName, values);
 		}
@@ -734,7 +732,7 @@ namespace Squirrel
 			
 			string copyFormula = formula;
 		   
-			string[] columns = formula.Split(new char[] { '+', '-', '*', '/', '(', ')',' ' },StringSplitOptions.RemoveEmptyEntries);
+			string[] columns = formula.Split(new[] { '+', '-', '*', '/', '(', ')',' ' },StringSplitOptions.RemoveEmptyEntries);
 
 			columns = columns.Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty))
 							 .Intersect(ColumnHeaders)
@@ -956,11 +954,11 @@ namespace Squirrel
 			//becomes the headers and value of each subsequent columns become rows 
 			//TO DO. -> This code doesn't work yet. 
 			Table transposed = new Table();
-			this[this.ColumnHeaders.ElementAt(0)].ToList().ForEach( m => transposed.ColumnHeaders.Add(m));
-			for (int i = 1; i < this.ColumnHeaders.Count; i++)
+			this[ColumnHeaders.ElementAt(0)].ToList().ForEach( m => transposed.ColumnHeaders.Add(m));
+			for (int i = 1; i < ColumnHeaders.Count; i++)
 			{
 				Dictionary<string, string> row = new Dictionary<string, string>();
-				this[this.ColumnHeaders.ElementAt(i)].ToList().ForEach(n => row.Add(this.ColumnHeaders.ElementAt(i), n));
+				this[ColumnHeaders.ElementAt(i)].ToList().ForEach(n => row.Add(ColumnHeaders.ElementAt(i), n));
 				transposed.Rows.Add(row);
 			}
 			return transposed;
@@ -977,9 +975,9 @@ namespace Squirrel
 		{          
 			if (decimalDigits > 10 || decimalDigits < 0)
 				throw new ArgumentOutOfRangeException(nameof(decimalDigits), "RoundOffTo() requires a non negative number less than 10");
-			for (int r = 0; r < this.RowCount; r++)
+			for (int r = 0; r < RowCount; r++)
 			{
-				foreach (string col in this.ColumnHeaders)
+				foreach (string col in ColumnHeaders)
 				{
 					try
 					{
@@ -1014,11 +1012,11 @@ namespace Squirrel
 			string[] tokens = decimalDigitsForEachColumn.Split(',');
 			foreach (string tok in tokens)
 			{
-				string[] internalTokens = tok.Split(new char[] { '(', ')' });
+				string[] internalTokens = tok.Split('(', ')');
 				roundOffMap.Add(internalTokens[0], Convert.ToInt16(internalTokens[1]));
 			}
-			foreach (string col in this.ColumnHeaders)
-				for (int r = 0; r < this.RowCount; r++)
+			foreach (string col in ColumnHeaders)
+				for (int r = 0; r < RowCount; r++)
 					if (Regex.IsMatch(this[r][col], @"^-?[0-9]\d*(\.\d+)?$"))
 						this[r][col] = Math.Round(Convert.ToDecimal(this[r][col]),  roundOffMap[col]).ToString();
 
@@ -1039,7 +1037,7 @@ namespace Squirrel
 			//West,2,3,4,2,12,3,4,2,2,3,4,22
 
 			List<decimal> newValues = new List<decimal>();
-			for (int i = 0; i < this.RowCount; i++)
+			for (int i = 0; i < RowCount; i++)
 			{
 				
 				List<decimal> values = new List<decimal> ();
@@ -1236,8 +1234,7 @@ namespace Squirrel
 			foreach (var row in Rows)
 			{
 				if(!tables.ContainsKey(row[columnName]))
-					tables.Add(row[columnName],new Table()
-						 { _rows = new List<Dictionary<string, string>>() {row} });
+					tables.Add(row[columnName],new Table { _rows = new List<Dictionary<string, string>> {row} });
 				else
 				{
 					
@@ -1293,16 +1290,16 @@ namespace Squirrel
 				anotherTable.ThrowIfColumnsAreNotPresentInTable(connectorColumn);
 			}
 			if (connectorColumn == "Not Provided")
-				connectorColumn = this.ColumnHeaders.First();
+				connectorColumn = ColumnHeaders.First();
 
 			Table mergedColumnsTable = new Table();
 
-			this.ColumnHeaders.ToList().ForEach(m => mergedColumnsTable.AddColumn(m, this.ValuesOf(m)));
+			ColumnHeaders.ToList().ForEach(m => mergedColumnsTable.AddColumn(m, ValuesOf(m)));
 			
 			anotherTable.ColumnHeaders.Where(t=>t!=connectorColumn)
 					   .ToList().ForEach(m =>
 									mergedColumnsTable.AddColumn(m, anotherTable.SortInThisOrder(connectorColumn, 
-									this.ValuesOf(connectorColumn)).ValuesOf(m)));
+									ValuesOf(connectorColumn)).ValuesOf(m)));
 
 
 			return mergedColumnsTable.SortBy(connectorColumn);
@@ -1341,11 +1338,12 @@ namespace Squirrel
 		/// <param name="anotherTable">The other table with which we have to compare.</param>
 		/// <returns>A new table with rows that are only available in the current table, not in the other one.</returns>
 		/// <example>Table exclusive = t1.Exclusive(t2);//Find rows that are exclusively available in table "t1"</example>
-		/// <github>
-		/// 
-		/// </github>
+		
 		public Table Exclusive(Table anotherTable)
 		{
+            this.ThrowIfTableIsNull();
+            anotherTable.ThrowIfTableIsNull();
+
 			Table result = new Table ();
 			for (int i = 0; i < RowCount; i++)
 			{
@@ -1362,10 +1360,11 @@ namespace Squirrel
 		/// <example>Table comRows = t1.Common(t2);//returns common rows that are available in "t1" and "t2"</example>
 		public Table Common(Table anotherTable)
 		{
-			if (anotherTable == null)
-				throw new ArgumentNullException(nameof(anotherTable));
+		
+            this.ThrowIfTableIsNull();
+            anotherTable.ThrowIfTableIsNull();
 
-			Table result = new Table();
+			var result = new Table();
 			for (int i = 0; i < RowCount; i++)
 			{
 				if (anotherTable._rows.Any(r => IsSameRow(r, _rows[i])))
@@ -1383,6 +1382,9 @@ namespace Squirrel
 		/// Where t1 and t2 are table instances.</example>
 		public bool IsSubset(Table anotherTable)
 		{
+            this.ThrowIfTableIsNull();
+            anotherTable.ThrowIfTableIsNull();
+
 			bool isSubset = false;
 			foreach (var row in _rows)
 			{
@@ -1414,14 +1416,18 @@ namespace Squirrel
 		/// //Merges two columns "First_Name" and "Last_Name" 
 		/// //and the new column is named "Full_Name"
 		/// Table mergedColumns = t1.MergeColumns("Full_Name", ' ',"First_Name","Last_Name");</example>
-		public Table MergeColumns(string newColumnName, char separator = ' ',params string[] columns)
+		public Table MergeColumns(string newColumnName, 
+                                  char separator = ' ',
+                                  params string[] columns)
 		{
-			List<string> mergedValues = new List<string>();
+			var mergedValues = new List<string>();
 			for (int i = 0; i < columns.Length - 1; i++)
-				mergedValues = this.ValuesOf(columns[i]).Zip(this.ValuesOf(columns[i + 1]), (a, b) => a + separator.ToString() + b).ToList();
+				mergedValues = ValuesOf(columns[i])
+                               .Zip(ValuesOf(columns[i + 1]), (a, b) => a + separator.ToString() + b)
+                               .ToList();
 
-			this.AddColumn(newColumnName, mergedValues);
-			columns.ToList().ForEach(col => this.RemoveColumn(col));
+			AddColumn(newColumnName, mergedValues);
+			columns.ToList().ForEach(RemoveColumn);
 			return this;
 		}
 		/// <summary>
@@ -1481,7 +1487,7 @@ namespace Squirrel
 		[Description("Pick random sample,Random sample,Generate random sample")]
 		public Table RandomSample(int sampleSize)
 		{
-			return this.Shuffle().Top(sampleSize);
+			return Shuffle().Top(sampleSize);
 		}
 		   
 		
@@ -1526,22 +1532,27 @@ namespace Squirrel
 		[Description("Top percent")]
 		public Table TopNPercent(int n)
 		{
-			int rowCount = Convert.ToInt16( Math.Floor((float) this.RowCount * n / 100.0));
-			return this.Top(rowCount);
+			int rowCount = Convert.ToInt16( Math.Floor((float) RowCount * n / 100.0));
+			return Top(rowCount);
 		}
 		
 
 		/// <summary>
 		/// Returns the bottom n % entries as a new table
 		/// </summary>
-		/// <param name="n"></param>
+		/// <param name="n">Percentage expressed as an integer</param>
 		/// <returns></returns>
-		/// 
+		/// <example>
+		/// //Returns last 5% rows in bottom5Percent table
+		/// var bottom5Percent = tab.BottomNPercent(5);
+		/// </example>
 		[Description("Bottom percent")]
 		public Table BottomNPercent(int n)
 		{
-			int rowCount = Convert.ToInt16(Math.Floor((float)this.RowCount * n / 100.0));
-			return this.Bottom(rowCount);
+		    if (n <= 0)
+		        throw new ArgumentOutOfRangeException($"Value of percentage provided is negative");
+			int rowCount = Convert.ToInt16(Math.Floor((float)RowCount * n / 100.0));
+			return Bottom(rowCount);
 		}
 		/// <summary>
 		/// Returns a section of rows from the middle of the table
@@ -1551,8 +1562,11 @@ namespace Squirrel
 		/// <returns></returns>
 		public Table Middle(int skip,int take)
 		{
-			Table mid = new Table();
-			mid.Rows.AddRange( this.Rows.Skip(skip).Take(take));
+		    if (take > RowCount)
+		        take = RowCount;
+
+			var mid = new Table();
+			mid.Rows.AddRange( Rows.Skip(skip).Take(take));
 			return mid;
 		}
 		/// <summary>
@@ -1562,10 +1576,9 @@ namespace Squirrel
 		/// <returns></returns>
 		public List<Table> SplitByRows(int rowsPerSplit)
 		{
-			List<Table> splits = new List<Table>();
 
-			return Enumerable.Range(0, this.RowCount - rowsPerSplit + 1)
-							 .Select(m => this.Middle(m * rowsPerSplit, rowsPerSplit))
+			return Enumerable.Range(0, RowCount - rowsPerSplit + 1)
+							 .Select(m => Middle(m * rowsPerSplit, rowsPerSplit))
 							 .ToList();
 			
 		}
@@ -1583,7 +1596,7 @@ namespace Squirrel
 			{
 				Table temp = new Table();
 				foreach (var col in columnDefinition)
-					temp.AddColumn(col, this.ValuesOf(col));
+					temp.AddColumn(col, ValuesOf(col));
 				tables.Add(temp);
 			}
 			return tables;
@@ -1631,13 +1644,12 @@ namespace Squirrel
 		{
 			Table result = this;
 			string[] words = query.Split(' ');//how many easy courses are there 
-			List<string> guessedColumns = new List<string>();
-			Dictionary<string, string> filterSettings = new Dictionary<string, string>();
+		
 			foreach (string word in words)
 			{
 				foreach (string column in ColumnHeaders)
 				{
-					if (this.ValuesOf(column).Contains(word))
+					if (ValuesOf(column).Contains(word))
 					{
 						result = result.Filter(column, word);
 					}
