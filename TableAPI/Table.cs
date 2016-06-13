@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using NCalc;
 using Squirrel.Cleansing;
@@ -187,18 +188,18 @@ namespace Squirrel
 		/// <param name="predicate">The predicate takes a row and returns a bool.</param>
 		/// <returns>The result table with filtered values</returns>
 		/// <example>
-		/////Finds all iris flowers where the SepalWidth is more than 3.0
-		///Table filtered = iris.Filter(x => Convert.ToDouble(x["SepalWidth"]) > 3.0);
+		///Finds all iris flowers where the SepalWidth is more than 3.0
+		///Table filtered = iris.Filter(x =&gt; Convert.ToDouble(x["SepalWidth"]) &gt; 3.0);
 		///</example>
 		public Table Filter(Func<Dictionary<string, string>, bool> predicate)
 		{
 			this.ThrowIfTableIsNull();
 			if (predicate == null)
 			{
-				throw new ArgumentNullException("predicate", "The predicate provided is null");
+				throw new ArgumentNullException(nameof(predicate), "The predicate provided is null");
 			}
 			var result = new Table();
-			result.Rows.AddRange(Rows.Where(t => predicate.Invoke(t)));
+			result.Rows.AddRange(Rows.Where(predicate.Invoke));
 			return result;
 		}
 
@@ -222,23 +223,24 @@ namespace Squirrel
 
 			if (regexPattern == null)
 			{
-				throw new ArgumentNullException ("regexPattern", "The regular expression pattern provided is null");
+				throw new ArgumentNullException (nameof(regexPattern),
+                     "The regular expression pattern provided is null");
 			}
 			var filteredTable = new Table();
-			for (int i = 0; i < _rows.Count; i++)
+			foreach (var row in _rows)
 			{
-				try
-				{
-					if (Regex.IsMatch(_rows[i][column], regexPattern))
-						filteredTable.AddRow(_rows[i]);
-				}
-				catch(KeyNotFoundException ex)
-				{
-					throw new KeyNotFoundException("The provided column name [" + column + "] doesn't exist." +
-						Environment.NewLine + ex.Message +  Environment.NewLine + ex.StackTrace);
-				}
+			    try
+			    {
+			        if (Regex.IsMatch(row[column], regexPattern))
+			            filteredTable.AddRow(row);
+			    }
+			    catch(KeyNotFoundException ex)
+			    {
+			        throw new KeyNotFoundException("The provided column name [" + column + "] doesn't exist." +
+			                                       Environment.NewLine + ex.Message +  Environment.NewLine + ex.StackTrace);
+			    }
 			}
-			return filteredTable;
+		    return filteredTable;
 	  
 		}
 		/// <summary>
@@ -252,7 +254,8 @@ namespace Squirrel
 			this.ThrowIfTableIsNull();
 			if(fieldSearchValuesMap == null)
 			{
-				throw new ArgumentNullException("fieldSearchValuesMap", "No value is provided to filter on");
+				throw new ArgumentNullException(nameof(fieldSearchValuesMap), 
+                    "No value is provided to filter on");
 			}
 			var result = this;
 			foreach (var key in fieldSearchValuesMap.Keys)
@@ -263,7 +266,7 @@ namespace Squirrel
 				}
 				catch(KeyNotFoundException ex)//If key "key" is not found in fieldSearchValueMap 
 				{
-					throw ex;
+					throw;
 				}
 			}
 			return result;
@@ -376,7 +379,8 @@ namespace Squirrel
 		/// <param name="inThisOrder">The custom ordering of elements</param>
 		/// <param name="how">Ascending or Descending</param>
 		/// <returns>A sorted table with the custom ordering.</returns>
-		public OrderedTable SortInThisOrder(string columnName,List<string> inThisOrder, SortDirection how = SortDirection.Ascending)
+		public OrderedTable SortInThisOrder(string columnName,List<string> inThisOrder, 
+                                            SortDirection how = SortDirection.Ascending)
 		{             
 			CustomComparers.SortInThisOrder = inThisOrder;
 
@@ -683,14 +687,9 @@ namespace Squirrel
 		/// <summary>
 		/// Read-only property for getting rows of the table
 		/// </summary>
-		public List<Dictionary<string, string>> Rows
-		{
-			get
-			{
-				return _rows;
-			}
-		}
-		/// <summary>
+		public List<Dictionary<string, string>> Rows => _rows;
+
+	    /// <summary>
 		/// Extracts words from values of a given column 
 		/// and then uses these extracted values to create a new column
 		/// </summary>
@@ -704,14 +703,12 @@ namespace Squirrel
 		{
 			this.ThrowIfTableIsNull();
 			this.ThrowIfColumnsAreNotPresentInTable(fromColumnName);
-			if (String.IsNullOrWhiteSpace(columnName))
+			if (string.IsNullOrWhiteSpace(columnName))
 				throw new ArgumentNullException($"The name of the column {columnName} is either null or empty or whitespace.");
-			if (String.IsNullOrWhiteSpace(pattern))
+			if (string.IsNullOrWhiteSpace(pattern))
 				throw new ArgumentNullException($"The regular expression pattern provided is to extract values is null or empty or whitespace");
-			var values = new List<string> ();
-			foreach (var val in ValuesOf(fromColumnName))
-				values.Add(Regex.Match(val, pattern).Value);
-			AddColumn(columnName, values);
+			var values = ValuesOf(fromColumnName).Select(val => Regex.Match(val, pattern).Value).ToList();
+	        AddColumn(columnName, values);
 		}
 		/// <summary>
 		/// Adds a column for which value gets calculated from a given formula.
@@ -761,7 +758,8 @@ namespace Squirrel
 				}
 		 
 
-				_rows[i].Add(columnName, Math.Round(Convert.ToDecimal(new Expression(formula).Evaluate().ToString()),decimalDigits).ToString());         
+				_rows[i].Add(columnName, Math.Round(Convert.ToDecimal(new Expression(formula).Evaluate().ToString()),
+                                  decimalDigits).ToString(CultureInfo.InvariantCulture));         
 			}
 		}
 		
@@ -1087,43 +1085,38 @@ namespace Squirrel
 			var aggregatedTable = new Table();
 			foreach (string value in allDistinctValues)
 			{
-				Dictionary<string, string> aggRow = new Dictionary<string, string>();
-				aggRow.Add(columnName, value);
-				
-				Table tempTable = Filter(columnName,value);
+			    var aggRow = new Dictionary<string, string> {{columnName, value}};
+
+			    var tempTable = Filter(columnName,value);
 				foreach (string col in allNumericColumns)
 				{
-				   if (col != columnName)
-					{
-						if (how == AggregationMethod.Count)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Count().ToString());
-						if (how == AggregationMethod.Max)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Max()
-											.ToString(CultureInfo.InvariantCulture));
-						if (how == AggregationMethod.Min)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Min()
-											.ToString(CultureInfo.InvariantCulture));
-						if (how == AggregationMethod.Sum)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Sum()
-										   .ToString(CultureInfo.InvariantCulture));
-						if (how == AggregationMethod.Average)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Average()
-										   .ToString(CultureInfo.InvariantCulture));
-						if (how == AggregationMethod.AboveAverageCount)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).AboveAverageCount()
-											  .ToString());
-						if(how == AggregationMethod.BelowAverageCount)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).BelowAverageCount()
-											  .ToString());
-						if (how == AggregationMethod.Range)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Range()
-													  .ToString(CultureInfo.InvariantCulture));
-						if (how == AggregationMethod.Kurtosis)
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()
-													.ToString(CultureInfo.InvariantCulture));
-
-					   
-					}
+				    if (col == columnName) continue;
+				    if (how == AggregationMethod.Count)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Count().ToString());
+				    if (how == AggregationMethod.Max)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Max()
+				            .ToString(CultureInfo.InvariantCulture));
+				    if (how == AggregationMethod.Min)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Min()
+				            .ToString(CultureInfo.InvariantCulture));
+				    if (how == AggregationMethod.Sum)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Sum()
+				            .ToString(CultureInfo.InvariantCulture));
+				    if (how == AggregationMethod.Average)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Average()
+				            .ToString(CultureInfo.InvariantCulture));
+				    if (how == AggregationMethod.AboveAverageCount)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).AboveAverageCount()
+				            .ToString());
+				    if(how == AggregationMethod.BelowAverageCount)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).BelowAverageCount()
+				            .ToString());
+				    if (how == AggregationMethod.Range)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Range()
+				            .ToString(CultureInfo.InvariantCulture));
+				    if (how == AggregationMethod.Kurtosis)
+				        aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()
+				            .ToString(CultureInfo.InvariantCulture));
 				}                
 				aggregatedTable.AddRow(aggRow);
 			}
@@ -1233,13 +1226,15 @@ namespace Squirrel
 
 			foreach (var row in Rows)
 			{
-				if(!tables.ContainsKey(row[columnName]))
-					tables.Add(row[columnName],new Table { _rows = new List<Dictionary<string, string>> {row} });
-				else
-				{
-					
-					tables[row[columnName]].AddRow(row);
-				}
+			    if (!tables.ContainsKey(row[columnName]))
+			        tables.Add(row[columnName],
+                         new Table {_rows = 
+                                        new List<Dictionary<string, string>> {row}});
+			    else
+			    {
+
+			        tables[row[columnName]].AddRow(row);
+			    }
 			}
 	
 			return tables;
@@ -1275,8 +1270,10 @@ namespace Squirrel
         /// Jane | 19  | F      | C#
         /// Raskin| 14 | M      | Python
         /// Table merged = t1.MergeByColumns(t2);//Uses the first column to perform the join
-        /// Table mergedByName = t1.MergeByColumns(t2,"Name");//Uses the column "Name" to perform the join</example>
+        /// Table mergedByName = t1.MergeByColumns(t2,"Name");//Uses the column "Name" to perform the join
+        /// 
         /// </example>
+  
 
         
         
@@ -1360,7 +1357,7 @@ namespace Squirrel
 		/// <example>Table comRows = t1.Common(t2);//returns common rows that are available in "t1" and "t2"</example>
 		public Table Common(Table anotherTable)
 		{
-		
+		    
             this.ThrowIfTableIsNull();
             anotherTable.ThrowIfTableIsNull();
 
@@ -1459,13 +1456,13 @@ namespace Squirrel
 			Table skippedColumnTable = new Table();
 			foreach (var row in Rows)
 			{
-				Dictionary<string, string> tempRow = new Dictionary<string, string>();
+				var tempRow = new Dictionary<string, string>();
 				foreach (string key in row.Keys)                
 				{
 					if (columns.Contains(key))
 						tempRow.Add(key, row[key]);
 				}
-				Dictionary<string, string> orderedRow = new Dictionary<string, string>();
+				var orderedRow = new Dictionary<string, string>();
 				foreach (string col in columns)
 				{
 					orderedRow.Add(col, tempRow[col]);
@@ -1487,6 +1484,8 @@ namespace Squirrel
 		[Description("Pick random sample,Random sample,Generate random sample")]
 		public Table RandomSample(int sampleSize)
 		{
+		    if (sampleSize <= 0)
+		        throw new ArgumentOutOfRangeException($"Sample size provided is negative or zero");
 			return Shuffle().Top(sampleSize);
 		}
 		   
@@ -1500,7 +1499,9 @@ namespace Squirrel
 		[Description("First,Top,From the beginning,From top")]
 		public Table Top(int n)
 		{
-			Table headTable = new Table();
+		    if (n <= 0)
+		        throw new ArgumentOutOfRangeException($"Size provided for top n elements is negative or zero");
+			var headTable = new Table();
 			if (n >= RowCount)
 				headTable._rows = _rows;
 			else
@@ -1516,7 +1517,9 @@ namespace Squirrel
 		[Description("Last,Bottom,From the end,From bottom")]
 		public Table Bottom(int n)
 		{
-			Table tailTable = new Table();
+		    if (n <= 0)
+		        throw new ArgumentOutOfRangeException($"Number of rows provided is either negative or zero.");
+			var tailTable = new Table();
 			if (n >= RowCount)
 				tailTable._rows = _rows;
 			else
@@ -1532,7 +1535,9 @@ namespace Squirrel
 		[Description("Top percent")]
 		public Table TopNPercent(int n)
 		{
-			int rowCount = Convert.ToInt16( Math.Floor((float) RowCount * n / 100.0));
+            if (n <= 0)
+                throw new ArgumentOutOfRangeException($"Value of percentage provided is negative");
+            int rowCount = Convert.ToInt16( Math.Floor((float) RowCount * n / 100.0));
 			return Top(rowCount);
 		}
 		
@@ -1611,11 +1616,9 @@ namespace Squirrel
 		[Description("Shuffle,Random shuffle,Randomize,Un order")]
 		public Table Shuffle()
 		{
-			if (this == null)
-			{
-				throw new ArgumentNullException("this", "The Table instance is null");
-			}
-			Table shuffledTable = new Table();
+			this.ThrowIfTableIsNull();
+
+			var shuffledTable = new Table();
 			shuffledTable._rows = _rows.OrderBy(r => Guid.NewGuid()).ToList();
 			return shuffledTable;
 		}
@@ -1629,6 +1632,9 @@ namespace Squirrel
 		/// <returns>True if both rows are same, else returns false.</returns>
 		private bool IsSameRow(Dictionary<string, string> firstRow, Dictionary<string, string> secondRow)
 		{
+            if(firstRow == null || secondRow == null)
+                throw new Exception("Either of the rows provided is null"); 
+
 			return firstRow.Keys.All(k => secondRow.Keys.Contains(k)) &&
 				firstRow.Keys.All(k => secondRow[k] == firstRow[k]);
 		}
