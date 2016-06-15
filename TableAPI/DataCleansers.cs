@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TableAPI;
 
 namespace Squirrel.Cleansing
 {
@@ -15,37 +19,83 @@ namespace Squirrel.Cleansing
         /// <summary>
         /// 
         /// </summary>
-        public enum MissingValueHandlingStrategy
+        public enum NormalizationStrategy
         {
             /// <summary>
             /// 
             /// </summary>
-            MarkWithNa,
+            LowerCase,
             /// <summary>
             /// 
+            /// </summary>
+            UpperCase,
+            /// <summary>
+            /// 
+            /// </summary>
+            SentenceCase,
+            /// <summary>
+            /// 
+            /// </summary>
+            MostFrequentOne
+
+        };
+        /// <summary>
+        /// 
+        /// </summary>
+        public enum MissingValueHandlingStrategy
+        {
+            /// <summary>
+            /// Mark missing values with NA if NA is not already a representation of the missing value
+            /// </summary>
+            MarkWithNa,
+            /// <summary>
+            /// Fill missing values with average of  values of the given column
             /// </summary>
             Average,
             /// <summary>
-            /// 
+            /// Fill missing values with minimum of  values of the given column
             /// </summary>
             Min,
             /// <summary>
-            /// 
+            /// Fill missing values with maximum of  values of the given column
             /// </summary>
-            Max,
-            /// <summary>
-            /// 
-            /// </summary>
-            AddDefaultValueForType
+            Max
         }
+
+        private static Dictionary<string,string> _handleMissingValue(this Dictionary<string,string> row,Table tab,
+                                    string columnName,
+                                       MissingValueHandlingStrategy strategy)
+        {
+            if (strategy == MissingValueHandlingStrategy.MarkWithNa)
+            {
+                row[columnName] = "NA";
+            }
+            if (strategy == MissingValueHandlingStrategy.Max)
+            {
+                row[columnName] = tab[columnName].Where(z => z.Trim().Length > 0).Select(Convert.ToDecimal).Max().ToString(CultureInfo.InvariantCulture);
+            }
+            if (strategy == MissingValueHandlingStrategy.Min)
+            {
+                row[columnName] = tab[columnName].Where(z => z.Trim().Length > 0).Select(Convert.ToDecimal).Max().ToString(CultureInfo.InvariantCulture);
+            }
+            if (strategy == MissingValueHandlingStrategy.Average)
+            {
+                row[columnName] = tab[columnName].Where(z => z.Trim().Length > 0).Select(Convert.ToDecimal).Max().ToString(CultureInfo.InvariantCulture);
+            }
+            return row;
+
+        }
+
         /// <summary>
         /// TO:DO
         /// </summary>
         /// <param name="tab"></param>
+        /// <param name="strategy"></param>
         /// <param name="missingValueRepresentations"></param>
         /// <returns></returns>
-        public static Table ReplaceMissingValuesByDefault(this Table tab, MissingValueHandlingStrategy strategy = MissingValueHandlingStrategy.AddDefaultValueForType,
-                                                                         params string[] missingValueRepresentations)
+        public static Table ReplaceMissingValuesByDefault(this Table tab,
+            MissingValueHandlingStrategy strategy = MissingValueHandlingStrategy.MarkWithNa,
+            params string[] missingValueRepresentations)
         {
             //If any of the missing value representative string appears in numeric column
             //replace with zero
@@ -55,15 +105,24 @@ namespace Squirrel.Cleansing
 
             foreach (var row in tab.Rows)
             {
-                Dictionary<string,string> currentRow = new Dictionary<string,string> ();
+                Dictionary<string, string> currentRow = new Dictionary<string, string>();
                 foreach (var colHead in tab.ColumnHeaders)
                 {
-               //     if( missingValueRepresentations.Any( z => z.Equals(row[colHead])))
-                        
+                    if (missingValueRepresentations.Any(z => z.Equals(row[colHead])))
+                    {
+                        temp.AddRow(_handleMissingValue(row, tab, colHead, strategy));
+
+                    }
+                    else
+                    {
+                        temp.AddRow(row);
+                    }
+
                 }
             }
-            return tab;
+            return temp;
         }
+
         /// <summary>
         /// Removes every other character from the given string except numbers
         /// </summary>
@@ -95,20 +154,14 @@ namespace Squirrel.Cleansing
         /// So this can be a bottleneck for a table with many columns.</remarks>
         public static Table Distinct(this Table tab)
         {
-            if (tab == null)
-            {
-                throw new ArgumentNullException("tab", "The Table instance is null");
-            }
-            if(tab.Rows == null)
-            {
-                throw new ArgumentNullException("Rows", "The Table instance has no rows");
-            }
+            tab.ThrowIfTableIsNull();
+
             Dictionary<string, List<Dictionary<string, string>>> noDups =
                 new Dictionary<string, List<Dictionary<string, string>>>();
 
             for (int i = 0; i < tab.RowCount; i++)
             {
-                string hash = string.Empty;
+                var hash = string.Empty;
                 try
                 {
                     hash = tab.Rows[i].OrderBy(m => m.Key).Select(m => m.Value).Aggregate((x, y) => x + y);
@@ -118,7 +171,8 @@ namespace Squirrel.Cleansing
                     //When Rows is null 
 
                 }
-                catch (InvalidOperationException ex)//When sequence contains no element Aggregate will throw this exception
+                catch (InvalidOperationException ex)
+                //When sequence contains no element Aggregate will throw this exception
                 {
 
                 }
@@ -129,7 +183,7 @@ namespace Squirrel.Cleansing
                     noDups[hash].Add(tab.Rows[i]);
             }
 
-            Table noDuplicates = new Table();
+            var noDuplicates = new Table();
           
             noDuplicates.Rows.AddRange(noDups.Select(t => t.Value.First()));
             return noDuplicates;
@@ -142,27 +196,23 @@ namespace Squirrel.Cleansing
         /// <param name="columnName">The name of the column.</param>
         /// <param name="algo">The algorithm to be used to extract outliers</param>
         /// <returns>A table with rows which are believed to be having values in the outlier range for the given column.</returns>
-        public static Table ExtractOutliers(this Table tab, string columnName, OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
+        public static Table ExtractOutliers(this Table tab, string columnName,
+            OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
         {
-            if (tab == null)
-            {
-                throw new ArgumentNullException("tab", "The Table instance is null");
-            }
-            if (String.IsNullOrEmpty(columnName) || String.IsNullOrWhiteSpace(columnName))
-            {
-                throw new ArgumentNullException("columnName", "The columnName is not provided or it doesn't exist");
-            }
-            Table outliers = new Table();
-            List<decimal> allValues = new List<decimal>();
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+            var outliers = new Table();
+            List<decimal> allValues;
             try
             {
-                allValues = tab.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
+                allValues = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
             }
             catch(FormatException ex)
             {
-                throw new FormatException(String.Format("some values of column {0} can't be converted to decimal ", columnName));
+                throw new FormatException($"some values of column {columnName} can't be converted to decimal ");
             }
-            Tuple<decimal, decimal> iqrRange = BasicStatistics.IqrRange(allValues);
+            var iqrRange = BasicStatistics.IqrRange(allValues);
             for (int i = 0; i < allValues.Count; i++)
             {
                 if (allValues[i] < iqrRange.Item1 || allValues[i] > iqrRange.Item2)
@@ -182,13 +232,16 @@ namespace Squirrel.Cleansing
         /// //of possible oulier 
         /// Table outliersRemoved = tableWithOutliers.RemoveOutliers("Age");
         /// </example>
-        public static Table RemoveOutliers(this Table tab, string columnName, OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
+        public static Table RemoveOutliers(this Table tab, string columnName,
+                                            OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
         {
-            List<decimal> allValues = tab.ValuesOf(columnName)
-                                         .Select(m => Convert.ToDecimal(m))
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+            var allValues = tab.ValuesOf(columnName)
+                                         .Select(Convert.ToDecimal)
                                          .ToList();
             //Get the IQR Range
-            Tuple<decimal, decimal> iqrRange = BasicStatistics.IqrRange(allValues);
+            var iqrRange = BasicStatistics.IqrRange(allValues);
             for (int i = 0; i < allValues.Count; i++)
             {
                 //Any value which is less or more than the given range is a possible outlier
@@ -210,7 +263,9 @@ namespace Squirrel.Cleansing
         /// Table cleansedTable = tab.RemoveIfBetween("Col",32M,56M);</example>
         public static Table RemoveIfBetween(this Table tab, string columnName, decimal low, decimal high)
         {
-            List<decimal> vals = tab.ValuesOf(columnName).Select(t => Convert.ToDecimal(t)).ToList();
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+            var vals = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
             for (int i = 0; i < vals.Count(); i++)
             {
                 if (low <= vals[i] && vals[i] <= high)
@@ -333,7 +388,7 @@ namespace Squirrel.Cleansing
         
         public static Table RemoveIfBetween(this Table tab, string dateColumnName, DateTime startDate, DateTime endDate)
         {
-            List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(t => Convert.ToDateTime(t)).ToList();
+            List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(Convert.ToDateTime).ToList();
             for (int i = 0; i < dates.Count; i++)
             {
                 if (dates[i].CompareTo(startDate) >= -1 && dates[i].CompareTo(endDate) <= 1)
@@ -351,7 +406,7 @@ namespace Squirrel.Cleansing
         /// <returns>A cleansed table with the violating rows removed.</returns>
         public static Table RemoveIfNotBetween(this Table tab, string dateColumnName, DateTime startDate, DateTime endDate)
         {
-            List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(t => Convert.ToDateTime(t)).ToList();
+            List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(Convert.ToDateTime).ToList();
             for (int i = 0; i < dates.Count; i++)
             {
                 if (!(dates[i].CompareTo(startDate) >= -1 && dates[i].CompareTo(endDate) <= 1))
@@ -419,7 +474,7 @@ namespace Squirrel.Cleansing
         /// <returns>A table with violating values removed from the specified column.</returns>
         public static Table RemoveLessThanOrEqualTo(this Table tab, string columnName, decimal value)
         {
-            List<decimal> values = tab.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
+            var values = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
             for (int i = 0; i < values.Count; i++)
             {
                 if (values[i] <= value)
@@ -427,6 +482,8 @@ namespace Squirrel.Cleansing
             }
             return tab;
         }
+
+      
         /// <summary>
         /// Removes rows where the values of the given column are greater than the decimal value
         /// </summary>
@@ -454,7 +511,7 @@ namespace Squirrel.Cleansing
         /// <returns>A table with violating values removed.</returns>
         public static Table RemoveGreaterThanOrEqualTo(this Table tab, string columnName, decimal value)
         {
-            List<decimal> values = tab.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
+            List<decimal> values = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
             for (int i = 0; i < values.Count; i++)
             {
                 if (values[i] >= value)
@@ -471,7 +528,8 @@ namespace Squirrel.Cleansing
         /// <param name="columnName">Name of the column</param>
         /// <param name="predicate">The predicated that dictates the delete operation</param>
         /// <returns>A table with the defaulters removed</returns>
-        public static Table RemoveIf<T>(this Table tab, string columnName, Func<T, bool> predicate) where T : IEquatable<T>
+        public static Table RemoveIf<T>(this Table tab, string columnName, Func<T, bool> predicate)
+                     where T : IEquatable<T>
         {
             int i = 0;
             List<int> indicesToRemove = new List<int>();
@@ -529,7 +587,261 @@ namespace Squirrel.Cleansing
             }
             return tab;
         }
-     
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="badValues"></param>
+        /// <returns></returns>
+        public static Table RemoveIfContains(this Table tab, string columnName, params string[] badValues)
+        {
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                if( badValues.Any( badValue =>  tab.Rows[i][columnName].Contains(badValue)))
+                    tab.Rows.RemoveAt(i);
+            }
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="goodValues"></param>
+        /// <returns></returns>
+        public static Table RemoveIfDoesNotContain(this Table tab, string columnName, params string[] goodValues)
+        {
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                if (!goodValues.All(goodValue => tab.Rows[i][columnName].Contains(goodValue)))
+                    tab.Rows.RemoveAt(i);
+            }
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="badPrefixes"></param>
+        /// <returns></returns>
+        public static Table RemoveIfStartsWith(this Table tab, string columnName, params string[] badPrefixes)
+        {
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                if (badPrefixes.Any(badPrefix => tab.Rows[i][columnName].StartsWith(badPrefix)))
+                    tab.Rows.RemoveAt(i);
+            }
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="badSuffixes"></param>
+        /// <returns></returns>
+        public static Table RemoveIfEndsWith(this Table tab, string columnName, params string[] badSuffixes)
+        {
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                if (!badSuffixes.Any(badSuffix => tab.Rows[i][columnName].EndsWith(badSuffix)))
+                    tab.Rows.RemoveAt(i);
+            }
+            return tab;
+        }
+        /// <summary>
+        /// Removes rows from teh table that don't start with any of the given list of good prefixes. 
+        /// </summary>
+        /// <param name="tab">The Table instance from which rows have to be removed</param>
+        /// <param name="columnName">The column where to look for values</param>
+        /// <param name="goodPrefixes">List of good prefixes.</param>
+        /// <returns>A table with defaulter rows deleted.</returns>
+        /// <example>
+        /// //Returns a table where rows where the values start with "Range" and "From"
+        /// //
+        /// var cleaned  = tab.RemoveIfDoesNotStartWith("Range","From","To");
+        /// </example>
+        public static Table RemoveIfDoesNotStartWith(this Table tab, string columnName, params string[] goodPrefixes)
+        {
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                if (!goodPrefixes.Any(goodPrefix => tab.Rows[i][columnName].StartsWith(goodPrefix)))
+                    tab.Rows.RemoveAt(i);
+            }
+            return tab;
+        }
+        /// <summary>
+        /// Remove rows where the values of the given column don't end with the given list of suffixes
+        /// </summary>
+        /// <param name="tab">The Table instance from which bad defaulter rows have to be removed</param>
+        /// <param name="columnName">The name of the column</param>
+        /// <param name="goodSuffixes">List of good suffixes</param>
+        /// <returns>A Table instance with defaulter rows deleted.</returns>
+        /// <example>
+        /// //The following line removes all those rows from the table "tab" where values of 
+        /// //the column "Quarter" don't end with any of "i","ii","iii" or "iv"
+        /// var cleaned = tab.RemoveIfDoesNotEndWith("Quarter","i","ii","iii","iv");</example>
+        public static Table RemoveIfDoesNotEndWith(this Table tab, string columnName, params string[] goodSuffixes)
+        {
+
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                if (!goodSuffixes.Any(goodSuffix => tab.Rows[i][columnName].EndsWith(goodSuffix)))
+                    tab.Rows.RemoveAt(i);
+            }
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="possibleValues"></param>
+        /// <returns></returns>
+        public static Table MarkAsMissingIfNotAnyOf(this Table tab, string columnName, 
+                                                     params string[] possibleValues)
+        {
+            return tab;
+        }
+
+        /// <summary>
+        /// Removes rows with impossible value combinations
+        /// For example for the Gender column 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="possibleValues"></param>
+        /// <returns></returns>
+        public static Table RemoveRowsWithImpossibleValues(this Table tab,
+                                                            string columnName,
+                                                            params string[] possibleValues)
+        {
+            for (int i = 0; i < tab.RowCount; i ++)
+            {
+                if (!possibleValues.Any(possibleValue => tab[columnName][i].Contains(possibleValue)))
+                {
+                    tab.Rows.RemoveAt(i);
+                }
+            }
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="possibleValueCombos"></param>
+        /// <returns></returns>
+        public static Table RemoveRowsWithImpossibleValues(this Table tab,
+            Dictionary<string, string[]> possibleValueCombos)
+        {
+            foreach (var col in possibleValueCombos.Keys)
+            {
+                tab = tab.RemoveRowsWithImpossibleValues(col, possibleValueCombos[col]);
+            }
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <returns></returns>
+        public static Table RemoveIncompleteRows(this Table tab)
+        {
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                foreach (var col in tab.ColumnHeaders)
+                {
+                    if(tab[col][i].Trim().Length == 0)
+                        tab.Rows.RemoveAt(i);
+                }
+            }
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="strategy"></param>
+        /// <returns></returns>
+        public static Table Normalize(this Table tab, string columnName,
+             NormalizationStrategy strategy = NormalizationStrategy.SentenceCase)
+        {
+            return tab;
+            
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="normalizationSchemes"></param>
+        /// <returns></returns>
+        public static Table Normalize(this Table tab, Dictionary<string, NormalizationStrategy> normalizationSchemes)
+        {
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="columnName"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static Table Truncate(this Table tab, string columnName, int length)
+        {
+            return tab;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="truncateLengths"></param>
+        /// <returns></returns>
+        public static Table Truncate(this Table tab, Dictionary<string, int> truncateLengths)
+        {
+            return tab;
+        }
+
+        /// <summary>
+		/// Transforms values of a column as per the given transformer
+		/// </summary>
+		/// <param name="tab">The Table instance</param>
+		/// <param name="columnName">The column on which the transformer function has to be run</param>
+		/// <param name="tranformer">The transformer method</param>
+		public static Table Transform(this Table tab, string columnName, Func<string, string> tranformer)
+        {
+            tab.ThrowIfTableIsNull();
+            tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+            if (tranformer == null)
+                throw new ArgumentNullException($"The scheme to transform the values of the given colum {columnName} is null");
+
+            var temp = new Table();
+            temp.Rows.AddRange(tab.Rows);
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                temp.Rows[i][columnName] = tranformer(temp.Rows[i][columnName]);
+            }
+            return temp;
+        }
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataCleansers.cs" />
+    <Compile Include="TableExceptionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="MSScriptControl">
