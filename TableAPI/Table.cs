@@ -763,29 +763,7 @@ namespace Squirrel
 			}
 		}
 		
-		/// <summary>
-		/// Removes all currency symbol and comma from the values of the given column.
-		/// </summary>
-		/// <param name="columns">The name of the column</param>
-		/// <returns>A table without the currency symbol and commas</returns>
-		/// 
-		[Description("Clean numeric columns")]
-		public Table TransformCurrencyToNumeric(params string[] columns)
-		{
-			Table newTable = this;
-			
-			foreach (string col in columns)
-			{
-
-				
-				newTable =  Transform(col, x => x.Replace(",",string.Empty)
-												 .Replace("$",string.Empty)//Remove US Dollar symbol
-												 .Replace("£",string.Empty)//Remove GBP Pound symbol
-												 .Replace("€",string.Empty)//Remove Euro Symbol
-												 .Replace("¥",string.Empty));//Remove Chinese Yen symbol
-			}
-			return newTable;
-		}
+		
 		/// <summary>
 		/// Create a column from given values
 		/// </summary>
