@@ -710,37 +710,37 @@ namespace Squirrel
 			var values = ValuesOf(fromColumnName).Select(val => Regex.Match(val, pattern).Value).ToList();
 			AddColumn(columnName, values);
 		}
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <param name="format"></param>
-        public void AddColumn(string columnName, string format)
-        {
-            //[City]([Edition])-> 
-            var columns = Regex.Matches(format, "[[a-zA-Z0-9 _-]+]").Cast<Match>()
-                                                                    //Dropping brackets [ and ]   
-                                                                    .Select(t => t.Value.Substring(1, t.Value.Length - 2))
-                                                                    .ToList();
-            format = format.Replace("[", string.Empty).Replace("]", string.Empty);
-            List<string> values = new List<string>();
-            for (int i = 0; i < this.RowCount; i++)
-            {
-                Dictionary<string, string> thisRow = new Dictionary<string, string>();
-                foreach (var col in columns)
-                {
-                    thisRow.Add(col, this[i][col]);
-                }
-                string temp = format;
-                foreach (var key in thisRow.Keys)
-                {
-                    temp = temp.Replace(key, thisRow[key]);
-                }
-                values.Add(temp);
-            }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="columnName"></param>
+		/// <param name="format"></param>
+		public void AddColumn(string columnName, string format)
+		{
+			//[City]([Edition])-> 
+			var columns = Regex.Matches(format, "[[a-zA-Z0-9 _-]+]").Cast<Match>()
+																	//Dropping brackets [ and ]   
+																	.Select(t => t.Value.Substring(1, t.Value.Length - 2))
+																	.ToList();
+			format = format.Replace("[", string.Empty).Replace("]", string.Empty);
+			List<string> values = new List<string>();
+			for (int i = 0; i < this.RowCount; i++)
+			{
+				Dictionary<string, string> thisRow = new Dictionary<string, string>();
+				foreach (var col in columns)
+				{
+					thisRow.Add(col, this[i][col]);
+				}
+				string temp = format;
+				foreach (var key in thisRow.Keys)
+				{
+					temp = temp.Replace(key, thisRow[key]);
+				}
+				values.Add(temp);
+			}
 
-            AddColumn(columnName, values);
-        }
+			AddColumn(columnName, values);
+		}
 		/// <summary>
 		/// Adds a column for which value gets calculated from a given formula.
 		/// </summary>
@@ -1184,8 +1184,8 @@ namespace Squirrel
 			this.ThrowIfTableIsNull();
 			this.ThrowIfColumnsAreNotPresentInTable(columnName);
 
-            return SplitOn(columnName).ToDictionary(t => t.Key, t => t.Value.RowCount);
-            
+			return SplitOn(columnName).ToDictionary(t => t.Key, t => t.Value.RowCount);
+			
 		}
 		/// <summary>
 		/// Splits a table on the distinct values of a given column
@@ -1208,17 +1208,17 @@ namespace Squirrel
 
 
 
-            foreach (var row in Rows)
-            {
-                if (!tables.ContainsKey(row[columnName]))
-                    tables.Add(row[columnName],
-                         new Table { _rows = new List<Dictionary<string, string>> { row } });
-                else
-                {
+			foreach (var row in Rows)
+			{
+				if (!tables.ContainsKey(row[columnName]))
+					tables.Add(row[columnName],
+						 new Table { _rows = new List<Dictionary<string, string>> { row } });
+				else
+				{
 
-                    tables[row[columnName]].AddRow(row);
-                }
-            }
+					tables[row[columnName]].AddRow(row);
+				}
+			}
 	
 			return tables;
 		}
