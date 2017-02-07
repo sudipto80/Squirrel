@@ -511,8 +511,8 @@ namespace Squirrel
 		/// <returns>All the values of the given column as a list of string.</returns>
 		/// <example>
 		/// //List of string codes will hold all the values of
-		/// //
-		/// List&lt;string&gt; codes  = tab.ValuesOf("Code");</example>
+		/// List&lt;string&gt; codes  = tab.ValuesOf(&quot;Code&quot;);
+        /// </example>
 		public List<string> ValuesOf(string columnName)
 		{
 
@@ -711,7 +711,7 @@ namespace Squirrel
 			AddColumn(columnName, values);
 		}
 		/// <summary>
-		/// 
+		/// This method let's us add column based on string column values.
 		/// </summary>
 		/// <param name="columnName"></param>
 		/// <param name="format"></param>
@@ -1338,50 +1338,6 @@ namespace Squirrel
 		/// <param name="anotherTable">The other table with which we want to find common rows</param>
 		/// <returns>A table with only common rows</returns>
 		/// <example>Table comRows = t1.Common(t2);//returns common rows that are available in "t1" and "t2"</example>
-		public Table Common(Table anotherTable)
-		{
-			
-			this.ThrowIfTableIsNull();
-			anotherTable.ThrowIfTableIsNull();
-
-			var result = new Table();
-			for (int i = 0; i < RowCount; i++)
-			{
-				if (anotherTable._rows.Any(r => IsSameRow(r, _rows[i])))
-					result.AddRow(_rows[i]);
-			}
-			return result;
-		}
-		/// <summary>
-		/// Checks whether a given table is subset of this table or not
-		/// </summary>
-		/// <param name="anotherTable">Other table for which the </param>
-		/// <returns>true if the argument table is a subset of the table object
-		/// which called the method</returns>
-		/// <example>bool subet = t1.IsSubset(t2);
-		/// Where t1 and t2 are table instances.</example>
-		public bool IsSubset(Table anotherTable)
-		{
-			this.ThrowIfTableIsNull();
-			anotherTable.ThrowIfTableIsNull();
-
-			bool isSubset = false;
-			foreach (var row in _rows)
-			{
-				if (anotherTable._rows.Any(r => IsSameRow(row, r)))
-				{
-					isSubset = true;
-				}
-				else
-				{
-					isSubset = false;
-					break;
-				}
-			}
-			return isSubset;
-		}
-		#endregion 
-
 		#region Useful Utility Methods
 	   
 	   
@@ -1622,6 +1578,50 @@ namespace Squirrel
 				firstRow.Keys.All(k => secondRow[k] == firstRow[k]);
 		}
 		#endregion
+		public Table Common(Table anotherTable)
+		{
+			
+			this.ThrowIfTableIsNull();
+			anotherTable.ThrowIfTableIsNull();
+
+			var result = new Table();
+			for (int i = 0; i < RowCount; i++)
+			{
+				if (anotherTable._rows.Any(r => IsSameRow(r, _rows[i])))
+					result.AddRow(_rows[i]);
+			}
+			return result;
+		}
+		/// <summary>
+		/// Checks whether a given table is subset of this table or not
+		/// </summary>
+		/// <param name="anotherTable">Other table for which the </param>
+		/// <returns>true if the argument table is a subset of the table object
+		/// which called the method</returns>
+		/// <example>bool subet = t1.IsSubset(t2);
+		/// Where t1 and t2 are table instances.</example>
+		public bool IsSubset(Table anotherTable)
+		{
+			this.ThrowIfTableIsNull();
+			anotherTable.ThrowIfTableIsNull();
+
+			bool isSubset = false;
+			foreach (var row in _rows)
+			{
+				if (anotherTable._rows.Any(r => IsSameRow(row, r)))
+				{
+					isSubset = true;
+				}
+				else
+				{
+					isSubset = false;
+					break;
+				}
+			}
+			return isSubset;
+		}
+		#endregion 
+
 
 		#region Natural Query
 		/// <summary>
