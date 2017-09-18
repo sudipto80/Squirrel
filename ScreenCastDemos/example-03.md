@@ -8,7 +8,9 @@ Example #3 (Finding Gender-Ratio statistics in North America)
 
 <p>The following C# code achieves this using Squirrel</p>
 <img src="http://gifyu.com/images/births.gif" border="0">
+
 ```csharp
+
 Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
 var splits = births.SplitOn("sex");
  
@@ -32,6 +34,7 @@ StreamWriter sw = new StreamWriter("temp.htm");
 sw.WriteLine("<html><h2>Gender Ratio in North America by the end of 2006</h2>" + tab + "</html>");
 sw.Close();
 System.Diagnostics.Process.Start("temp.htm"); 
+
 ```
 
 This produces the following result 
