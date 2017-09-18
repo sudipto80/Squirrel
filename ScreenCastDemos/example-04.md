@@ -6,6 +6,7 @@ a pie chart for top gold winning nations.
 <img src="http://gifyu.com/images/OlympicsInput.png" alt="OlympicsInput.png" border="0" />
 
 <p>Here is the code using Squirrel to generate a pie chart for top gold winning nations.</p>
+
 ```csharp 
 Table olympics = DataAcquisition.LoadCSV("C:\\Squirrel\\olympics.csv");
 StreamWriter sw = new StreamWriter("temp.htm");
@@ -25,10 +26,13 @@ System.Diagnostics.Process.Start("temp.htm");
 <img src="http://g.recordit.co/Tt4M6OlUYI.gif" border="0"/>
 
 Changing this Pie chart to a donut chart is a simple enum change. Just change the call 
+
 ```csharp
 .ToPieByGoogleDataVisualization("Country", "Top Gold Winning Nations in Olympics");
 ```
+
 to 
+
 ```csharp
 .ToPieByGoogleDataVisualization("Country", "Top Gold Winning Nations in Olympics",GoogleDataVisualizationcs.PieChartType.Donut);
 ```
