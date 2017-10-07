@@ -1363,6 +1363,7 @@ namespace Squirrel
 							   .ToList();
 
 			AddColumn(newColumnName, mergedValues);
+            //merged!
 			columns.ToList().ForEach(RemoveColumn);
 			return this;
 		}

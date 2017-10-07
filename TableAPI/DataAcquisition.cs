@@ -42,7 +42,7 @@ namespace Squirrel
             tags.RemoveAll(t => exceptTheseTags.Contains(t));
             foreach (string k in codeLine.Split(tags.ToArray(), StringSplitOptions.RemoveEmptyEntries))
                 html = html + k + " ";
-
+            //the html
             return html;
         }
         
