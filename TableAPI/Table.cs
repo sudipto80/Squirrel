@@ -1206,7 +1206,7 @@ namespace Squirrel
 
 			var tables = new Dictionary<string, Table>();
 
-
+            //Rows over
 
 			foreach (var row in Rows)
 			{
@@ -1254,7 +1254,8 @@ namespace Squirrel
 		/// Raskin| 14 | M      | Python
 		/// Table merged = t1.MergeByColumns(t2);//Uses the first column to perform the join
 		/// Table mergedByName = t1.MergeByColumns(t2,"Name");//Uses the column "Name" to perform the join
-		/// 
+		/// //This is how merge works
+        /// 
 		/// </example>
   
 
