@@ -793,7 +793,12 @@ namespace Squirrel.Cleansing
 		/// <returns></returns>
 		public static Table Normalize(this Table tab, Dictionary<string, NormalizationStrategy> normalizationSchemes)
 		{
-			return tab;
+			foreach (var key in normalizationSchemes.Keys)
+            {
+                //Normalize one column at a time
+                tab = tab.Normalize(key, normalizationSchemes[key]);
+            }
+            return tab;
 		}
 		/// <summary>
 		/// 
