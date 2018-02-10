@@ -47,6 +47,7 @@
     <Compile Include="Data Visualization\BootstrapTableDecorators.cs" />
     <Compile Include="CustomComparers.cs" />
     <Compile Include="DataAcquisition.cs" />
+    <Compile Include="Normalize.cs" />
     <Compile Include="RelationalDatabaseConnectors.cs" />
     <Compile Include="Data Visualization\GoogleDataVisualizationcs.cs" />
     <Compile Include="OrderedTable.cs" />

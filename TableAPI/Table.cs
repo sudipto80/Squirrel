@@ -324,7 +324,7 @@ namespace Squirrel
 		public Table RunSQLQuery(string sql)
 		{
 			HashSet<string> columns = ColumnHeaders;
-			StreamWriter sw = new StreamWriter(@"C:\temp.csv");
+			StreamWriter sw = new StreamWriter(@"temp.csv");
 			sw.WriteLine(columns.Aggregate((a, b) => a + "," + b));
 			string numberRegex = "[0-9]+.*[0-9]+";
 			for (int i = 0; i < _rows.Count; i++)
@@ -343,8 +343,8 @@ namespace Squirrel
 				sw.WriteLine();
 			}
 			sw.Close();
-			string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='C:\temp.csv';Extended Properties='text;HDR=YES;'";
-			sql = sql.Replace("[Table]", @"C:\temp.csv");
+			string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='temp.csv';Extended Properties='text;HDR=YES;'";
+			sql = sql.Replace("[Table]", @"temp.csv");
 
 			OleDbDataAdapter oleda = new OleDbDataAdapter(sql, strCSVConnString);
 			DataTable dataTable = new DataTable();

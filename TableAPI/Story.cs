@@ -245,49 +245,32 @@ namespace Squirrel
                     }
                     else
                     {
-
-                        if (cols.Contains(v) || Regex.Match(v,"[0-9]+").Success)
+                    var suspectedCol = string.Empty;
+                    foreach (var z in tab.ColumnHeaders)
+                    {
+                        if (tab.ValuesOf(z).Contains(v))
                         {
-                            if (Regex.Match(v, "[0-9]+").Success)
-                            {
-                                operandStack.Push("numeric:" + v);
-                            }
-                            else
-                            {
-                                operandStack.Push(v);
+                            suspectedCol = z; 
+                            operandStack.Push(suspectedCol);
+                            break;
+                        }
+                    }
+                    if (cols.Contains(v) || Regex.Match(v, "[0-9]+").Success)
+                    {
+                        if (Regex.Match(v, "[0-9]+").Success)
+                        {
+                            operandStack.Push("numeric:" + v);
+                        }
+                        
+                       
+                        else
+                        {
+                            operandStack.Push(v);
                             if (storyScript.Contains("[Histogram]"))
                                 return tab;// ToChart(tab, operandStack.Peek());
-                            }
-                            if (inToks.ToList().IndexOf(v) == inToks.Length - 1)
-                            {
-                                var topElement = methodStack.Peek();
-                                KeyValuePair<string, string[]> command = new KeyValuePair<string, string[]>();
-                                KeyValuePair<string, int> commandNumeric = new KeyValuePair<string, int>();
-                                if (!operandStack.All(t => t.StartsWith("numeric:")))
-                                {
-                                    command = GetCommand(topElement, operandStack);
-                                    result = HandleIt(result, command.Key, command.Value);
-                                }
-                                else
-                                {
-                                    commandNumeric = GetCommand(topElement, Convert.ToInt32(operandStack.Peek().Replace("numeric:",string.Empty)));
-                                    result = HandleIt(result, commandNumeric.Key, commandNumeric.Value);
-                                }
-
-                                calls.Add("."+methodStack.Pop().Trim(new char[]{'[',']'}) + "(");
-                                if (operandStack.All(t => t.StartsWith("numeric:")))
-                                    calls.Add(operandStack.Select(t=>t.Replace("numeric:",string.Empty)).Aggregate((a, b) => a + "," + b));
-                                else
-                                    calls.Add(operandStack.Select(t => "\"" + t + "\"").Aggregate((a, b) => a + "," + b));
-                                while (operandStack.Count != 0)
-                                    operandStack.Pop();
-                                calls.Add(")");
-                            }
-                            continue;
                         }
-                        if (!cols.Contains(v) && inToks.ToList().IndexOf(v) == inToks.Length - 1)
+                        if (inToks.ToList().IndexOf(v) == inToks.Length - 1)
                         {
-
                             var topElement = methodStack.Peek();
                             KeyValuePair<string, string[]> command = new KeyValuePair<string, string[]>();
                             KeyValuePair<string, int> commandNumeric = new KeyValuePair<string, int>();
@@ -298,10 +281,41 @@ namespace Squirrel
                             }
                             else
                             {
-                                commandNumeric = GetCommand(topElement, Convert.ToInt32(operandStack.Peek().Replace("numeric:",string.Empty)));
-                                result = HandleIt(result, "."+commandNumeric.Key.Replace("[",string.Empty).Replace("]",string.Empty), commandNumeric.Value);
+                                commandNumeric = GetCommand(topElement, Convert.ToInt32(operandStack.Peek().Replace("numeric:", string.Empty)));
+                                result = HandleIt(result, commandNumeric.Key, commandNumeric.Value);
+                            }
+
+                            calls.Add("." + methodStack.Pop().Trim(new char[] { '[', ']' }) + "(");
+                            if (operandStack.All(t => t.StartsWith("numeric:")))
+                                calls.Add(operandStack.Select(t => t.Replace("numeric:", string.Empty)).Aggregate((a, b) => a + "," + b));
+                            else
+                                calls.Add(operandStack.Select(t => "\"" + t + "\"").Aggregate((a, b) => a + "," + b));
+                            while (operandStack.Count != 0)
+                                operandStack.Pop();
+                            calls.Add(")");
+                        }
+                        continue;
+                    }
+                    if (!cols.Contains(v) && inToks.ToList().IndexOf(v) == inToks.Length - 1)
+                    {
+
+                        var topElement = methodStack.Peek();
+                        KeyValuePair<string, string[]> command = new KeyValuePair<string, string[]>();
+                        KeyValuePair<string, int> commandNumeric = new KeyValuePair<string, int>();
+                        if (operandStack.Count > 0)
+                        {
+                            if (!operandStack.All(t => t.StartsWith("numeric:")))
+                            {
+                                command = GetCommand(topElement, operandStack);
+                                result = HandleIt(result, command.Key, command.Value);
+                            }
+                            else
+                            {
+                                commandNumeric = GetCommand(topElement, Convert.ToInt32(operandStack.Peek().Replace("numeric:", string.Empty)));
+                                result = HandleIt(result, "." + commandNumeric.Key.Replace("[", string.Empty).Replace("]", string.Empty), commandNumeric.Value);
                             }
                         }
+                    }
 
                     }
                 }
@@ -359,8 +373,10 @@ namespace Squirrel
             //Find jobs processed by iPhone and Android
             //how many jobs were processed by iPhone and Android over the weekend. 
             
-            //A really deep example
+            //{show me only} {sub-category} and {item} for {top} {5} items which were bought {more than average} in {Snacks}
 
+            //A really deep example
+            //show me only 
             //NQL : "{show me only} {name} and {marks} for {top} {10} person who scored {more than average} in {Physics}"
             //               Pick Name Marks  Top 10 Aggregate how:AggregationMethod.AboveAverage columnName:Subject
             //        

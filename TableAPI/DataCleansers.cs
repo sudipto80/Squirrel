@@ -17,29 +17,7 @@ namespace Squirrel.Cleansing
 	/// </summary>
 	public static class DataCleansers
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		public enum NormalizationStrategy
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			LowerCase,
-			/// <summary>
-			/// 
-			/// </summary>
-			UpperCase,
-			/// <summary>
-			/// 
-			/// </summary>
-			SentenceCase,
-			/// <summary>
-			/// 
-			/// </summary>
-			MostFrequentOne
-
-		};
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -53,6 +31,10 @@ namespace Squirrel.Cleansing
 			/// Fill missing values with average of  values of the given column
 			/// </summary>
 			Average,
+            /// <summary>
+            /// Fill missing values with the default values of the given type
+            /// </summary>
+            Default,
 			/// <summary>
 			/// Fill missing values with minimum of  values of the given column
 			/// </summary>
@@ -326,7 +308,7 @@ namespace Squirrel.Cleansing
 		/// <param name="columnName">The column name</param>
 		/// <param name="regexPattern">The regular expression</param>
 		/// <returns>A cleansed table where the non matching rows are removed.</returns>
-		/// <seealso cref="Squirrel.DataCleansers.RemoveMatches"/>
+		/// <seealso cref="RemoveMatches"/>
 		public static Table RemoveNonMatches(this Table tab,string columnName, string regexPattern)
 		{
 			List<string> values = tab.ValuesOf(columnName).ToList();
@@ -366,7 +348,7 @@ namespace Squirrel.Cleansing
 		/// <param name="dateColumnName">The date column</param>
 		/// <param name="date">The terminal date after which we need to remove values</param>
 		/// <returns>A cleansed table</returns>
-		/// <seealso cref="Squirrel.DataCleansers.RemoveIfBefore"/>
+		/// <seealso cref="RemoveIfBefore"/>
 		public static Table RemoveIfAfter(this Table tab, string dateColumnName, DateTime date)
 		{
 			List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(m => Convert.ToDateTime(m)).ToList();
@@ -788,7 +770,19 @@ namespace Squirrel.Cleansing
 		public static Table Normalize(this Table tab, string columnName,
 			 NormalizationStrategy strategy = NormalizationStrategy.SentenceCase)
 		{
-			return tab;
+            Table normalizedTable = new Table(); 
+            foreach (var col in tab.ColumnHeaders)
+            {
+                if(col == columnName)
+                {
+                    normalizedTable.AddColumn(col, tab.ValuesOf(col).NormalizeAsPerStrategy(strategy));
+                }
+                else
+                {
+                    normalizedTable.AddColumn(col, tab.ValuesOf(col));
+                }
+            }
+            return normalizedTable;
 			
 		}
 		/// <summary>
