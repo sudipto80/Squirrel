@@ -1,7 +1,7 @@
 Example #7 (Calculating speed of a bungee jumper)
 ==============
 
-<img src ="https://media.licdn.com/mpr/mpr/AAEAAQAAAAAAAAy2AAAAJGM5OTM5MDAyLTJjNTItNDViNS1hYjRkLTc4NmFhNzdhMmYzZA.jpg"/>
+<img src ="http://www.coupondunia.in/blog/wp-content/uploads/2013/12/Bungee_Jumping-1-1050x591.jpeg"/>
 
 Calculating the speed of a bungee jumper as a function of time is goverened by the following formula 
 
