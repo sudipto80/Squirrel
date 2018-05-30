@@ -1,6 +1,6 @@
 Example #5 (How much money will he accumulate at retirment?)
 ------
-<img src="https://www.saveup.com/blog/wp-content/uploads/2012/11/retirement-savings.jpg"/>
+<img src="https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Fjamiehopkins%2Ffiles%2F2014%2F04%2F7027606047_cac49c3b79_b.jpg"/>
 
 
 Imagine a person wants to save for his retirement. He decided to invest 300000 INR for the first year and then increase his yearly contribution 5% year over year. Let's also assume that he magically identified an investment scheme that gives him 15% return year over year. He is a proud father of a 1 year old son. He is 30 years old now in 2015. He wants to know during the last 10 years of his retirement what he could possiblly accumulate should everything remains the same. 
