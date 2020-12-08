@@ -23,9 +23,9 @@ tips.AddColumn(columnName: "TIP%", formula: "[TIP]*100/[TOTAL_BILL]", decimalDig
  
 tips
 //Pick only these columns
-.Pick("sex", "tip%")
+.Pick("SEX", "TIP%")
 //Aggregate the Tip% values by calculating the average
-.Aggregate("sex", AggregationMethod.Average)
+.Aggregate("SEX", AggregationMethod.Average)
 //Round off the result till 2 decimal points
 .RoundOffTo(2)
 //Dump the result to console.
