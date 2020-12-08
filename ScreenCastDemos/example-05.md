@@ -49,7 +49,7 @@ System.Diagnostics.Process.Start("temp.htm");
 
 This produces the following output. Cr meanse "Crores" . 1 Crore = 10 million
 
-<img src="http://gifyu.com/images/retirement.png" border="0">
+<img src="stock_cr.png" >
 
 With following canges the table can be tranformed with an interactive column chart using Google Data Visualization. 
 
