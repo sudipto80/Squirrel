@@ -1,6 +1,6 @@
 Example #1 (Do women pay more tip than men?)
 ------
-<img src="http://gifyu.com/images/women_dining.jpg" border="0">
+<img src="wdt.jpg" border="0">
 
 ***data*** for this example is available at ***../Data/tips.csv***
 
