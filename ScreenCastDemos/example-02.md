@@ -9,7 +9,7 @@ Example #2 (Iris dataset aggregation)
 <p>A botanist might want to find several aggregation reports from this dataset</p>
 
 
-<img src="http://gifyu.com/images/iris.gif" border="0">
+<img src="iriscsv.png">
 
 Here is the code that uses Squirrel to address these requirements.
 ```csharp
