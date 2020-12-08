@@ -38,4 +38,4 @@ writer.Close();
 System.Diagnostics.Process.Start("temp.html"); 
 ```
 This produces the following output
-<img src="http://gifyu.com/images/IrisAggregationResult.png" alt="IrisAggregationResult.png" border="0" />
+<img src="iris_result.png" border="0" />
