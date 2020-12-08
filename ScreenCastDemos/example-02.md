@@ -13,28 +13,29 @@ Example #2 (Iris dataset aggregation)
 
 Here is the code that uses Squirrel to address these requirements.
 ```csharp
-Table iris = DataAcquisition.LoadCSV(@"iris.csv");
+Table iris = DataAcquisition.LoadCSV(@"C:\personal\iris.csv");
 StringBuilder builder = new StringBuilder();
- 
+
 builder.AppendLine("<html>");
- 
+
 builder.AppendLine("<h2>Range</h2>");
-builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Range).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped)););
- 
+builder.AppendLine(iris.Aggregate("variety", AggregationMethod.Range).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+
 builder.AppendLine("<h2>Average</h2>");
-builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Average).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped)););
- 
+builder.AppendLine(iris.Aggregate("variety", AggregationMethod.Average).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+
 builder.AppendLine("<h2>Max</h2>");
-builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Max).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped)););
- 
+builder.AppendLine(iris.Aggregate("variety", AggregationMethod.Max).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+
 builder.AppendLine("<h2>Min</h2>");
-builder.AppendLine(iris.Aggregate("Name", AggregationMethod.Min).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped)););
- 
+builder.AppendLine(iris.Aggregate("variety", AggregationMethod.Min).ToBasicBootstrapHTMLTable(BootstrapTableDecorators.BootstrapTableClasses.Table_Striped));
+
 builder.AppendLine("</html>");
-StreamWriter writer = new StreamWriter("temp.html");
+StreamWriter writer = new StreamWriter(@"C:\personal\temp.html");
 writer.WriteLine(builder.ToString());
 writer.Close();
- 
+
+System.Diagnostics.Process.Start(@"C:\personal\temp.html");
 System.Diagnostics.Process.Start("temp.html"); 
 ```
 This produces the following output
