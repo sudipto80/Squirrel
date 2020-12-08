@@ -52,6 +52,6 @@ System.Diagnostics.Process.Start("temp.htm");
 This produces the following plot 
 
 <!--<img src="http://gifyu.com/images/bungeeop.png" alt="bungeeop.png" border="0" />-->
-<img src="bungee.gif" border="0" />
+<img src="bungee.gif" />
 
 From this plot we can see that the jumper attained his terminal speed within the first minute. 
