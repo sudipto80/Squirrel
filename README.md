@@ -39,7 +39,7 @@ For a quick start take a look at the [CheatSheet] (http://www.slideshare.net/sud
 Data analytics solution development using **Squirrel** follows a templatized design style. As a Data Scientist would, a software developer using Squirrel too would solve a data analytics problem by stacking his solution starting with Data acquisition, followed by Data modeling & cleansing and then topping up with appropriate Data visualization. Applying Bootstrap to the visualization is automatic, bringing agility to development without compromising on quality of user experience. The following figure describes a stacked template of function blocks that aptly summarizes solution development using **Squirrel**
 
 Here is a high level block diagram of all the components of Squirrel.
-![Block Diagram](http://gifyu.com/images/blocks.png "High Level Block Diagram")
+<img src="squirrel_block.png"/>
 
 Squirrel in action (Under 5 minutes)
 ------------------
