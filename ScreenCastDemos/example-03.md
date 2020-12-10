@@ -1,6 +1,6 @@
 Example #3 (Finding Gender-Ratio statistics in North America)
 ----
-<img src="http://alivecampus.com/wp-content/uploads/2013/12/male-female-ratio1.jpg" width="200" />
+<img src="gr.jpg"  />
 
 ***data*** for this example is available at ***../Data/births.csv***
 
@@ -14,16 +14,16 @@ Example #3 (Finding Gender-Ratio statistics in North America)
 ```csharp
 
 Table births = DataAcquisition.LoadCSV(@"..\..\births.csv");
-var splits = births.SplitOn("sex");
+var splits = births.SplitOn("SEX");
  
-var boys = splits["boy"].Aggregate("state").Drop("year");
-var girls = splits["girl"].Aggregate("state").Drop("year");
+var boys = splits["boy"].Aggregate("STATE").Drop("YEAR");
+var girls = splits["girl"].Aggregate("STATE").Drop("YEAR");
  
 Table combined = new Table();
  
-combined.AddColumn("State", boys["state"]);
-combined.AddColumn("Boys", boys["births"]);
-combined.AddColumn("Girls", girls["births"]);
+combined.AddColumn("State", boys["STATE"]);
+combined.AddColumn("Boys", boys["BIRTHS"]);
+combined.AddColumn("Girls", girls["BIRTHS"]);
 combined.AddColumn("Difference", "[Boys]-[Girls]", 4);
 combined.AddColumn("GenderRatio", "[Girls]/[Boys]", 4);
 //Showing 5 states with lowest gender ratio at the end of 2006.
