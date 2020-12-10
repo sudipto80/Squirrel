@@ -4,9 +4,9 @@ Example #3 (Finding Gender-Ratio statistics in North America)
 
 ***data*** for this example is available at ***../Data/births.csv***
 
-<img src="births.png">
-
 <p>Gender Ratio is an important sociological index to gauge the growth of a nation. The following data (only a few are shown here) is a list of "boy" and "girl" birth statistics for different states across North America. The data analysis task a sociologist might be interested to do is to find gender-ratio of North America for different states</p>
+
+<img src="births.png">
 
 <p>The following C# code achieves this using Squirrel</p>
 <img src="http://gifyu.com/images/births.gif" border="0">
