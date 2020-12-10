@@ -43,7 +43,7 @@ Here is a high level block diagram of all the components of Squirrel.
 
 Squirrel in action (Under 5 minutes)
 ------------------
-[![Squirrel in action](http://gifyu.com/images/ActionDemoShot.jpg)](https://youtu.be/jv1znNEq5h4)
+[![Squirrel in action](<img src="squirren_action.png">)](https://youtu.be/jv1znNEq5h4)
 
 
 Key Design Philosophy
