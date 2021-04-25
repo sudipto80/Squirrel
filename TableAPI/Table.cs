@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.OleDb;
+
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -323,50 +323,52 @@ namespace Squirrel
 		/// <param name="sql">The query in the form Select * from [Table] Where A = 'a'</param>
 		public Table RunSQLQuery(string sql)
 		{
-			HashSet<string> columns = ColumnHeaders;
-			StreamWriter sw = new StreamWriter(@"temp.csv");
-			sw.WriteLine(columns.Aggregate((a, b) => a + "," + b));
-			string numberRegex = "[0-9]+.*[0-9]+";
-			for (int i = 0; i < _rows.Count; i++)
-			{
-				foreach (string col in columns)
-				{
-					if (Regex.IsMatch(_rows[i][col], numberRegex))
-					{
-						sw.Write(_rows[i][col] + ",");
-					}
-					else
-					{
-						sw.Write("\"" + _rows[i][col] + "\",");
-					}
-				}
-				sw.WriteLine();
-			}
-			sw.Close();
-			string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='temp.csv';Extended Properties='text;HDR=YES;'";
-			sql = sql.Replace("[Table]", @"temp.csv");
-
-			OleDbDataAdapter oleda = new OleDbDataAdapter(sql, strCSVConnString);
-			DataTable dataTable = new DataTable();
-			oleda.Fill(dataTable);
-
-
 			var resultTable = new Table();
-			for (int i = 0; i < dataTable.Rows.Count; i++)
-			{
-				Dictionary<string, string> currentRow = new Dictionary<string, string>();
-				foreach (string column in columns)
-				{
-					try
-					{
-						currentRow.Add(column, dataTable.Rows[i][column].ToString());
-					}
-					catch {
-					}
-				}
-				resultTable.AddRow(currentRow);
-			}
 			return resultTable;
+			//HashSet<string> columns = ColumnHeaders;
+			//StreamWriter sw = new StreamWriter(@"temp.csv");
+			//sw.WriteLine(columns.Aggregate((a, b) => a + "," + b));
+			//string numberRegex = "[0-9]+.*[0-9]+";
+			//for (int i = 0; i < _rows.Count; i++)
+			//{
+			//	foreach (string col in columns)
+			//	{
+			//		if (Regex.IsMatch(_rows[i][col], numberRegex))
+			//		{
+			//			sw.Write(_rows[i][col] + ",");
+			//		}
+			//		else
+			//		{
+			//			sw.Write("\"" + _rows[i][col] + "\",");
+			//		}
+			//	}
+			//	sw.WriteLine();
+			//}
+			//sw.Close();
+			//string strCSVConnString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='temp.csv';Extended Properties='text;HDR=YES;'";
+			//sql = sql.Replace("[Table]", @"temp.csv");
+
+			//OleDbDataAdapter oleda = new OleDbDataAdapter(sql, strCSVConnString);
+			//DataTable dataTable = new DataTable();
+			//oleda.Fill(dataTable);
+
+
+			//var resultTable = new Table();
+			//for (int i = 0; i < dataTable.Rows.Count; i++)
+			//{
+			//	Dictionary<string, string> currentRow = new Dictionary<string, string>();
+			//	foreach (string column in columns)
+			//	{
+			//		try
+			//		{
+			//			currentRow.Add(column, dataTable.Rows[i][column].ToString());
+			//		}
+			//		catch {
+			//		}
+			//	}
+			//	resultTable.AddRow(currentRow);
+			//}
+			//return resultTable;
 		}
 
 		#endregion
