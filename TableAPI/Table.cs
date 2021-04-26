@@ -749,7 +749,7 @@ namespace Squirrel
 		/// <param name="columnName">Name of the column</param>
 		/// <param name="formula">Formula to calculate values of the new column</param>
 		/// <param name="decimalDigits"></param>
-		public void AddColumn(string columnName, string formula, int decimalDigits)
+		public Table AddColumn(string columnName, string formula, int decimalDigits)
 		{
 			this.ThrowIfTableIsNull();
 			//this.ThrowIfColumnsAreNotPresentInTable(columnName);
@@ -780,13 +780,13 @@ namespace Squirrel
 										 .Replace("]", string.Empty)]);
 					}
 					
-					catch(KeyNotFoundException ex)//Occurs when the column name is not found
-					{
+					//catch(KeyNotFoundException ex)//Occurs when the column name is not found
+					//{
 				 //       throw new KeyNotFoundException(nameof())                        
-					}
+				//	}
 					catch (Exception ex)
 					{
-
+						return this;
 					}
 				}
 		 
@@ -794,6 +794,7 @@ namespace Squirrel
 				_rows[i].Add(columnName, Math.Round(Convert.ToDecimal(new Expression(formula).Evaluate().ToString()),
 								  decimalDigits).ToString(CultureInfo.InvariantCulture));         
 			}
+			return this;
 		}
 		
 		
