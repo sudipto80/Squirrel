@@ -41,7 +41,7 @@ This produces the following result as shown here in tabular format
 This proves that women actually pays more tip than men!
 
 The same example written in F#
-==============================
+-----
 
 ```fsharp
 open Squirrel   
