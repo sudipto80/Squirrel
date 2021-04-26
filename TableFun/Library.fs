@@ -8,7 +8,7 @@ module Table =
         x.Pick(columns)
 
     let drop ([<ParamArray>] columns : string array) (x:Table) =
-        x.Pick(columns)
+        x.Drop(columns)
 
     let addColumn(columnName:string)(formula:string)(decimalDigits:int)(x:Table)=
         x.AddColumn(columnName,formula,decimalDigits)
