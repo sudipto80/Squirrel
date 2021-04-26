@@ -1342,8 +1342,8 @@ namespace Squirrel
 		/// <returns>A table with only common rows</returns>
 		/// <example>Table comRows = t1.Common(t2);//returns common rows that are available in "t1" and "t2"</example>
 		#region Useful Utility Methods
-	   
-	   
+
+
 		/// <summary>
 		/// Returns a table with merged columns 
 		/// </summary>
@@ -1355,8 +1355,9 @@ namespace Squirrel
 		/// //Merges two columns "First_Name" and "Last_Name" 
 		/// //and the new column is named "Full_Name"
 		/// Table mergedColumns = t1.MergeColumns("Full_Name", ' ',"First_Name","Last_Name");</example>
-		public Table MergeColumns(string newColumnName, 
+		public Table MergeColumns(string newColumnName,
 								  char separator = ' ',
+								  bool removeColums = false,
 								  params string[] columns)
 		{
 			var mergedValues = new List<string>();
@@ -1366,8 +1367,12 @@ namespace Squirrel
 							   .ToList();
 
 			AddColumn(newColumnName, mergedValues);
-            //merged!
-			columns.ToList().ForEach(RemoveColumn);
+			//merged!
+
+			//If the user wants to remove the columns 
+			//from which this column in generated then 
+			if (removeColums)
+				columns.ToList().ForEach(RemoveColumn);
 			return this;
 		}
 		/// <summary>
@@ -1427,8 +1432,8 @@ namespace Squirrel
 		[Description("Pick random sample,Random sample,Generate random sample")]
 		public Table RandomSample(int sampleSize)
 		{
-			if (sampleSize <= 0)
-				throw new ArgumentOutOfRangeException($"Sample size provided is negative or zero");
+			if (sampleSize <= 0 || sampleSize > this.RowCount)
+				throw new ArgumentOutOfRangeException($"Sample size provided is negative or zero or beyond RowCount");
 			return Shuffle().Top(sampleSize);
 		}
 		   
