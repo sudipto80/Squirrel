@@ -48,6 +48,8 @@ namespace Squirrel
         
         /// <summary>
         /// Creates a table out of a list of anonynous type objects. 
+        /// This is useful when you are creating a bunch of objects 
+        /// of anonymous type and want to 
         /// </summary>
         /// <typeparam name="T">Type of the anonynous type</typeparam>
         /// <param name="list">list of anonynous objects</param>
@@ -296,11 +298,11 @@ namespace Squirrel
         /// <param name="csvFileName">The file for which values has to be loaded into a table data structure.</param>
         /// <param name="wrappedWihDoubleQuotes"></param>
         /// <returns>A table which has all the values in the CSV file</returns>
-        public static Table LoadCsv(string csvFileName)
+        public static Table LoadCsv(string csvFileName,bool hasHeader = true)
         {
 
 
-            return LoadFlatFile(csvFileName, new string[] { "," });
+            return LoadFlatFile(csvFileName, hasHeader, new string[] { "," });
             
         }
 
@@ -329,9 +331,9 @@ namespace Squirrel
         /// </summary>
         /// <param name="tsvFileName">The file name to read from</param>
         /// <returns>A table loaded with these values</returns>
-        public static Table LoadTsv(string tsvFileName)
+        public static Table LoadTsv(string tsvFileName, bool hasHeader)
         {
-            return LoadFlatFile(tsvFileName, new string[] { "\t" });
+            return LoadFlatFile(tsvFileName, hasHeader,  new string[] { "\t" });
         }
        
         /// <summary>
@@ -340,7 +342,7 @@ namespace Squirrel
         /// <param name="fileName">The name of the file</param>
         /// <param name="delimeters">Delimeters</param>
         /// <returns>A table loaded with all the values in the file.</returns>
-        public static Table LoadFlatFile(string fileName, string[] delimeters)
+        public static Table LoadFlatFile(string fileName, bool hasHeader, string[] delimeters)
         {
 
             Table loadedCsv = new Table();
@@ -351,7 +353,7 @@ namespace Squirrel
             while ((line = csvReader.ReadLine()) != null)
             {
                 
-                if (lineNumber == 0)//reading the column headers
+                if (hasHeader && lineNumber == 0)//reading the column headers
                 {
                     if (line.Contains("\""))
                         line = "\"" + line + "\"";
