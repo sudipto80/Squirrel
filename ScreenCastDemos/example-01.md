@@ -67,3 +67,24 @@ let main argv =
     
     0
 ```
+
+Now Squirrel also has a F# Friendly wrapper. So you can use Squirrel _*more naturally*_ from your F# source. The same example using `Squirrel.FSharp` module 
+
+```fsharp
+
+open Squirrel
+open Squirrel.FSharp
+
+[<EntryPoint>]
+let main argv =
+     
+@"D:\tips.csv" |> DataAcquisition.LoadCsv
+               |> Table.addColumn "tip%" "[tip]*100/[total_bill]" 3 
+               |> Table.pick [|"sex";"tip%"|]
+               |> Table.aggregate "sex" AggregationMethod.Average
+               |> Table.roundOffTo 2 
+               |> Table.prettyDump 
+0
+
+```
+
