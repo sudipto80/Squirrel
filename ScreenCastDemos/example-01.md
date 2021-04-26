@@ -68,6 +68,8 @@ let main argv =
     0
 ```
 
+Love Pipes in F#? We all do!
+------------------------------
 Now Squirrel also has a F# Friendly wrapper. So you can use Squirrel _*more naturally*_ from your F# source. The same example using `Squirrel.FSharp` module 
 
 ```fsharp
