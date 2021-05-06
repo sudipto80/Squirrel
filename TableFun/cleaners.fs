@@ -28,4 +28,7 @@ module Table =
      let removeIfBetween(tab:Table)(columnName:string)(startDate:DateTime)(endDate:DateTime) = 
          tab.RemoveIfBetween(columnName,startDate,endDate)
 
+     let extractOutliers(x:Table)(columnName:string)(algo:OutlierDetectionAlgorithm)=
+         x.ExtractOutliers(columnName,algo)
+
      
