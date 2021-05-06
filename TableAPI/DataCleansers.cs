@@ -116,7 +116,19 @@ namespace Squirrel.Cleansing
 			return input.Where(x => "0123456789.".Contains(x)).Select(z=>z.ToString())
 															  .Aggregate((a, b) => a + b);
 		}
-	 
+
+
+		/// <summary>
+		/// TODO : Cleans table wherever there are duplicate values for a given column.
+		/// </summary>
+		/// <param name="tab"></param>
+		/// <param name="columnName"></param>
+		/// <returns></returns>
+		public static Table DistinctBy(this Table tab, params string[] columnNames)
+		{
+			//To do
+			return tab;
+		}
 
 		/// <summary>
 		/// TODO : Cleans table wherever there are duplicate values for a given column.
