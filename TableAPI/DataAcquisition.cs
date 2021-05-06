@@ -287,6 +287,8 @@ namespace Squirrel
                             toks[m] = magic;
                         continue;
                     }
+                    else
+                        values.Add(toks[i]);
                 }
             }
             return values.ToList();
