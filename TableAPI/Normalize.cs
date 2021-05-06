@@ -87,7 +87,7 @@ namespace TableAPI
                      => values.ToLookup(t => t)
                                              .ToDictionary(t => t.Key, t => t.Count())
                                              .OrderByDescending(t => t.Value)
-                                             .First()
+                                             .Last()
                                              .Key;
 
 
