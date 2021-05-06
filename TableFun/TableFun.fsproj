@@ -5,10 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="roadaccidents.html" />
+    <None Include="weather.nominal.arff" />
+    <Compile Include="defaultCleansers.fs" />
     <Compile Include="cleaners.fs" />
     <Compile Include="DefaultLib.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
+
+  <ItemGroup />
 
   <ItemGroup>
     <ProjectReference Include="..\TableAPI\TableAPI.csproj" />
