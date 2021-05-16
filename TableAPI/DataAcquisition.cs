@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Squirrel
@@ -194,6 +195,46 @@ namespace Squirrel
 
             return result;
         }
+        
+        private static List<string> getColumnsFromHtmlTable(string tableCode)
+        {
+           return Regex.Matches(tableCode, "<th>.*</th>").Cast<Match>().ElementAt(0).Value.Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
+                 .Select(t => t.Trim())
+                 .Where(t => t.Length > 0)
+                 .ToList();
+        }
+
+        private static List<Dictionary<string,string>> getRowsFromHtmlTable(List<string> columns, string tableCode)
+        {
+            List<Dictionary<string, string>> AllTheRows = new List<Dictionary<string, string>>();
+           tableCode = tableCode.Substring(tableCode.IndexOf("</tr>") + 5);
+            var rows = Regex.Matches(tableCode, "<td>.*</td>").Cast<Match>().ElementAt(0)
+                .Value.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(t => t.Trim())
+                .ToList();
+
+           
+            var lines = Enumerable.Range(0, rows.Count / columns.Count)
+                             .Select(t => rows.Skip(t*columns.Count).Take(columns.Count))
+
+                             .ToList();
+            int currentIndex = 0;
+
+            for(int i = currentIndex; i < rows.Count/columns.Count; i++)
+            {
+                Dictionary<string, string> current = new Dictionary<string, string>();
+                for (int j = 0; j < columns.Count; j++)
+                {
+                    current.Add(columns[j], lines[i].ElementAt(j));
+                    current[columns[j]] = current[columns[j]].Substring(current[columns[j]].LastIndexOf("<td>") + 4).Trim();
+                }
+                currentIndex = i * columns.Count;
+
+                AllTheRows.Add(current);
+            }
+            
+            return AllTheRows;
+        }
         /// <summary>
         /// Loads a HTML table to the corresponding Table container
         /// </summary>
@@ -201,6 +242,7 @@ namespace Squirrel
         /// <returns>A table with all the data from the html table</returns>
         public static Table LoadHtmlTable(string htmlTable)
         {
+            Table loaded = new Table();
             StreamReader htmlReader = new StreamReader(htmlTable);
             string totalTable = htmlReader.ReadToEnd();
             htmlReader.Close();
@@ -209,18 +251,11 @@ namespace Squirrel
             totalTable = StripTags(totalTable, new List<string>() { "<td>", "</td>", "<th>", "</th>", "<tr>", "</tr>" });
 
             totalTable = totalTable.Replace("\r", string.Empty).Replace("\t", string.Empty).Replace("\n", string.Empty);
-            totalTable = totalTable.Replace("<tr><th>", string.Empty)
-                              .Replace("</th></tr>", "\"" + Environment.NewLine)
-                              .Replace("</th><th>", "\",\"")
-                              .Replace("</td></tr>", "\"" + Environment.NewLine)
-                              .Replace("</td><td>", "\",\"")
-                              .Replace("<tr><td>", "\"" + Environment.NewLine);
-            totalTable = totalTable.Replace("&nbsp;", " ");//Use WebUtilities to get all the html encoding removed.
-            StreamWriter sw = new StreamWriter("TemporaryFile.csv");
-            sw.WriteLine(totalTable);
-            sw.Close();
-            Table loadedTable = LoadCsv("TemporaryFile.csv");
-            return loadedTable;
+            var cols = getColumnsFromHtmlTable(totalTable);
+            foreach (var row in getRowsFromHtmlTable(cols, totalTable))
+                loaded.AddRow(row);
+   
+            return loaded;
         }        
         /// <summary>
         /// Returns a list of values from each CSV row
