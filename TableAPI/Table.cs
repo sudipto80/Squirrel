@@ -523,6 +523,23 @@ namespace Squirrel
 
 			return _rows.Select(t => t[columnName]).ToList();
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="columnName"></param>
+		/// <param name="transformer"></param>
+		/// <returns></returns>
+		public List<T> ValuesOf<T>(string columnName,Func<string,T> transformer)
+        {
+			this.ThrowIfTableIsNull();
+			this.ThrowIfColumnsAreNotPresentInTable(columnName);
+			
+			return _rows.Select(t => transformer(t[columnName]))
+					   .ToList();
+		}
+
+
   
 
 		/// <summary>
