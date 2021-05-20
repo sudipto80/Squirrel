@@ -102,6 +102,23 @@ PM> Install-Package TableAPI
 
 [Here is the NuGet Package page](https://www.nuget.org/packages/TableAPI/)
 
+Although the package is named `TableAPI` the namespaces to import is Squirrel like 
+
+```csharp
+
+using Squirrel
+
+``` 
+
+and in F# 
+
+```fsharp 
+
+open Squirrel
+open Squirrel.FSharp
+
+```
+
 Documentation
 -------------
 [Here is a very high level list of functions and their summaries](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Documentation.md). The documentation will be perpetually in-progress as the development is very active right now. Also this is a place where you can contribute. If you are looking for example, take a look at the documentation for [Aggregate](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Aggregate.md) 
