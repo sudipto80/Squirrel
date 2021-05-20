@@ -4,9 +4,16 @@ Squirrel
 
 <img src="squirrel_logo.png" border="0" height="250" width="300">
 
+[`Squirrel LOGO is designed by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
+
+The Cross Platform Agile Data Analytics for .NET 
+------------------------------------------------
+<img src="https://www.pocketsolution.net/img/mac-linux-windows.png"/>
+
+Squirrel is built on .NET Standard 2.0
+
 <!--<a href="Squirrel"><img src="https://raw.github.com/sudipto80/Squirrel/newb/img/icon_26718.png" align="left" t="100" width="100" ></a>-->
 
-[`Squirrel LOGO is designed by Pirog tetyana from The Noun Project`](https://raw.github.com/sudipto80/Squirrel/newb/img/license.txt)
 
 Why Squirrel
 ------------
@@ -98,46 +105,7 @@ Documentation
 -------------
 [Here is a very high level list of functions and their summaries](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Documentation.md). The documentation will be perpetually in-progress as the development is very active right now. Also this is a place where you can contribute. If you are looking for example, take a look at the documentation for [Aggregate](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Aggregate.md) 
 
-Running Squirrel on Ubuntu
----------------------------
-You can use Squirrel on Linux/Ubuntu by installing [MonoDevelop](http://www.monodevelop.com/). Installing MonoDevelop installs all the required assemblies to run Squirrel. Here are the steps and they are not far from what would expect. In fact getting up to speed with Squirrel on Ubuntu is a breeze as you would see now. 
 
-###Steps
-1. Get MonoDevelop 
-```sh
-$ sudo apt-get install monodevelop
-```
-2. Step #2 You will be prompted to give your password.
-3. Let it run and install monodevelop 
-4. Once the installation is over, launch MonoDevelop by typing ```monodevelop``` in the console 
-5. Download Squirrel by clicking on the "Download Zip" button 
-6. Extract the content of this folder in a folder. I did it on desktop in a folder called "Squirrel".
-7. Create a new project in Mono Develop and add the reference of TableAPI.dll and NCalc.dll 
-8. Write the following code. It will work assuming you have saved Squirrel on desktop and the solution you created is named "HelloWorldSolution"
-
-```csharp
-using System;
-using Squirrel;
-
-namespace HelloWorldSolution
-{
-	class MainClass
-	{
-		public static void Main (string[] args)
-		{
-			Table iris = DataAcquisition.LoadCSV(@"/home/sudipta/Desktop/Squirrel/Squirrel-master/TableAPI/Data/iris.csv");
-			iris.RandomSample(10)	
-				.PrettyDump();
-		}
-	}
-}
-```
-
-This will generate the following output
-
-<img src="https://pbs.twimg.com/media/CGb0i9qUkAAaloi.png" border ="0"/>                                              
-
-Some functionalities may not work on Ubuntu yet. If not, please report them by creating an issue. 
 
 Examples
 --------
