@@ -256,19 +256,19 @@ namespace Squirrel
                 loaded.AddRow(row);
    
             return loaded;
-        }        
+        }
         /// <summary>
         /// Returns a list of values from each CSV row
         /// </summary>
         /// <param name="line">The string representation of a CSV row</param>
         /// <returns>Values of the line</returns>
-        private static List<string> GetValues(string line)
+        private static List<string> GetValues(string line, char[] delims)
         {
             string magic = Guid.NewGuid().ToString();
             //if wrapped with quotes from both sides, ignore and trim
             //else
             if (!line.Contains("\""))
-                return line.Split(',').ToList();
+                return line.Split(delims).ToList();
             string[] toks = line.Split(new char[]{','},StringSplitOptions.None);
 
             List<int> startingWithQuote = new List<int>();
@@ -339,7 +339,7 @@ namespace Squirrel
         {
 
 
-            return LoadFlatFile(csvFileName, hasHeader, new string[] { "," });
+            return LoadFlatFile(csvFileName, hasHeader, new char[] { ','});
             
         }
 
@@ -370,7 +370,7 @@ namespace Squirrel
         /// <returns>A table loaded with these values</returns>
         public static Table LoadTsv(string tsvFileName, bool hasHeader)
         {
-            return LoadFlatFile(tsvFileName, hasHeader,  new string[] { "\t" });
+            return LoadFlatFile(tsvFileName, hasHeader,  new char[] { '\t' });
         }
        
         /// <summary>
@@ -379,7 +379,7 @@ namespace Squirrel
         /// <param name="fileName">The name of the file</param>
         /// <param name="delimeters">Delimeters</param>
         /// <returns>A table loaded with all the values in the file.</returns>
-        public static Table LoadFlatFile(string fileName, bool hasHeader, string[] delimeters)
+        public static Table LoadFlatFile(string fileName, bool hasHeader, char[] delimeters)
         {
 
             Table loadedCsv = new Table();
@@ -396,7 +396,7 @@ namespace Squirrel
                         line = "\"" + line + "\"";
                     //Because sometimes the column header can have a comma in them
                     //and that can spoil the order
-                    GetValues(line).ForEach(col => columns.Add(col));
+                    GetValues(line,delimeters).ForEach(col => columns.Add(col));
                   //  line.Split(delimeters, StringSplitOptions.None)
                     //    .ToList()
                       //  .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
@@ -407,8 +407,8 @@ namespace Squirrel
                     string[] values = null;
                     if (line.Trim().Length > 0)
                     {
-                        if (delimeters.Length == 1 && delimeters[0] == ",")
-                            values = GetValues(line).ToArray();
+                        if (delimeters.Length == 1 && delimeters[0] == ',')
+                            values = GetValues(line,delimeters).ToArray();
                         else
 
                             values = line.Split(delimeters, StringSplitOptions.None);
