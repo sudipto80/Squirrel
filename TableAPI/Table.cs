@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using NCalc;
+using NCalc2; 
 using Squirrel.Cleansing;
 using TableAPI;
 
