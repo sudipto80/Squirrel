@@ -84,7 +84,7 @@ API Overview
 Dependency
 ----------
 
-There is a dependency for [NCalc](https://ncalc.codeplex.com/) for the following methods 
+There is a dependency for [NCalc2](https://github.com/sklose/NCalc2) for the following methods 
 ```csharp
 AddColumn() 
 AddRows()
