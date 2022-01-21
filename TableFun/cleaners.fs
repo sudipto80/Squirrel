@@ -23,7 +23,7 @@ module Table =
          tab.RemoveIfAfter(columnName,date)
     
      let removeIfBefore(tab:Table)(columnName:string)(date:DateTime) = 
-         tab.RemoveIfAfter(columnName,date)
+         tab.RemoveIfBefore(columnName,date)
 
      let removeIfBetween(tab:Table)(columnName:string)(startDate:DateTime)(endDate:DateTime) = 
          tab.RemoveIfBetween(columnName,startDate,endDate)
