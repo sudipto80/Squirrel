@@ -1242,6 +1242,47 @@ namespace Squirrel
 	
 			return tables;
 		}
+
+		public Table Explode(string columnName)
+        {
+			//name,age,skills
+			//sam;19;F#,C#,VB
+			//jenny;28;C++;OCaml
+
+
+			//sam,19,F#
+			//sam,19,C#
+			//sam,19,VB
+			//jenny,28,C++
+			//jenny,28,OCaml
+
+			Table exploded = new Table();
+
+			List<Dictionary<string, string>> rows = new List<Dictionary<string, string>>();
+			var values = this.ValuesOf(columnName);
+			for(int i = 0; i< values.Count; i++)
+            {
+				var parts = values[i].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+				if (parts.Length > 0)
+                {
+					for(int j = 0; j<parts.Length; j++)
+                    {
+						var cr = new Dictionary<string, string>();
+						foreach(var k in this.Rows[i].Keys)
+							cr.Add(k,this.Rows[i][k]);
+						cr[columnName] = parts[j];
+						exploded.Rows.Add(cr);
+					}
+					
+                }
+				else
+                {
+					exploded.Rows.Add(this.Rows[i]);
+                }
+            }
+			return exploded;
+
+        }
 		#endregion
 
 
