@@ -93,7 +93,9 @@ AddRowsByShortHand()
 
 NuGet Package
 -------------
-<img src="http://cdn.ws.citrix.com/wp-content/uploads/2011/09/NugetIcon.png"/>
+![image](https://user-images.githubusercontent.com/1287634/182864139-eaa07abf-4ff7-46cd-82cc-798ea39c2b1c.png)
+
+
 You can integrate the package using NuGet by giving the following command</br>
 
 ```
