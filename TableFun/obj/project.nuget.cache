@@ -1,15 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "fsVAr10xdCnuH4+cmCtuXQOf+QYOD5hPTyJOE5e/i91x1T57/1zao9scgW/KKxgR8wMCGbinmrpQ8ybqSMpmEA==",
+  "dgSpecHash": "YrEfFmTN0ZYe7uqJEhtt+2ieaWnJK/ijeaQjQwIGDUcFskCRHIUTy0qYZKUBJOdBOJN8eZRPop85Lv4wYnopDQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableFun\\TableFun.fsproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\antlr4\\4.6.4\\antlr4.4.6.4.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\antlr4.codegenerator\\4.6.4\\antlr4.codegenerator.4.6.4.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\antlr4.runtime\\4.6.4\\antlr4.runtime.4.6.4.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\fsharp.core\\7.0.300\\fsharp.core.7.0.300.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.csharp\\4.4.1\\microsoft.csharp.4.4.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\ncalc\\1.3.8\\ncalc.1.3.8.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\ncalc2\\2.1.0\\ncalc2.2.1.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\nunit\\3.13.2\\nunit.3.13.2.nupkg.sha512",
@@ -35,5 +37,16 @@
     "C:\\Users\\Admin\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETStandard,Version=v2.0'. This package may not be fully compatible with your project.",
+      "libraryId": "ncalc",
+      "targetGraphs": [
+        ".NETStandard,Version=v2.0"
+      ]
+    }
+  ]
 }

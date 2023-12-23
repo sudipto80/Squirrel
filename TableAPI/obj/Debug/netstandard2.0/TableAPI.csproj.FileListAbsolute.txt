@@ -1,0 +1,10 @@
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\obj\Debug\netstandard2.0\TableAPI.csproj.AssemblyReference.cache
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\obj\Debug\netstandard2.0\TableAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\obj\Debug\netstandard2.0\TableAPI.AssemblyInfoInputs.cache
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\obj\Debug\netstandard2.0\TableAPI.AssemblyInfo.cs
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\obj\Debug\netstandard2.0\TableAPI.csproj.CoreCompileInputs.cache
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\bin\Debug\netstandard2.0\TableAPI.deps.json
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\bin\Debug\netstandard2.0\TableAPI.dll
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\bin\Debug\netstandard2.0\TableAPI.pdb
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\obj\Debug\netstandard2.0\TableAPI.dll
+C:\Users\Admin\RiderProjects\Squirrel\TableAPI\obj\Debug\netstandard2.0\TableAPI.pdb

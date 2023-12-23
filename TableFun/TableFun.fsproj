@@ -11,9 +11,12 @@
     <Compile Include="cleaners.fs" />
     <Compile Include="DefaultLib.fs" />
     <Compile Include="Library.fs" />
+    <Compile Include="FunAliases.fs" />
   </ItemGroup>
 
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="ncalc" Version="1.3.8" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TableAPI\TableAPI.csproj" />

@@ -1,6 +1,7 @@
 ﻿namespace Squirrel.FSharp
 open Squirrel
 open System
+open NCalc2
 
 module Table =
     //Wrapper for Pick() from Squirrel.Table
@@ -10,11 +11,14 @@ module Table =
     let drop ([<ParamArray>] columns : string array) (x:Table) =
         x.Drop(columns)
 
+ 
     let addColumn(columnName:string)(formula:string)(decimalDigits:int)(x:Table)=
+        
         x.AddColumn(columnName,formula,decimalDigits)
 
-    let aggregate(columnName:string)(how:AggregationMethod)(x:Table)=
+    let aggregate(how:AggregationMethod)(columnName:string)(x:Table)=
         x.Aggregate(columnName,how)
+    
 
     
     let roundOffTo(decimalDigits:int)(x:Table) = x.RoundOffTo(decimalDigits)
