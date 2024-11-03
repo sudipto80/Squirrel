@@ -1,43 +1,103 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+# Visual Studio files
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
 
-# Folder config file
-Desktop.ini
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# Binaries
+*.dll
+*.pdb
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
 
-# =========================
-# Operating System Files
-# =========================
+# Visual Studio cache/options directory
+.vs/
 
-# OSX
-# =========================
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
 
-.DS_Store
-.AppleDouble
-.LSOverride
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
 
-# Icon must end with two \r
-Icon
+# NuGet Packages
+*.nupkg
+# NuGet Symbol Packages
+*.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
 
-# Thumbnails
-._*
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!?*.[Cc]ache/
 
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
 
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+# Others
+*.swp
+*.log
+*.tmp
+*.tmp_proj
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.pfx
+*.publishsettings
+
+# Visual Studio IntelliCode
+.vsconfig
+
+# Local History for Visual Studio
+.localhistory/
+
+# Visual Studio History (VSHistory)
+.vshistory/
+
+# Backup & report files from converting an old project file
+# to a newer Visual Studio version
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+ServiceFabricBackup/
+
+# Environment Files
+*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE specific files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.iml

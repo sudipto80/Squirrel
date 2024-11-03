@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using NCalc2; 
 using Squirrel.Cleansing;
 using TableAPI;
 
-// ReSharper disable once CheckNamespace
+
 namespace Squirrel
 {
 	
@@ -22,11 +15,11 @@ namespace Squirrel
 	public enum Alignment 
 	{ 
 		/// <summary>
-		/// Alligns the content to left
+		/// Aligns the content to left
 		/// </summary>
 		Left,
 		/// <summary>
-		/// Alligns the content to right
+		/// Aligns the content to right
 		/// </summary>
 		Right 
 	}

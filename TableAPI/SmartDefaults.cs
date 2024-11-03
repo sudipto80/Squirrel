@@ -17,13 +17,8 @@ namespace Squirrel
         /// <summary>
         /// 
         /// </summary>
-        public static SmartDefaults Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
+        public static SmartDefaults Instance => _instance;
+
         SmartDefaults()
         {
             // Initialize.
