@@ -199,16 +199,37 @@ namespace Squirrel
 
         private static List<string> getColumnsFromHtmlTable(string tableCode)
         {
-            return Regex.Matches(tableCode, "<th>.*</th>").Cast<Match>().ElementAt(0).Value.Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
-                  .Select(t => t.Trim())
-                  .Where(t => t.Length > 0)
-                  .ToList();
+            
+            string pattern = "<th>.*</th>";
+            if (tableCode.Contains("<th>"))
+            {
+                return Regex.Matches(tableCode, pattern).Cast<Match>().ElementAt(0).Value.Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(t => t.Trim())
+                    .Where(t => t.Length > 0)
+                    .ToList();
+               
+            }
+            else
+            {
+
+
+               
+                return tableCode.Substring(tableCode.IndexOf("<tr>")+5,tableCode.IndexOf("</tr>")-6)
+                    .Split(new string[] { "<td>", "</td>" }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(t => t.Trim())
+                    .Where(t => t.Length > 0)
+                    .ToList();
+
+
+            }
+
+
         }
 
         private static List<Dictionary<string, string>> getRowsFromHtmlTable(List<string> columns, string tableCode)
         {
             List<Dictionary<string, string>> AllTheRows = new List<Dictionary<string, string>>();
-            tableCode = tableCode.Substring(tableCode.IndexOf("</tr>") + 5);
+            tableCode = tableCode.Substring(tableCode.IndexOf("</tr>", StringComparison.InvariantCultureIgnoreCase) + 5);
             var rows = Regex.Matches(tableCode, "<td>.*</td>").Cast<Match>().ElementAt(0)
                 .Value.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(t => t.Trim())
@@ -303,14 +324,7 @@ namespace Squirrel
                 value = value.Slice(1, value.Length - 2);
             }
 
-            if (value.IndexOf('"') != -1)
-            {
-                values.Add(UnescapeQuotes(value));
-            }
-            else
-            {
-                values.Add(value.ToString());
-            }
+            values.Add(value.IndexOf('"') != -1 ? UnescapeQuotes(value) : value.ToString());
         }
 
         static string UnescapeQuotes(ReadOnlySpan<char> value)

@@ -219,7 +219,7 @@ namespace Squirrel.Cleansing
 		/// Remove all rows that correspond to a value for the given column which is an outlier
 		/// </summary>
 		/// <param name="tab">The table which needs cleansing </param>
-		/// <param name="columnName">The name of the column among which the outliers has to be found.</param>
+		/// <param name="columnName">The name of the column among which the outliers have to be found.</param>
 		/// <param name="algo">The algorithm to be used to determine outliers in the values of the column given.</param>
 		/// <returns>A cleansed table</returns>
 		/// <example> 
@@ -363,13 +363,13 @@ namespace Squirrel.Cleansing
 		/// <seealso cref="RemoveIfBefore"/>
 		public static Table RemoveIfAfter(this Table tab, string dateColumnName, DateTime date)
 		{
-			List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(m => Convert.ToDateTime(m)).ToList();
+			List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(Convert.ToDateTime).ToList();
 
-			for (int i = 0; i < dates.Count; i++)
+			for (var i = 0; i < dates.Count; i++)
 			{
-				if (dates[i].CompareTo(date) >= 1)
-					tab.Rows.RemoveAt(i);
+				if (dates[i].CompareTo(date) >= 1) tab.Rows.RemoveAt(i);
 			}
+
 			return tab;
 		}
 		/// <summary>
