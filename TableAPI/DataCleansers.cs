@@ -192,7 +192,7 @@ namespace Squirrel.Cleansing
 		/// <param name="algo">The algorithm to be used to extract outliers</param>
 		/// <returns>A table with rows which are believed to be having values in the outlier range for the given column.</returns>
 		public static Table ExtractOutliers(this Table tab, string columnName,
-			OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
+			OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IqrInterval)
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
@@ -228,7 +228,7 @@ namespace Squirrel.Cleansing
 		/// Table outliersRemoved = tableWithOutliers.RemoveOutliers("Age");
 		/// </example>
 		public static Table RemoveOutliers(this Table tab, string columnName,
-											OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IQR_Interval)
+											OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IqrInterval)
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);

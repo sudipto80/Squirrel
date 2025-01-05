@@ -45,11 +45,11 @@ namespace Squirrel
 		/// <summary>
 		/// Inter Quantile Range
 		/// </summary>
-		IQR_Interval, 
+		IqrInterval, 
 		/// <summary>
 		/// Z Score
 		/// </summary>
-		Z_Score 
+		ZScore 
 	}
 	/// <summary>
 	/// Method to be used for aggregation/consolidation
@@ -129,8 +129,12 @@ namespace Squirrel
 	/// </summary>
 	public class Table
 	{   
-		private HashSet<string> _columnHeaders = new HashSet<string>();
-		private List<Dictionary<string, string>> _rows = new List<Dictionary<string, string>>();
+		/// <summary>
+		/// A private field that stores the rows of the table.
+		/// Each row is represented as a dictionary with string keys and string values.
+		/// </summary>
+		private List<Dictionary<string, string>> _rows = [];
+		
 		/// <summary>
 		/// Marks whether the missing values have been handled or not for a given Table instance
 		/// </summary>
@@ -253,15 +257,11 @@ namespace Squirrel
 			var result = this;
 			foreach (var key in fieldSearchValuesMap.Keys)
 			{
-				try
-				{
-					result = result.Filter(key, fieldSearchValuesMap[key].ToArray());
-				}
-				catch(KeyNotFoundException ex)//If key "key" is not found in fieldSearchValueMap 
-				{
-					throw;
-				}
+
+				result = result.Filter(key, fieldSearchValuesMap[key].ToArray());
+
 			}
+
 			return result;
 		}
 		/// <summary>
@@ -314,7 +314,7 @@ namespace Squirrel
 		/// Runs SQL Query against the Table
 		/// </summary>
 		/// <param name="sql">The query in the form Select * from [Table] Where A = 'a'</param>
-		public Table RunSQLQuery(string sql)
+		public Table RunSqlQuery(string sql)
 		{
 			var resultTable = new Table();
 			return resultTable;
@@ -383,10 +383,11 @@ namespace Squirrel
 
 			var sorter = new CustomComparers.CustomSorter();
 
-			if (how == SortDirection.Ascending)
-				sortedTable._rows = _rows.OrderBy(m => m[columnName], sorter).ToList();
-			else
-				sortedTable._rows = _rows.OrderByDescending(m => m[columnName], sorter).ToList();
+			sortedTable._rows = how switch
+			{
+				SortDirection.Ascending => _rows.OrderBy(m => m[columnName], sorter).ToList(),
+				_ => _rows.OrderByDescending(m => m[columnName], sorter).ToList()
+			};
 
 			return sortedTable;
 		}
@@ -405,64 +406,54 @@ namespace Squirrel
 		{
 			var sortedTable = new OrderedTable();
 			
-			CustomComparers.NumericComparer comp = new CustomComparers.NumericComparer();
-			CustomComparers.DateComparer dateComp = new CustomComparers.DateComparer();
-			CustomComparers.CurrencyCustomSorter currencyComp = new CustomComparers.CurrencyCustomSorter();
+			var comp = new CustomComparers.NumericComparer();
+			var dateComp = new CustomComparers.DateComparer();
+			var currencyComp = new CustomComparers.CurrencyCustomSorter();
 
 			if (smartSort)
 			{
 				SmartDefaults.Instance.GetSmartDefaultValues(smartDefaultFile);//Populate and keep it ready once. 
 
-				KeyValuePair<bool, string> matchingEntriesIfAny = SmartDefaults.Instance.DoesMatchingEntryExist(ValuesOf(columnName));
+				var matchingEntriesIfAny = SmartDefaults.Instance.DoesMatchingEntryExist(ValuesOf(columnName));
 
 				//Smart Sort the day and month names 
 				if (matchingEntriesIfAny.Key)
 				{
-					List<string> sortingOrder = SmartDefaults.DefaultValues[matchingEntriesIfAny.Value];
+					var sortingOrder = SmartDefaults.DefaultValues[matchingEntriesIfAny.Value];
 					return SortInThisOrder(columnName, sortingOrder, how);
 				}
 			}
 			
 
-			string dateRegex = @"^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$";//matches date with regular expression.
-			string numericRegex = @"^-?[0-9]\d*(\.\d+)?$";//matches decimals with negative          
-			string currencyRegex = @"[$£€¥][0-9]\d*(\.\d+)?$";//matches currencies
+			const string dateRegex = @"^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$"; //matches date with regular expression.
+			const string numericRegex = @"^-?[0-9]\d*(\.\d+)?$"; //matches decimals with negative          
+			const string currencyRegex = @"[$£€¥][0-9]\d*(\.\d+)?$"; //matches currencies
 			
-			bool isDateColumn = ValuesOf(columnName).All(m=>Regex.IsMatch(m,dateRegex));
-			bool isNumericColumn = ValuesOf(columnName).All(m => Regex.IsMatch(m, numericRegex));
-			bool isCurrencyColumn = ValuesOf(columnName).All(m => Regex.IsMatch(m, currencyRegex));
+			var isDateColumn = ValuesOf(columnName).All(m=>Regex.IsMatch(m,dateRegex));  
+			var isNumericColumn = ValuesOf(columnName).All(m => Regex.IsMatch(m, numericRegex));
+			var isCurrencyColumn = ValuesOf(columnName).All(m => Regex.IsMatch(m, currencyRegex));
 
 			//The column we are trying to sort has all numeric values
 			if (isNumericColumn)
 			{
-				if (how == SortDirection.Ascending)
-					sortedTable._rows = _rows.OrderBy(m => m[columnName], comp).ToList();
-				else
-					sortedTable._rows = _rows.OrderByDescending(m => m[columnName], comp).ToList();
+				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName], comp).ToList() : _rows.OrderByDescending(m => m[columnName], comp).ToList();
 			}
 			if (isCurrencyColumn)
 			{
-				if (how == SortDirection.Ascending)
-					sortedTable._rows = _rows.OrderBy(m => m[columnName], currencyComp).ToList();
-				else
-					sortedTable._rows = _rows.OrderByDescending(m => m[columnName], currencyComp).ToList();
+				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName], currencyComp).ToList() : _rows.OrderByDescending(m => m[columnName], currencyComp).ToList();
 			}
 			//The column we are trying to has all date values
 			else if (isDateColumn)
 			{
-				if (how == SortDirection.Ascending)
-					sortedTable._rows = _rows.OrderBy(m => m[columnName], dateComp).ToList();
-				else
-					sortedTable._rows = _rows.OrderByDescending(m => m[columnName], dateComp).ToList();
+				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName], currencyComp).ToList() : _rows.OrderByDescending(m => m[columnName], dateComp).ToList();
 			}
 
 			//the column has all string values. So we are assuming that default "alphabetic" sort will do.
-			else if(!isNumericColumn && !isDateColumn && !isCurrencyColumn)
+			else
 			{
-				if (how == SortDirection.Ascending)
-					sortedTable._rows = _rows.OrderBy(m => m[columnName]).ToList();
-				else
-					sortedTable._rows = _rows.OrderByDescending(m => m[columnName]).ToList();
+				sortedTable._rows = how == SortDirection.Ascending
+					? _rows.OrderBy(m => m[columnName]).ToList()
+					: _rows.OrderByDescending(m => m[columnName]).ToList();
 			}
 			return sortedTable;
 		}
@@ -647,7 +638,7 @@ namespace Squirrel
 			string pattern = "[[0-9]+]";
 			string[] tokens = formula.Split('=');
 			string[] columnsPresent = Regex.Matches(tokens[1], "[a-zA-Z]+[[0-9]+]")
-										   .Cast<Match>()
+										   
 										   .Select(z => z.Value.Substring(0,z.Value.IndexOf('[')))
 										   .ToArray();
 			string columnNameLeft = formula.Trim().Substring(0, formula.IndexOf('['));
@@ -663,7 +654,7 @@ namespace Squirrel
 				{
 					statement = statement.Replace(columnName + "[" + startCopy + "]", _rows[i][columnName]);
 				}
-				Expression exp = new Expression(statement);
+				var exp = new Expression(statement);
 				if (RowCount <= index)
 				{
 					var temp = new Dictionary<string, string> {{columnNameLeft, exp.Evaluate().ToString()}};
@@ -730,7 +721,7 @@ namespace Squirrel
 		public void AddColumn(string columnName, string format)
 		{
 			//[City]([Edition])-> 
-			var columns = Regex.Matches(format, "[[a-zA-Z0-9 _-]+]").Cast<Match>()
+			var columns = Regex.Matches(format, "[[a-zA-Z0-9 _-]+]")
 																	//Dropping brackets [ and ]   
 																	.Select(t => t.Value.Substring(1, t.Value.Length - 2))
 																	.ToList();
@@ -884,6 +875,29 @@ namespace Squirrel
 				AddColumn(columnName, value);
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="columnName"></param>
+		/// <param name="indices"></param>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public IEnumerable<string> this[string columnName, params IEnumerable<int> indices]
+		{
+			get
+			{
+				this.ThrowIfTableIsNull();
+				this.ThrowIfColumnsAreNotPresentInTable(columnName);
+				foreach (var index in indices)
+				{
+					if (index >= _rows.Count)
+						throw new ArgumentOutOfRangeException($"{nameof(index)} is out of range");
+
+					yield return this[columnName][index];
+				}
+			}
+		}
+		
 		/// <summary>
 		/// Returns value for a given column at a given index
 		/// </summary>
@@ -931,16 +945,16 @@ namespace Squirrel
 						switch(how)
 						{
 							case AggregationMethod.Sum:
-								currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Sum().ToString());
+								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Sum().ToString());
 								break;
 							case AggregationMethod.Average:
-								currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Average().ToString());
+								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Average().ToString());
 								break;
 							case AggregationMethod.Max:
-								currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Max().ToString());
+								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Max().ToString());
 								break;
 							case AggregationMethod.Min:
-								currentRow.Add(col, this[col].Take(i + 1).Select(s => Convert.ToDecimal(s)).Min().ToString());
+								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Min().ToString());
 								break;
 						}
 					}
@@ -1027,15 +1041,15 @@ namespace Squirrel
 		public Table RoundOffTo(string decimalDigitsForEachColumn)
 		{
 			//Q1(4),Q4(5),Q2(3)
-			Dictionary<string, int> roundOffMap = new Dictionary<string, int>();
-			string[] tokens = decimalDigitsForEachColumn.Split(',');
-			foreach (string tok in tokens)
+			var roundOffMap = new Dictionary<string, int>();
+			var tokens = decimalDigitsForEachColumn.Split(',');
+			foreach (var tok in tokens)
 			{
 				string[] internalTokens = tok.Split('(', ')');
 				roundOffMap.Add(internalTokens[0], Convert.ToInt16(internalTokens[1]));
 			}
-			foreach (string col in ColumnHeaders)
-				for (int r = 0; r < RowCount; r++)
+			foreach (var col in ColumnHeaders)
+				for (var r = 0; r < RowCount; r++)
 					if (Regex.IsMatch(this[r][col], @"^-?[0-9]\d*(\.\d+)?$"))
 						this[r][col] = Math.Round(Convert.ToDecimal(this[r][col]),  roundOffMap[col]).ToString();
 
@@ -1056,10 +1070,10 @@ namespace Squirrel
 			//West,2,3,4,2,12,3,4,2,2,3,4,22
 
 			List<decimal> newValues = new List<decimal>();
-			for (int i = 0; i < RowCount; i++)
+			for (var i = 0; i < RowCount; i++)
 			{
 				
-				List<decimal> values = new List<decimal> ();
+				var values = new List<decimal> ();
 				foreach (string col in columns)
 					values.Add(Convert.ToDecimal(this[col][i]));
 				switch (how)
@@ -1251,11 +1265,10 @@ namespace Squirrel
 
 			Table exploded = new Table();
 
-			List<Dictionary<string, string>> rows = new List<Dictionary<string, string>>();
-			var values = this.ValuesOf(columnName);
+			var values = ValuesOf(columnName);
 			for(int i = 0; i< values.Count; i++)
             {
-				var parts = values[i].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+				var parts = values[i].Split([','], StringSplitOptions.RemoveEmptyEntries);
 				if (parts.Length > 0)
                 {
 					for(int j = 0; j<parts.Length; j++)
@@ -1263,7 +1276,7 @@ namespace Squirrel
 						var cr = new Dictionary<string, string>();
 						foreach(var k in this.Rows[i].Keys)
 							cr.Add(k,this.Rows[i][k]);
-						cr[columnName] = parts[j];
+						cr[columnName] =  parts[j];
 						exploded.Rows.Add(cr);
 					}
 					
@@ -1280,6 +1293,7 @@ namespace Squirrel
 
 
 		#region Set Operations
+
 		/// <summary>
 		/// Generation of a single table with merged columns.
 		/// </summary>
@@ -1309,12 +1323,12 @@ namespace Squirrel
 		/// Table merged = t1.MergeByColumns(t2);//Uses the first column to perform the join
 		/// Table mergedByName = t1.MergeByColumns(t2,"Name");//Uses the column "Name" to perform the join
 		/// //This is how merge works
-        /// 
+		/// 
 		/// </example>
-  
 
-		
-		
+
+
+
 		public Table MergeByColumns(Table anotherTable, string connectorColumn = "Not Provided")
 		{
 			this.ThrowIfTableIsNull();
@@ -1326,17 +1340,12 @@ namespace Squirrel
 			}
 			if (connectorColumn == "Not Provided")
 				connectorColumn = ColumnHeaders.First();
-
-			Table mergedColumnsTable = new Table();
-
+			var mergedColumnsTable = new Table();
 			ColumnHeaders.ToList().ForEach(m => mergedColumnsTable.AddColumn(m, ValuesOf(m)));
-			
-			anotherTable.ColumnHeaders.Where(t=>t!=connectorColumn)
-					   .ToList().ForEach(m =>
-									mergedColumnsTable.AddColumn(m, anotherTable.SortInThisOrder(connectorColumn, 
-									ValuesOf(connectorColumn)).ValuesOf(m)));
-
-
+			anotherTable.ColumnHeaders.Where(t => t != connectorColumn)
+				.ToList().ForEach(m =>
+					mergedColumnsTable.AddColumn(m, anotherTable.SortInThisOrder(connectorColumn,
+						ValuesOf(connectorColumn)).ValuesOf(m)));
 			return mergedColumnsTable.SortBy(connectorColumn);
 		}
 
@@ -1351,7 +1360,12 @@ namespace Squirrel
 			this.ThrowIfTableIsNull();
 			anotherTable.ThrowIfTableIsNull();
 
-			var mergedTable = new Table();
+			var mergedTable = new Table
+			{
+				_rows = null,
+				MissingValueHandled = false,
+				Name = null
+			};
 			if (!ColumnHeaders.OrderBy(head => head).SequenceEqual(anotherTable.ColumnHeaders.OrderBy(head => head)))
 				return this; //Merge is not possible'
 
@@ -1359,12 +1373,7 @@ namespace Squirrel
 			mergedTable._rows = _rows;
 
 			mergedTable._rows.AddRange(anotherTable._rows);
-			if (removeDups)
-				return mergedTable.Distinct();
-
-			return mergedTable;
-
-
+			return removeDups ? mergedTable.Distinct() : mergedTable;
 		}
 
 		/// <summary>
@@ -1373,14 +1382,13 @@ namespace Squirrel
 		/// <param name="anotherTable">The other table with which we have to compare.</param>
 		/// <returns>A new table with rows that are only available in the current table, not in the other one.</returns>
 		/// <example>Table exclusive = t1.Exclusive(t2);//Find rows that are exclusively available in table "t1"</example>
-		
 		public Table Exclusive(Table anotherTable)
 		{
 			this.ThrowIfTableIsNull();
 			anotherTable.ThrowIfTableIsNull();
 
-			Table result = new Table ();
-			for (int i = 0; i < RowCount; i++)
+			var result = new Table ();
+			for (var i = 0; i < RowCount; i++)
 			{
 				if(!anotherTable._rows.Any(r => IsSameRow(r,_rows[i])))
 					result.AddRow(_rows[i]);
@@ -1401,6 +1409,7 @@ namespace Squirrel
 		/// </summary>
 		/// <param name="newColumnName">The new column header</param>
 		/// <param name="separator">The character separator to use between values of participating columns</param>
+		/// <param name="removeColums">Flag to set if we want to remove the columns from which the new column is generated</param>
 		/// <param name="columns">Columns to merge</param>
 		/// <returns>Returns a table with the merged column</returns>
 		/// <example>
@@ -1501,11 +1510,10 @@ namespace Squirrel
 		{
 			if (n <= 0)
 				throw new ArgumentOutOfRangeException($"Size provided for top n elements is negative or zero");
-			var headTable = new Table();
-			if (n >= RowCount)
-				headTable._rows = _rows;
-			else
-				headTable._rows = _rows.Take(n).ToList();
+			var headTable = new Table
+			{
+				_rows = n >= RowCount ? _rows : _rows.Take(n).ToList()
+			};
 			return headTable;
 		}
 		/// <summary>
@@ -1519,11 +1527,10 @@ namespace Squirrel
 		{
 			if (n <= 0)
 				throw new ArgumentOutOfRangeException($"Number of rows provided is either negative or zero.");
-			var tailTable = new Table();
-			if (n >= RowCount)
-				tailTable._rows = _rows;
-			else
-				tailTable._rows = _rows.Skip(RowCount - n).ToList();
+			var tailTable = new Table
+			{
+				_rows = n >= RowCount ? _rows : _rows.Skip(RowCount - n).ToList()
+			};
 			return tailTable;
 		}
 		/// <summary>
@@ -1575,7 +1582,7 @@ namespace Squirrel
 			return mid;
 		}
 		/// <summary>
-		/// Splits the table acording to the rows
+		/// Splits the table according to the rows
 		/// </summary>
 		/// <param name="rowsPerSplit">The number of rows to be included in each table.</param>
 		/// <returns></returns>
@@ -1596,10 +1603,10 @@ namespace Squirrel
 		[Description("Split columns,Split by columns")]
 		public List<Table> SplitByColumns(params string[][] columnSplitDescription)
 		{
-			List<Table> tables = new List<Table>();
+			var tables = new List<Table>();
 			foreach (var columnDefinition in columnSplitDescription)
 			{
-				Table temp = new Table();
+				var temp = new Table();
 				foreach (var col in columnDefinition)
 					temp.AddColumn(col, ValuesOf(col));
 				tables.Add(temp);
@@ -1618,8 +1625,10 @@ namespace Squirrel
 		{
 			this.ThrowIfTableIsNull();
 
-			var shuffledTable = new Table();
-			shuffledTable._rows = _rows.OrderBy(r => Guid.NewGuid()).ToList();
+			var shuffledTable = new Table
+			{
+				_rows = _rows.OrderBy(_ => Guid.NewGuid()).ToList()
+			};
 			return shuffledTable;
 		}
 		/// <summary>
@@ -1646,7 +1655,7 @@ namespace Squirrel
 			anotherTable.ThrowIfTableIsNull();
 
 			var result = new Table();
-			for (int i = 0; i < RowCount; i++)
+			for (var i = 0; i < RowCount; i++)
 			{
 				if (anotherTable._rows.Any(r => IsSameRow(r, _rows[i])))
 					result.AddRow(_rows[i]);
@@ -1659,7 +1668,7 @@ namespace Squirrel
 		/// <param name="anotherTable">Other table for which the </param>
 		/// <returns>true if the argument table is a subset of the table object
 		/// which called the method</returns>
-		/// <example>bool subet = t1.IsSubset(t2);
+		/// <example>bool subset = t1.IsSubset(t2);
 		/// Where t1 and t2 are table instances.</example>
 		public bool IsSubset(Table anotherTable)
 		{
@@ -1686,7 +1695,7 @@ namespace Squirrel
 
 		#region Natural Query
 		/// <summary>
-		/// Some times we are interested to find rows in the table that match a given condition 
+		/// Sometimes we are interested to find rows in the table that match a given condition 
 		/// </summary>
 		/// <param name="query"></param>
 		/// <returns></returns>

@@ -10,11 +10,152 @@ using System.Threading.Tasks;
 
 namespace Squirrel
 {
+    
     /// <summary>
     /// The class that holds the data I/O methods for several file formats.
     /// </summary>
     public static class DataAcquisition
     {
+        /// <summary>
+        /// Loads data from a CSV file with custom delimiters.
+        /// </summary>
+        /// <param name="csvFileName">The name of the CSV file.</param>
+        /// <param name="delimiter">The delimiter used in the CSV file.</param>
+        /// <returns>A table with all the values from the CSV file.</returns>
+        public static Table LoadCsv(string csvFileName, char delimiter)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from a Google Sheets document.
+        /// </summary>
+        /// <param name="spreadsheetId">The ID of the Google Sheets document.</param>
+        /// <param name="range">The range of cells to load.</param>
+        /// <returns>A table with all the values from the Google Sheets document.</returns>
+        public static Table LoadGoogleSheets(string spreadsheetId, string range)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from an API endpoint.
+        /// </summary>
+        /// <param name="apiUrl">The URL of the API endpoint.</param>
+        /// <returns>A table with all the values from the API response.</returns>
+        public static Table LoadApi(string apiUrl)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from a MongoDB collection.
+        /// </summary>
+        /// <param name="connectionString">The connection string to the MongoDB database.</param>
+        /// <param name="databaseName">The name of the MongoDB database.</param>
+        /// <param name="collectionName">The name of the MongoDB collection.</param>
+        /// <returns>A table with all the values from the MongoDB collection.</returns>
+        public static Table LoadMongoDb(string connectionString, string databaseName, string collectionName)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from an Excel file with multiple sheets.
+        /// </summary>
+        /// <param name="fileName">The name of the Excel file.</param>
+        /// <param name="sheetNames">The names of the sheets to load.</param>
+        /// <returns>A table with all the values from the specified sheets.</returns>
+        public static Table LoadExcelWithMultipleSheets(string fileName, params string[] sheetNames)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from a SQL Server database.
+        /// </summary>
+        /// <param name="connectionString">The connection string to the SQL Server database.</param>
+        /// <param name="query">The SQL query to execute.</param>
+        /// <returns>A table with all the values from the SQL Server database.</returns>
+        public static Table LoadSqlServer(string connectionString, string query)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from a SQLite database.
+        /// </summary>
+        /// <param name="connectionString">The connection string to the SQLite database.</param>
+        /// <param name="query">The SQL query to execute.</param>
+        /// <returns>A table with all the values from the SQLite database.</returns>
+        public static Table LoadSQLite(string connectionString, string query)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from a JSON file.
+        /// </summary>
+        /// <param name="jsonFileName">The name of the JSON file.</param>
+        /// <returns>A table with all the values from the JSON file.</returns>
+        public static Table LoadJson(string jsonFileName)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from an XML file.
+        /// </summary>
+        /// <param name="xmlFileName">The name of the XML file.</param>
+        /// <returns>A table with all the values from the XML file.</returns>
+        public static Table LoadXml(string xmlFileName)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from a Parquet file.
+        /// </summary>
+        /// <param name="parquetFileName">The name of the Parquet file.</param>
+        /// <returns>A table with all the values from the Parquet file.</returns>
+        public static Table LoadParquet(string parquetFileName)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from an Avro file.
+        /// </summary>
+        /// <param name="avroFileName">The name of the Avro file.</param>
+        /// <returns>A table with all the values from the Avro file.</returns>
+        public static Table LoadAvro(string avroFileName)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+        /// <summary>
+        /// Loads data from a YAML file.
+        /// </summary>
+        /// <param name="yamlFileName">The name of the YAML file.</param>
+        /// <returns>A table with all the values from the YAML file.</returns>
+        public static Table LoadYaml(string yamlFileName)
+        {
+            // Method implementation goes here
+            return new Table();
+        }
+
+
 
         /// <summary>
         /// Deletes the tags from a HTML line
@@ -38,9 +179,11 @@ namespace Squirrel
                         tag = tag + codeLine[i];
                         i++;
                     } while (codeLine[i] != '>');
+
                     tags.Add("<" + tag + ">");
                 }
             }
+
             tags.RemoveAll(t => exceptTheseTags.Contains(t));
             foreach (string k in codeLine.Split(tags.ToArray(), StringSplitOptions.RemoveEmptyEntries))
                 html = html + k + " ";
@@ -69,8 +212,10 @@ namespace Squirrel
                     row.Add(p, anon.GetProperty(p).GetValue(l).ToString());
                 result.Rows.Add(row);
             }
+
             return result;
         }
+
         /// <summary>
         /// Loads the data from an Excel workbook to a table
         /// </summary>
@@ -86,6 +231,7 @@ namespace Squirrel
             //http://code.google.com/p/linqtoexcel/ (Love This!)
             return tab;
         }
+
         /// <summary>
         /// Loads data from fixed column length files.
         /// </summary>
@@ -130,6 +276,7 @@ namespace Squirrel
 
                         start += fieldLengthMap[k];
                     }
+
                     fieldCount--;
                 }
             }
@@ -139,6 +286,7 @@ namespace Squirrel
 
             return thisTable;
         }
+
         /// <summary>
         /// Loads data from file with fixed column length. 
         /// </summary>
@@ -146,7 +294,7 @@ namespace Squirrel
         /// <param name="headersWithLength">Headers with column widths in brackets as shown "name(20),age(2),course(5)"</param>
         /// <returns>A table with all the values loaded.</returns>
         /// <example>Table data = DataAcquisition.LoadFixedLength("data.txt","name(20),age(2),course(5)");</example>
-        public static Table LoadFixedLength(string fileName, string headersWithLength)// "name(20),age(2),course(5)"
+        public static Table LoadFixedLength(string fileName, string headersWithLength) // "name(20),age(2),course(5)"
         {
             string[] tokens = headersWithLength.Split(',');
 
@@ -157,8 +305,10 @@ namespace Squirrel
                 string[] internalTokens = tok.Split(new char[] { '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
                 expectations.Add(internalTokens[0], Convert.ToInt16(internalTokens[1]));
             }
+
             return LoadFixedLength(fileName, expectations);
         }
+
         /// <summary>
         /// Loads data from .arff format
         /// Data in Weka toolkit is from .arff source
@@ -179,8 +329,10 @@ namespace Squirrel
                 if (line.Trim().ToLower().StartsWith("@data"))
                     break;
             }
-            List<string> dataLines = File.ReadAllLines(fileName).Where(rline => !rline.Trim().StartsWith("%") && !rline.Trim().StartsWith("@"))
-                                          .ToList();
+
+            List<string> dataLines = File.ReadAllLines(fileName)
+                .Where(rline => !rline.Trim().StartsWith("%") && !rline.Trim().StartsWith("@"))
+                .ToList();
 
             foreach (string dataLine in dataLines)
             {
@@ -199,22 +351,23 @@ namespace Squirrel
 
         private static List<string> getColumnsFromHtmlTable(string tableCode)
         {
-            
+
             string pattern = "<th>.*</th>";
             if (tableCode.Contains("<th>"))
             {
-                return Regex.Matches(tableCode, pattern).Cast<Match>().ElementAt(0).Value.Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
+                return Regex.Matches(tableCode, pattern).Cast<Match>().ElementAt(0).Value
+                    .Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(t => t.Trim())
                     .Where(t => t.Length > 0)
                     .ToList();
-               
+
             }
             else
             {
 
 
-               
-                return tableCode.Substring(tableCode.IndexOf("<tr>")+5,tableCode.IndexOf("</tr>")-6)
+
+                return tableCode.Substring(tableCode.IndexOf("<tr>") + 5, tableCode.IndexOf("</tr>") - 6)
                     .Split(new string[] { "<td>", "</td>" }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(t => t.Trim())
                     .Where(t => t.Length > 0)
@@ -229,7 +382,8 @@ namespace Squirrel
         private static List<Dictionary<string, string>> getRowsFromHtmlTable(List<string> columns, string tableCode)
         {
             List<Dictionary<string, string>> AllTheRows = new List<Dictionary<string, string>>();
-            tableCode = tableCode.Substring(tableCode.IndexOf("</tr>", StringComparison.InvariantCultureIgnoreCase) + 5);
+            tableCode = tableCode.Substring(tableCode.IndexOf("</tr>", StringComparison.InvariantCultureIgnoreCase) +
+                                            5);
             var rows = Regex.Matches(tableCode, "<td>.*</td>").Cast<Match>().ElementAt(0)
                 .Value.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(t => t.Trim())
@@ -237,9 +391,9 @@ namespace Squirrel
 
 
             var lines = Enumerable.Range(0, rows.Count / columns.Count)
-                             .Select(t => rows.Skip(t * columns.Count).Take(columns.Count))
+                .Select(t => rows.Skip(t * columns.Count).Take(columns.Count))
 
-                             .ToList();
+                .ToList();
             int currentIndex = 0;
 
             for (int i = currentIndex; i < rows.Count / columns.Count; i++)
@@ -248,8 +402,10 @@ namespace Squirrel
                 for (int j = 0; j < columns.Count; j++)
                 {
                     current.Add(columns[j], lines[i].ElementAt(j));
-                    current[columns[j]] = current[columns[j]].Substring(current[columns[j]].LastIndexOf("<td>") + 4).Trim();
+                    current[columns[j]] = current[columns[j]].Substring(current[columns[j]].LastIndexOf("<td>") + 4)
+                        .Trim();
                 }
+
                 currentIndex = i * columns.Count;
 
                 AllTheRows.Add(current);
@@ -257,6 +413,7 @@ namespace Squirrel
 
             return AllTheRows;
         }
+
         /// <summary>
         /// Loads a HTML table to the corresponding Table container
         /// </summary>
@@ -270,7 +427,8 @@ namespace Squirrel
             htmlReader.Close();
             //sometimes the tags "<td> <th> and <tr> can have extra attributes. We don't care for that. we have to get rid of that
             totalTable = totalTable.Replace("<td ", "<td><").Replace("<th ", "<th><").Replace("<tr ", "<tr><");
-            totalTable = StripTags(totalTable, new List<string>() { "<td>", "</td>", "<th>", "</th>", "<tr>", "</tr>" });
+            totalTable = StripTags(totalTable,
+                new List<string>() { "<td>", "</td>", "<th>", "</th>", "<tr>", "</tr>" });
 
             totalTable = totalTable.Replace("\r", string.Empty).Replace("\t", string.Empty).Replace("\n", string.Empty);
             var cols = getColumnsFromHtmlTable(totalTable);
@@ -279,6 +437,7 @@ namespace Squirrel
 
             return loaded;
         }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<string> GetValues(ReadOnlySpan<char> line, ReadOnlySpan<char> delims)
         {
@@ -304,9 +463,9 @@ namespace Squirrel
             AddValue(line.Slice(startIndex), values);
             return values;
 
-            
 
-          
+
+
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -351,6 +510,7 @@ namespace Squirrel
 
             return new string(result.Slice(0, resultIndex));
         }
+
         /// <summary>
         /// Returns a list of values from each CSV row
         /// </summary>
@@ -382,6 +542,7 @@ namespace Squirrel
 
                 }
             }
+
             List<string> values = new List<string>();
 
             for (int i = 0; i < toks.Length; i++)
@@ -390,7 +551,8 @@ namespace Squirrel
                 //    continue;
                 if (!startingWithQuote.Contains(i) && !endingWithQuote.Contains(i))
                 {
-                    values.Add(RemoveDoubleQuoteFromEndIfPossible(toks[i].Replace("\"\"", "\"")));//.Trim(new char[] { ' ', '"' }));
+                    values.Add(RemoveDoubleQuoteFromEndIfPossible(toks[i].Replace("\"\"",
+                        "\""))); //.Trim(new char[] { ' ', '"' }));
                 }
 
 
@@ -405,6 +567,7 @@ namespace Squirrel
 
 
                         }
+
                         string concatenatedValue = innerToks.Aggregate((m, n) => m + "," + n);
                         concatenatedValue = concatenatedValue.Substring(1, concatenatedValue.Length - 2);
                         values.Add(RemoveDoubleQuoteFromEndIfPossible(concatenatedValue.Replace("\"\"", "\"")));
@@ -420,6 +583,7 @@ namespace Squirrel
                         values.Add(toks[i]);
                 }
             }
+
             return values.ToList();
 
 
@@ -455,10 +619,13 @@ namespace Squirrel
                 {
                     rowRep.Add(col, row[col].ToString());
                 }
+
                 temp.AddRow(rowRep);
             }
+
             return temp;
         }
+
         /// <summary>
         /// Loads Data from Tab Separated File
         /// </summary>
@@ -486,7 +653,7 @@ namespace Squirrel
             while ((line = csvReader.ReadLine()) != null)
             {
 
-                if (hasHeader && lineNumber == 0)//reading the column headers
+                if (hasHeader && lineNumber == 0) //reading the column headers
                 {
                     if (line.Contains("\""))
                         line = "\"" + line + "\"";
@@ -507,7 +674,7 @@ namespace Squirrel
                         //    values = GetValues(line, delimeters).ToArray();
                         //else
 
-                            values = line.Split(delimeters, StringSplitOptions.None);
+                        values = line.Split(delimeters, StringSplitOptions.None);
 
                         if (values.Length == columns.Count)
                         {
@@ -516,17 +683,25 @@ namespace Squirrel
                             {
                                 try
                                 {
-                                    tempRow.Add(columns.ElementAt(i), values[i]);// RemoveDoubleQuoteFromEndIfPossible(values[i].Trim().Replace("\"\"", "\"")));
+                                    tempRow.Add(columns.ElementAt(i),
+                                        values[
+                                            i]); // RemoveDoubleQuoteFromEndIfPossible(values[i].Trim().Replace("\"\"", "\"")));
                                 }
-                                catch { continue; }
+                                catch
+                                {
+                                    continue;
+                                }
                             }
+
                             loadedCsv.AddRow(tempRow);
                         }
                     }
                 }
             }
+
             return loadedCsv;
         }
+
         private static string RemoveDoubleQuoteFromEndIfPossible(string input)
         {
             //List<int> indices = new List<int>();
@@ -537,8 +712,9 @@ namespace Squirrel
             //if (indices.Count == 2 && indices[0] == 0 && indices[1] == input.Length - 1)
             //    return input.Trim(new char[] { ' ', '"' });
             //else
-                return input;
+            return input;
         }
+
         /// <summary>
         /// Dumps the table in a pretty format to console.
         /// </summary>
@@ -550,8 +726,9 @@ namespace Squirrel
         /// <example>tab.PrettyDump();//The default dump </example>
         /// <example>tab.PrettyDump(header:"Sales Report");//dumping the table with a header</example>
         /// <example>tab.PrettyDump(header:"Sales Report", align:Alignment.Left);//Right alignment is default</example>        
-        public static void PrettyDump(this Table tab, ConsoleColor headerColor = ConsoleColor.Green, ConsoleColor rowColor = ConsoleColor.White,
-                                                      string header = "None", Alignment align = Alignment.Right)
+        public static void PrettyDump(this Table tab, ConsoleColor headerColor = ConsoleColor.Green,
+            ConsoleColor rowColor = ConsoleColor.White,
+            string header = "None", Alignment align = Alignment.Right)
         {
             if (header != "None")
                 Console.WriteLine(header);
@@ -570,6 +747,7 @@ namespace Squirrel
                 if (align == Alignment.Left)
                     Console.Write(" " + col.PadRight(longestLengths[col]) + new string(' ', 4));
             }
+
             Console.WriteLine();
             Console.ForegroundColor = rowColor;
             for (int i = 0; i < tab.RowCount; i++)
@@ -584,9 +762,11 @@ namespace Squirrel
                             Console.Write(" " + tab.Rows[i][col].PadRight(longestLengths[col]) + new string(' ', 4));
                     }
                 }
+
                 Console.WriteLine();
             }
         }
+
         /// <summary>
         /// Returns the tabular representation of a gist 
         /// </summary>
@@ -597,7 +777,7 @@ namespace Squirrel
         {
 
             var dic = gist.ToLookup(g => g.Item1).Select(g => new KeyValuePair<string, IEnumerable<string>>(g.Key,
-                                    g.Select(x => x.Item2 + "=" + x.Item3)));//.Dump();
+                g.Select(x => x.Item2 + "=" + x.Item3))); //.Dump();
             Table gistTable = new Table();
             foreach (var v in dic)
             {
@@ -608,8 +788,10 @@ namespace Squirrel
                     string[] toks = z.Split('=');
                     row.Add(toks[0], toks[1]);
                 }
+
                 gistTable.Rows.Add(row);
             }
+
             return gistTable;
 
 
@@ -628,6 +810,7 @@ namespace Squirrel
             {
                 tableBuilder.AppendLine("<th>" + header + "</th>");
             }
+
             for (int i = 0; i < tab.RowCount; i++)
             {
                 tableBuilder.AppendLine("<tr>");
@@ -635,9 +818,11 @@ namespace Squirrel
                     tableBuilder.AppendLine("<td>" + tab[header][i] + "</td>");
                 tableBuilder.AppendLine("</tr>");
             }
+
             tableBuilder.AppendLine("</table>");
             return tableBuilder.ToString();
         }
+
         /// <summary>
         /// Generates a CSV representation of the table
         /// </summary>
@@ -646,6 +831,7 @@ namespace Squirrel
         {
             return tab.ToValues(',');
         }
+
         /// <summary>
         /// Generates a TSV representation of the table
         /// </summary>
@@ -654,6 +840,7 @@ namespace Squirrel
         {
             return tab.ToValues('\t');
         }
+
         private static string ToValues(this Table tab, char delim)
         {
             Func<string, string> quote = x => "\"" + x + "\"";
@@ -667,11 +854,15 @@ namespace Squirrel
                 {
                     csvOrtsvBuilder.Append(quote(tab[header, i]));
                 }
-                csvOrtsvBuilder.Append(quote(tab[tab.ColumnHeaders.ElementAt(tab.ColumnHeaders.Count - 1), tab.RowCount - 1]));
-                csvOrtsvBuilder.AppendLine();//Push in a new line.
+
+                csvOrtsvBuilder.Append(quote(tab[tab.ColumnHeaders.ElementAt(tab.ColumnHeaders.Count - 1),
+                    tab.RowCount - 1]));
+                csvOrtsvBuilder.AppendLine(); //Push in a new line.
             }
+
             return csvOrtsvBuilder.ToString();
         }
+
         /// <summary>
         /// Generates a DataTable out of the current Table 
         /// </summary>
@@ -691,6 +882,7 @@ namespace Squirrel
 
             return thisTable;
         }
+
         /// <summary>
         /// Returns the string representations of the table as a ARFF file. 
         /// </summary>
@@ -702,9 +894,10 @@ namespace Squirrel
             foreach (string header in tab.ColumnHeaders)
             {
                 arffBuilder.AppendLine("@attribute " + header + " {" + tab.ValuesOf(header)
-                                                                          .Distinct()
-                                                                          .Aggregate((a, b) => a + "," + b) + "}");
+                    .Distinct()
+                    .Aggregate((a, b) => a + "," + b) + "}");
             }
+
             arffBuilder.AppendLine("@data");
             for (int i = 0; i < tab.RowCount; i++)
             {
@@ -713,6 +906,7 @@ namespace Squirrel
                     values.Add(tab[header][i]);
                 arffBuilder.AppendLine(values.Aggregate((a, b) => a + "," + b));
             }
+
             return arffBuilder.ToString();
         }
 
