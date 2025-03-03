@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudipta Mukherjee - Resume</title>
+    <style>
+        :root {
+            --github-dark: #0d1117;
+            --github-dark-secondary: #161b22;
+            --github-border: #30363d;
+            --github-text: #c9d1d9;
+            --github-text-secondary: #8b949e;
+            --github-green: #238636;
+            --github-blue: #58a6ff;
+            --github-purple: #8957e5;
+            --github-orange: #f0883e;
+            --github-red: #f85149;
+            --github-yellow: #e3b341;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--github-dark);
+            color: var(--github-text);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 28% 70%;
+            gap: 2%;
+        }
+        
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--github-border);
+            padding-bottom: 1rem;
+            grid-column: 1 / -1;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--github-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            font-size: 1.6rem;
+            color: var(--github-yellow);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--github-border);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            color: var(--github-purple);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar {
+            background-color: var(--github-dark-secondary);
+            border-radius: 6px;
+            padding: 1.5rem;
+            border: 1px solid var(--github-border);
+        }
+        
+        .main-content {
+            background-color: var(--github-dark-secondary);
+            border-radius: 6px;
+            padding: 1.5rem;
+            border: 1px solid var(--github-border);
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--github-blue);
+            border: 1px solid rgba(88, 166, 255, 0.4);
+            border-radius: 2rem;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem 0.25rem 0.25rem 0;
+            font-size: 0.85rem;
+        }
+        
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+        
+        .job-title {
+            font-weight: bold;
+            color: var(--github-green);
+        }
+        
+        .company-name {
+            color: var(--github-orange);
+        }
+        
+        .date-range {
+            color: var(--github-text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding-left: 1rem;
+        }
+        
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--github-blue);
+            font-weight: bold;
+        }
+        
+        .job-experience {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--github-border);
+        }
+        
+        .job-experience:last-child {
+            border-bottom: none;
+        }
+        
+        .book {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--github-border);
+        }
+        
+        .book:last-child {
+            border-bottom: none;
+        }
+        
+        .book-title {
+            color: var(--github-blue);
+            font-weight: bold;
+        }
+        
+        .book-year {
+            color: var(--github-text-secondary);
+        }
+        
+        .talk {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--github-border);
+        }
+        
+        .talk:last-child {
+            border-bottom: none;
+        }
+        
+        .talk-title {
+            color: var(--github-blue);
+            font-weight: bold;
+        }
+        
+        .talk-event {
+            color: var(--github-purple);
+        }
+        
+        .talk-year {
+            color: var(--github-text-secondary);
+        }
+        
+        .open-source {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(35, 134, 54, 0.1);
+            border: 1px solid rgba(35, 134, 54, 0.4);
+            border-radius: 6px;
+        }
+        
+        .download-badge {
+            display: inline-block;
+            background-color: var(--github-dark);
+            color: var(--github-green);
+            border-radius: 2rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+        
+        .recognition {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(137, 87, 229, 0.1);
+            border: 1px solid rgba(137, 87, 229, 0.4);
+            border-radius: 6px;
+        }
+        
+        a {
+            color: var(--github-blue);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .contact-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-icon {
+            margin-right: 0.5rem;
+            color: var(--github-text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sudipta Mukherjee</h1>
+        <!--<p>Founding Engineer at HoundDog.ai | Author | Compiler Expert | ML Enthusiast</p>-->
+    </header>
+    
+    <div class="container">
+        <div class="sidebar">
+            <h2>🧰 Technologies</h2>
+            
+            <div class="skill-category">
+                <h3>Programming Languages</h3>
+                <div>
+                    <span class="skill-tag">C</span>
+                    <span class="skill-tag">C++</span>
+                    <span class="skill-tag">C#</span>
+                    <span class="skill-tag">F#</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Kotlin</span>
+                    <span class="skill-tag">Rust</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Unit Testing</h3>
+                <div>
+                    <span class="skill-tag">NUnit</span>
+                    <span class="skill-tag">MSTest</span>
+                    <span class="skill-tag">Expecto</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Frameworks</h3>
+                <div>
+                    <span class="skill-tag">LINQ</span>
+                    <span class="skill-tag">Roslyn</span>
+                    <span class="skill-tag">TreeSitter</span>
+                    <span class="skill-tag">Rx.NET</span>
+                    <span class="skill-tag">TPL</span>
+                    <span class="skill-tag">STL</span>
+                    <span class="skill-tag">Pandas</span>
+                    <span class="skill-tag">NumPy</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Databases</h3>
+                <div>
+                    <span class="skill-tag">SQL Server</span>
+                    <span class="skill-tag">SQLLITE</span>
+                    <span class="skill-tag">Oracle</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Tech Writing</h3>
+                <div>
+                    <span class="skill-tag">Markdown</span>
+                    <span class="skill-tag">Asciidoctor</span>
+                    <span class="skill-tag">Mermaid</span>
+                    <span class="skill-tag">GraphViz</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Machine Learning</h3>
+                <div>
+                    <span class="skill-tag">ML.NET</span>
+                    <span class="skill-tag">Accord.NET</span>
+                    <span class="skill-tag">PyTorch</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Versioning</h3>
+                <div>
+                    <span class="skill-tag">Git</span>
+                </div>
+            </div>
+            
+            <div class="open-source">
+                <h3>🌟 Open Source Project</h3>
+                <p>Author of <a href="https://github.com/sudipto80/Squirrel">Squirrel</a></p>
+                <p>The only Cross Platform Agile Data analytics Framework for .NET</p>
+                <p><a href="https://www.nuget.org/packages/TableAPI/">NuGet Downloads</a> <span class="download-badge">6200+</span></p>
+            </div>
+            
+            <div class="recognition">
+                <h3>🏆 Recognition</h3>
+                <p><a href="https://www.slideshare.net/sudipto80/sudipta-mukherjee-certificate-148757386">Recognized F# Expert</a></p>
+                <p>Granted for contribution to F# Eco system on Applied F# Challenge.</p>
+            </div>
+            
+            <h2>📚 Education</h2>
+            <h3>B.E. Electronics and Communication Engineering</h3>
+            <p>Vidyasagar University, 2004</p>
+            <p>GPA: 8.0/10</p>
+            
+            <h3>Certifications</h3>
+            <ul>
+                <li><a href="https://confirm.udacity.com/35SHEQVQ">Python Foundation (Udacity)</a></li>
+                <li><a href="http://www.slideshare.net/sudipto80/coursera-ml-2016-59666402">Machine Learning (Coursera, Andrew Ng)</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <h2>💼 Professional Experience</h2>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Founding Engineer</span> • <span class="company-name">HoundDog.ai</span> • <span class="date-range">May 2023 – Present</span></p>
+                <ul>
+                    <li>Created and maintained a code scanner for detecting vulnerabilities and data leaks written using Spoon, Roslyn and TreeSitter for multiple programming languages like C#, Java, Python, Kotlin and Ruby.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Freelance Software Developer</span> • <span class="date-range">July 2022 – May 2023</span></p>
+                <ul>
+                    <li>Worked as a freelance software engineer on projects in source code analysis and process mining domain using C#, F# and Python.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Lead Backend Developer</span> • <span class="company-name">Phosphor.co</span> • <span class="date-range">Dec 2021 – July 2022</span></p>
+                <ul>
+                    <li>Implemented several features of the domain specific language for financial transaction modelling language using Python and F#.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Compiler Tech Lead</span> • <span class="company-name">OutSystems</span> • <span class="date-range">March 2021 – Oct 2021</span></p>
+                <ul>
+                    <li>Helped create a new team for making a massive rewrite of the code generation infrastructure of the transpiler that translates C# and JS code from OutSystems Language.</li>
+                    <li>Led the team of four people.</li>
+                    <li>Made the code generation fast, discoverable, and optimal.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Senior Compiler Engineer</span> • <span class="company-name">RainCode Labs</span> • <span class="date-range">Nov 2016 – March 2021</span></p>
+                <ul>
+                    <li>Worked in the code generation and semantic checker parts of the new compiler for legacy programming languages (Mostly 4GLs).</li>
+                    <li>Created a new compiler for an old language with MSIL as the target platform.</li>
+                    <li>Responsible for all code generation, semantic checks, and error reporting (compiler backend).</li>
+                    <li>Automated documentation for the user manual for all the compiler products, ensuring docs automatically updated with code changes.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Senior Engineer</span> • <span class="company-name">Epicor</span> • <span class="date-range">Aug 2015 – Aug 2016</span></p>
+                <ul>
+                    <li>Worked in the tools and performance engineering group to identify bottlenecks in several projects.</li>
+                    <li>Created a Source Code Analytics system using Roslyn and JavaScript Data Visualization.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">System Software Engineer II</span> • <span class="company-name">HP</span> • <span class="date-range">March 2010 – Jul 2015</span></p>
+                <ul>
+                    <li>Designed and implemented a Domain Specific Language (DSL) for defining UI constraints for different type of printers.</li>
+                    <li>Replaced old XML based system, reducing typing needs drastically with a flat learning curve due to its resemblance to English.</li>
+                    <li>Invented a programmable and distributable key value pair storage format called "Sponge" for efficiently storing iterative and repetitive data, using 75% less storage space than equivalent XML documents.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Technical Lead</span> • <span class="company-name">Ness Technologies</span> • <span class="date-range">Apr 2009 – March 2010</span></p>
+                <ul>
+                    <li>Built a data structure called "Affinity Map" and used it in a supervised learning algorithm to auto-categorize banking transactions with 85% accuracy.</li>
+                    <li>Created a static code analysis tool that could find near duplicate code and supported a part of Code Query Language, helping identify code blocks to refactor to reduce technical debt.</li>
+                    <li>Mentored and managed a team of developers and testers.</li>
+                </ul>
+            </div>
+            
+            <div class="job-experience">
+                <p><span class="job-title">Associate Consultant</span> • <span class="company-name">Tata Consultancy Services</span> • <span class="date-range">Nov 2004 – March 2009</span></p>
+                <ul>
+                    <li>Implemented Affiliate Management Platform and Web Application for Citibank, starting as a developer and becoming team lead for a group of 5 people.</li>
+                    <li>Created a data mining tool for the project support team that could read and classify support ticket emails into different problem domains and forward them to appropriate support engineers.</li>
+                </ul>
+            </div>
+            
+            <h2>📕 Published Books</h2>
+            
+            <div class="book">
+                <p><span class="book-title"><a href="https://link.springer.com/book/10.1007/978-1-4842-6543-7">ML.NET Revealed</a></span> <span class="book-year">(2020)</span></p>
+                <p>A hands-on guide to begin your adventure in Machine Learning using open source, cross platform ML.NET framework.</p>
+            </div>
+            
+            <div class="book">
+                <p><span class="book-title"><a href="https://link.springer.com/book/10.1007/978-1-4842-1925-6">Source Code Analytics</a></span> <span class="book-year">(2017)</span></p>
+                <p>A hands-on guide to analyze source code using meta-programming with Microsoft Roslyn.</p>
+            </div>
+            
+            <div class="book">
+                <p><span class="book-title"><a href="https://www.goodreads.com/book/show/29382948-f-for-machine-learning-essentials">F# for Machine Learning Essentials</a></span> <span class="book-year">(2016)</span></p>
+                <p>Solving several Machine Learning problems from ground up using F#.</p>
+                <p><em>Foreword by Dr. Ralf Herbrich, then Director of Machine Learning Science, Amazon</em></p>
+            </div>
+            
+            <div class="book">
+                <p><span class="book-title"><a href="https://www.amazon.in/Thinking-LINQ-Harnessing-Programming-Applications-ebook/dp/B01JFTOQ2O">Thinking in LINQ</a></span> <span class="book-year">(2014)</span></p>
+                <p>Several problems from different domains are solved using LINQ and C#, to show how functional programming concepts can lead to cleaner, concise and maintainable code to solve complex problems.</p>
+            </div>
+            
+            <div class="book">
+                <p><span class="book-title"><a href="https://www.amazon.com/NET-Generics-4-0-Beginners-Guide-ebook/dp/B0072HDMSQ">.NET Generics Beginners Guide</a></span> <span class="book-year">(2012)</span></p>
+                <p>Generics programming for new .NET developers.</p>
+                <p><em>Foreword by Dr. Don Syme and Dr. Andrew Kennedy from Microsoft Research, UK</em></p>
+            </div>
+            
+            <div class="book">
+                <p><span class="book-title"><a href="https://www.amazon.in/Data-Structures-Using-Problems-Solutions/dp/0070667659">Data Structure using C: 1000 Problems and Solutions</a></span> <span class="book-year">(2008)</span></p>
+                <p>An undergraduate textbook on Data Structure and related algorithms.</p>
+                <p><em>Translated to <a href="https://www.amazon.com/data-structure-C-language-version-Questions/dp/7302224846">simplified Chinese</a></em></p>
+            </div>
+            
+            <h2>🎤 Conference Talks</h2>
+            
+            <div class="talk">
+                <p><span class="talk-title">Meta Programming for the Masses</span> • <span class="talk-event"><a href="https://2020.programming-conference.org/details/programming-2020-tutorials/5/Meta-Programming-for-the-masses">Programming 2020</a></span></p>
+                <p><em>Cancelled due to COVID-19. Will try to deliver it in person at a later date.</em></p>
+            </div>
+            
+            <div class="talk">
+                <p><span class="talk-title">Practical Machine Learning using F# (Workshop)</span> • <span class="talk-event"><a href="https://skillsmatter.com/conferences/10869-f-sharp-exchange-2019#program">F# Exchange 2019</a></span> • <span class="talk-year">London</span></p>
+                <p>Workshop based on the F# for Machine Learning Essentials book.</p>
+            </div>
+            
+            <div class="talk">
+                <p><span class="talk-title">Creating DSLs using Functional Kotlin</span> • <span class="talk-event"><a href="https://confengine.com/functional-conf-2018/proposal/6468/creating-dsls-in-functional-kotlin">Functional Programming Conference 2018</a></span></p>
+                <p>A talk on how to create DSLs using Kotlin.</p>
+            </div>
+            
+            <div class="talk">
+                <p><span class="talk-title">Practical Machine Learning using F#</span> • <span class="talk-event"><a href="https://confengine.com/functional-conf-2015/proposal/1211/practical-machine-learning-in-f">Functional Programming Conference 2015</a></span></p>
+                <p><a href="https://www.youtube.com/watch?v=r0IWKboD7fE">Watch the talk</a> based on "F# for Machine Learning Essentials" book.</p>
+            </div>
+            
+            <div class="talk">
+                <p><span class="talk-title">Thinking in LINQ</span> • <span class="talk-event"><a href="https://confengine.com/functional-conf-2014/proposal/690/thinking-in-linq">Functional Programming Conference 2014</a></span></p>
+                <p><a href="https://www.youtube.com/watch?v=cIcYZ9t9o2Q">Watch the talk</a> based on "Thinking in LINQ" book.</p>
+            </div>
+            
+            <h2>🔍 Core Interests</h2>
+            <div>
+                <span class="skill-tag">Framework Design</span>
+                <span class="skill-tag">Data Structures</span>
+                <span class="skill-tag">Algorithms</span>
+                <span class="skill-tag">Tools Development</span>
+                <span class="skill-tag">Text Processing</span>
+                <span class="skill-tag">Machine Learning</span>
+                <span class="skill-tag">Domain Specific Languages</span>
+                <span class="skill-tag">Unit Testing</span>
+                <span class="skill-tag">Usability</span>
+                <span class="skill-tag">Refactoring</span>
+                <span class="skill-tag">Web Crawlers</span>
+                <span class="skill-tag">Data Analysis</span>
+                <span class="skill-tag">Technical Writing</span>
+                <span class="skill-tag">Sketching</span>
+                <span class="skill-tag">Geometry</span>
+                <span class="skill-tag">Programming Language Design</span>
+                <span class="skill-tag">Meta Programming</span>
+                <span class="skill-tag">Software Forensics</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
