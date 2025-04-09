@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
-using NCalc2; 
+using NCalc; 
 using Squirrel.Cleansing;
 using TableAPI;
 
@@ -240,6 +241,23 @@ namespace Squirrel
 			return filteredTable;
 	  
 		}
+
+		/// <summary>
+		/// Returns the table whose name is given if found from a list of tables 
+		/// </summary>
+		/// <param name="tables">List of tables to search</param>
+		/// <param name="name">The name of the table to search</param>
+		/// <param name="ignoreCase">Should we ignore case while searching</param>
+		/// <returns></returns>
+	
+		public static Table GetTableByName(IEnumerable<Table> tables, string name, bool ignoreCase)
+		{
+			return tables.FirstOrDefault(t => string.Equals(t.Name, name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal)) 
+			       ?? new EmptyTable();
+		}
+		
+			 
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -395,7 +413,7 @@ namespace Squirrel
 		/// <summary>
 		/// Sorts the current table by the given column. 
 		/// </summary>
-		/// <param name="columnName">The column to sorty by</param>
+		/// <param name="columnName">The column to sort by</param>
 		/// <param name="smartSort"></param>
 		/// <param name="smartDefaultFile"></param>
 		/// <param name="how">Whether the sorting has to be done in ascending or in descending order or not.</param>
@@ -516,15 +534,17 @@ namespace Squirrel
 		/// <returns></returns>
 		public List<T> ValuesOf<T>(string columnName,Func<string,T> transformer)
         {
-			this.ThrowIfTableIsNull();
-			this.ThrowIfColumnsAreNotPresentInTable(columnName);
+	        ArgumentNullException.ThrowIfNull(columnName, nameof(columnName));
+	        ArgumentNullException.ThrowIfNull(transformer, nameof(transformer));
+	        this.ThrowIfTableIsNull();
+	        this.ThrowIfColumnsAreNotPresentInTable(columnName);
 			
 			return _rows.Select(t => transformer(t[columnName]))
 					   .ToList();
 		}
 
 
-  
+		
 
 		/// <summary>
 		/// Returns only the numeric columns
@@ -561,6 +581,7 @@ namespace Squirrel
 					return new HashSet<string>();
 				}
 			}
+			set => throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -1249,6 +1270,8 @@ namespace Squirrel
 	
 			return tables;
 		}
+		
+	
 
 		public Table Explode(string columnName)
         {

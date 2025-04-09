@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TableAPI;
 
 namespace Squirrel
 {
@@ -97,8 +98,10 @@ namespace Squirrel
         public static Table LoadSQLite(string connectionString, string query)
         {
             // Method implementation goes here
+            
             return new Table();
         }
+       
 
         /// <summary>
         /// Loads data from a JSON file.
@@ -199,17 +202,25 @@ namespace Squirrel
         /// <typeparam name="T">Type of the anonynous type</typeparam>
         /// <param name="list">list of anonynous objects</param>
         /// <returns>A table with rows created from a list of anonymnous objects</returns>
+        /// <summary>
+        /// Creates a table out of a list of anonymous type objects.
+        /// This is useful when you are creating a bunch of objects
+        /// of anonymous type and want to
+        /// </summary>
+        /// <typeparam name="T">Type of the anonymous type</typeparam>
+        /// <param name="list">list of anonymous objects</param>
+        /// <returns>A table with rows created from a list of anonymous objects</returns>
         public static Table ToTableFromAnonList<T>(this IEnumerable<T> list) where T : class
         {
-            Table result = new Table();
-
-            List<string> props = list.ElementAt(0).GetType().GetProperties().Select(l => l.Name).ToList();
-            Type anon = list.ElementAt(0).GetType();
+            Table result = new();
+            var firstType = list.First().GetType();
+            List<string> props = firstType.GetProperties().Select(l => l.Name).ToList();
+            
             foreach (var l in list)
             {
-                Dictionary<string, string> row = new Dictionary<string, string>();
+                Dictionary<string, string> row = new();
                 foreach (var p in props)
-                    row.Add(p, anon.GetProperty(p).GetValue(l).ToString());
+                    row.Add(p, firstType.GetProperty(p)!.GetValue(l)!.ToString()!);
                 result.Rows.Add(row);
             }
 
@@ -308,6 +319,7 @@ namespace Squirrel
 
             return LoadFixedLength(fileName, expectations);
         }
+       
 
         /// <summary>
         /// Loads data from .arff format
@@ -324,14 +336,15 @@ namespace Squirrel
             string line = string.Empty;
             while ((line = arffReader.ReadLine()) != null)
             {
-                if (line.Trim().ToLower().StartsWith("@attribute"))
+                var trimmedLine = line.Trim().ToLower();
+                if (trimmedLine.StartsWith("@attribute"))
                     columnHeaders.Add(line.Split(' ')[1]);
-                if (line.Trim().ToLower().StartsWith("@data"))
+                if (trimmedLine.StartsWith("@data"))
                     break;
             }
 
-            List<string> dataLines = File.ReadAllLines(fileName)
-                .Where(rline => !rline.Trim().StartsWith("%") && !rline.Trim().StartsWith("@"))
+            List<string> dataLines = File.ReadLines(fileName)
+                .Where(line => !line.TrimStart().StartsWith("%") && !line.TrimStart().StartsWith("@"))
                 .ToList();
 
             foreach (string dataLine in dataLines)
@@ -348,6 +361,8 @@ namespace Squirrel
 
             return result;
         }
+        
+       
 
         private static List<string> getColumnsFromHtmlTable(string tableCode)
         {
@@ -437,10 +452,12 @@ namespace Squirrel
 
             return loaded;
         }
+      
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static List<string> GetValues(ReadOnlySpan<char> line, ReadOnlySpan<char> delims)
+        public static List<string> GetValues(ReadOnlySpan<char> line, ReadOnlySpan<char> delims, string prefix = "")
         {
+            line = prefix + line.ToString() ;
             var values = new List<string>();
             bool inQuotes = false;
             int startIndex = 0;
@@ -644,7 +661,9 @@ namespace Squirrel
         /// <returns>A table loaded with all the values in the file.</returns>
         public static Table LoadFlatFile(string fileName, bool hasHeader, char[] delimeters)
         {
-
+            string prefix = "";
+            string suffix = "";
+            string lastOne = "";
             Table loadedCsv = new Table();
             StreamReader csvReader = new StreamReader(fileName);
             string line = string.Empty;
@@ -653,13 +672,14 @@ namespace Squirrel
             while ((line = csvReader.ReadLine()) != null)
             {
 
+            
                 if (hasHeader && lineNumber == 0) //reading the column headers
                 {
-                    if (line.Contains("\""))
-                        line = "\"" + line + "\"";
+                    //if (line.Contains("\""))
+                    //    line = "\"" + line + "\"";
                     //Because sometimes the column header can have a comma in them
                     //and that can spoil the order
-                    GetValues(line, delimeters).ForEach(col => columns.Add(col));
+                    GetValues(line, delimeters, prefix).ForEach(col => columns.Add(col));
                     //  line.Split(delimeters, StringSplitOptions.None)
                     //    .ToList()
                     //  .ForEach(col => columns.Add(col.Trim(new char[] { '"', ' ' })));
@@ -674,26 +694,47 @@ namespace Squirrel
                         //    values = GetValues(line, delimeters).ToArray();
                         //else
 
-                        values = line.Split(delimeters, StringSplitOptions.None);
+
+                        values = GetValues(line, delimeters, prefix).ToArray();
+
+                        if (values.Length == 0)
+                            values = line.Split(delimeters, StringSplitOptions.None);
 
                         if (values.Length == columns.Count)
                         {
-                            Dictionary<string, string> tempRow = new Dictionary<string, string>();
-                            for (int i = 0; i < values.Length; i++)
+                            lastOne = values.Last();//.Substring(1);
+                            //lastOne = lastOne.Substring(0, lastOne.Length - 1);
+                            
+                            if (lastOne.StartsWith("\"") || lastOne.EndsWith("\""))
                             {
-                                try
-                                {
-                                    tempRow.Add(columns.ElementAt(i),
-                                        values[
-                                            i]); // RemoveDoubleQuoteFromEndIfPossible(values[i].Trim().Replace("\"\"", "\"")));
-                                }
-                                catch
-                                {
-                                    continue;
-                                }
+                                            
+                                prefix = prefix + line;
+                                continue;
                             }
+                           
+                            Dictionary<string, string> tempRow = new Dictionary<string, string>();
+                                for (int i = 0; i < values.Length; i++)
+                                {
+                                    try
+                                    {
+                                        tempRow.Add(columns.ElementAt(i),
+                                            values[
+                                                i]); // RemoveDoubleQuoteFromEndIfPossible(values[i].Trim().Replace("\"\"", "\"")));
+                                    }
+                                    catch
+                                    {
+                                        continue;
+                                    }
+                                }
+                                
+                                loadedCsv.AddRow(tempRow);
+                                prefix = "";
+                            
 
-                            loadedCsv.AddRow(tempRow);
+                        }
+                        else
+                        {
+                            prefix += line;
                         }
                     }
                 }
@@ -909,6 +950,14 @@ namespace Squirrel
 
             return arffBuilder.ToString();
         }
+
+        /// <summary>
+        /// Converts a table to a RecordTable 
+        /// </summary>
+        /// <param name="tab">The table to be converted</param>
+        /// <typeparam name="T">The type of the record</typeparam>
+        /// <returns>A record table</returns>
+        public static RecordTable<T> AsRecordTable<T>(this Table tab) => RecordTable<T>.FromTable(tab);
 
     }
 }

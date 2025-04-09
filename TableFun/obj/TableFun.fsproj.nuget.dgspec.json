@@ -1,20 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableFun\\TableFun.fsproj": {}
+    "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableFun\\TableFun.fsproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj": {
+    "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj",
         "projectName": "TableAPI",
-        "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj",
+        "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -22,15 +23,15 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netstandard2.0"
+          "net9.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netstandard2.0": {
-            "targetAlias": "netstandard2.0",
+          "net9.0": {
+            "targetAlias": "net9.0",
             "projectReferences": {}
           }
         },
@@ -38,21 +39,25 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
-        "netstandard2.0": {
-          "targetAlias": "netstandard2.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
-            "NCalc2": {
+            "CoreCLR-NCalc": {
               "target": "Package",
-              "version": "[2.1.0, )"
+              "version": "[3.1.253, )"
             },
-            "NETStandard.Library": {
-              "suppressParent": "All",
+            "Microsoft.VisualBasic": {
               "target": "Package",
-              "version": "[2.0.3, )",
-              "autoReferenced": true
+              "version": "[10.3.0, )"
             },
             "Nunit": {
               "target": "Package",
@@ -70,21 +75,27 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.104/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableFun\\TableFun.fsproj": {
+    "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableFun\\TableFun.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableFun\\TableFun.fsproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableFun\\TableFun.fsproj",
         "projectName": "TableFun",
-        "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableFun\\TableFun.fsproj",
+        "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableFun\\TableFun.fsproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableFun\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableFun\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -96,19 +107,25 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\FSharp\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\9.0.104\\FSharp\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netstandard2.0": {
             "targetAlias": "netstandard2.0",
             "projectReferences": {
-              "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj": {
-                "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj"
+              "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj": {
+                "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj"
               }
             }
           }
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "netstandard2.0": {
@@ -117,7 +134,7 @@
             "FSharp.Core": {
               "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
               "target": "Package",
-              "version": "[7.0.300, )",
+              "version": "[9.0.101, )",
               "generatePathProperty": true
             },
             "NETStandard.Library": {
@@ -144,7 +161,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.104\\RuntimeIdentifierGraph.json"
         }
       }
     }

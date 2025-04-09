@@ -6,33 +6,34 @@ using System.Threading.Tasks;
 
 namespace TableAPI
 {
+   
     /// <summary>
     /// 
     /// </summary>
     public enum NormalizationStrategy
     {
         /// <summary>
-        ///  
+        /// Convert to lower case
         /// </summary>
         LowerCase,
         /// <summary>
-        /// 
+        /// Convert to Upper case 
         /// </summary>
         UpperCase,
         /// <summary>
-        /// 
+        /// Convert to Sentence Case
         /// </summary>
         SentenceCase,
         /// <summary>
-        /// 
+        /// Replace with the most frequent one
         /// </summary>
         MostFrequentOne,
         /// <summary>
-        /// 
+        /// Replace with the least frequent one
         /// </summary>
         LeastFrequentOne,
         /// <summary>
-        /// 
+        /// Capture till we encounter the space character
         /// </summary>
         TerminateAtSpace,
         /// <summary>
@@ -56,6 +57,7 @@ namespace TableAPI
     /// </summary>
     public static class Normalize
     {
+        static char[] NUMBERS = new char[]{'0','1','2','3','4','5','6','7','8','9'};
         /// <summary>
         /// Default Special Chars list
         /// </summary>
@@ -71,10 +73,16 @@ namespace TableAPI
         }
         private static string TillSpace(this string text )
         {
-            if (text.IndexOf(' ') != -1)
-                return text.Substring(0, text.IndexOf(' '));
-            else
-                return text;
+            if (text.IndexOf(' ') == -1) return text;
+            return text.Substring(0, text.IndexOf(' '));
+        }
+
+        private static string TillNumber(this string text)
+        {
+            if (text.IndexOf(' ') == -1) return text;
+          
+            return text.Substring(0, text.IndexOfAny(NUMBERS));
+
         }
         private static string MostFrequentOne(this List<string> values)
                      =>               values.ToLookup(t => t)
@@ -123,8 +131,10 @@ namespace TableAPI
                     normalizedColumnValues = columnValues.Select(t => t.TillSpace()).ToList();
                     break;
                 case NormalizationStrategy.TerminateAtNumber:
+                    normalizedColumnValues = columnValues.Select(t => t.TillNumber()).ToList();
                     break;
                 case NormalizationStrategy.TerminateAtFirstNonAlpha:
+                    
                     break;
                 case NormalizationStrategy.TerminateAtFirstNonAlphaNumeric:
                     break;

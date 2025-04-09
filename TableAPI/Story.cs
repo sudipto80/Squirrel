@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -493,15 +494,15 @@ namespace Squirrel
             foreach (var m in numericColumns)
             {
                 
-                double max = tab.ValuesOf(m).Select(t => Convert.ToDouble(t)).Max();
-                double min = tab.ValuesOf(m).Select(t => Convert.ToDouble(t)).Min();
-                double avg = tab.ValuesOf(m).Select(t => Convert.ToDouble(t)).Average();
-                decimal range = tab.ValuesOf(m).Select(t => Convert.ToDecimal(t)).Range();
+                double max = tab.ValuesOf(m).Select(Convert.ToDouble).Max();
+                double min = tab.ValuesOf(m).Select(Convert.ToDouble).Min();
+                double avg = tab.ValuesOf(m).Select(Convert.ToDouble).Average();
+                decimal range = tab.ValuesOf(m).Select(Convert.ToDecimal).Range();
 
-                gistValues.Add(new Tuple<string, string, string>(m, "Max", max.ToString()));
-                gistValues.Add(new Tuple<string, string, string>(m, "Min", min.ToString()));
-                gistValues.Add(new Tuple<string, string, string>(m, "Average", avg.ToString()));
-                gistValues.Add(new Tuple<string, string, string>(m, "Range", range.ToString()));
+                gistValues.Add(new Tuple<string, string, string>(m, "Max", max.ToString(CultureInfo.InvariantCulture)));
+                gistValues.Add(new Tuple<string, string, string>(m, "Min", min.ToString(CultureInfo.InvariantCulture)));
+                gistValues.Add(new Tuple<string, string, string>(m, "Average", avg.ToString(CultureInfo.InvariantCulture)));
+                gistValues.Add(new Tuple<string, string, string>(m, "Range", range.ToString(CultureInfo.InvariantCulture)));
                 
             }
            

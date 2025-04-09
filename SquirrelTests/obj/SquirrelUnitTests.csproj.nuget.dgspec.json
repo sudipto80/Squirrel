@@ -1,20 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\RiderProjects\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj": {}
+    "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\RiderProjects\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj": {
+    "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
         "projectName": "SquirrelUnitTests",
-        "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
+        "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\SquirrelTests\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -22,18 +23,18 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net9.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
+          "net9.0": {
+            "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj": {
-                "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj"
+              "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj": {
+                "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj"
               }
             }
           }
@@ -42,11 +43,17 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
             "MSTest.TestAdapter": {
               "target": "Package",
@@ -76,40 +83,27 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.10, 3.1.10]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.105/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj": {
+    "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj",
         "projectName": "TableAPI",
-        "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj",
+        "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -117,15 +111,15 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netstandard2.0"
+          "net9.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netstandard2.0": {
-            "targetAlias": "netstandard2.0",
+          "net9.0": {
+            "targetAlias": "net9.0",
             "projectReferences": {}
           }
         },
@@ -133,21 +127,25 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
-        "netstandard2.0": {
-          "targetAlias": "netstandard2.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
-            "NCalc2": {
+            "CoreCLR-NCalc": {
               "target": "Package",
-              "version": "[2.1.0, )"
+              "version": "[3.1.253, )"
             },
-            "NETStandard.Library": {
-              "suppressParent": "All",
+            "Microsoft.VisualBasic": {
               "target": "Package",
-              "version": "[2.0.3, )",
-              "autoReferenced": true
+              "version": "[10.3.0, )"
             },
             "Nunit": {
               "target": "Package",
@@ -165,7 +163,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.105/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -2,35 +2,6 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "Antlr4/4.6.4": {
-        "type": "package",
-        "dependencies": {
-          "Antlr4.CodeGenerator": "4.6.4",
-          "Antlr4.Runtime": "4.6.4"
-        }
-      },
-      "Antlr4.CodeGenerator/4.6.4": {
-        "type": "package",
-        "build": {
-          "build/_._": {}
-        }
-      },
-      "Antlr4.Runtime/4.6.4": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "1.6.0"
-        },
-        "compile": {
-          "lib/netstandard1.1/Antlr4.Runtime.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard1.1/Antlr4.Runtime.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "coverlet.collector/1.2.0": {
         "type": "package",
         "build": {
@@ -50,13 +21,33 @@
           "build/netstandard1.0/Microsoft.CodeCoverage.targets": {}
         }
       },
-      "Microsoft.CSharp/4.4.1": {
+      "Microsoft.CSharp/4.0.1": {
         "type": "package",
+        "dependencies": {
+          "System.Collections": "4.0.11",
+          "System.Diagnostics.Debug": "4.0.11",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.Globalization": "4.0.11",
+          "System.Linq": "4.1.0",
+          "System.Linq.Expressions": "4.1.0",
+          "System.ObjectModel": "4.0.12",
+          "System.Reflection": "4.1.0",
+          "System.Reflection.Extensions": "4.0.1",
+          "System.Reflection.Primitives": "4.0.1",
+          "System.Reflection.TypeExtensions": "4.1.0",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0",
+          "System.Runtime.InteropServices": "4.1.0",
+          "System.Threading": "4.0.11"
+        },
         "compile": {
-          "ref/netcoreapp2.0/_._": {}
+          "ref/netstandard1.0/Microsoft.CSharp.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netcoreapp2.0/_._": {}
+          "lib/netstandard1.3/Microsoft.CSharp.dll": {}
         }
       },
       "Microsoft.NET.Test.Sdk/16.5.0": {
@@ -376,24 +367,6 @@
           }
         }
       },
-      "NCalc2/2.1.0": {
-        "type": "package",
-        "dependencies": {
-          "Antlr4": "4.6.4",
-          "Microsoft.CSharp": "4.4.1",
-          "System.Dynamic.Runtime": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/NCalc2.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/NCalc2.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "NETStandard.Library/1.6.1": {
         "type": "package",
         "dependencies": {
@@ -491,25 +464,6 @@
           "lib/netstandard2.0/NuGet.Frameworks.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "NUnit/3.13.2": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "2.0.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/nunit.framework.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/nunit.framework.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "build/_._": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -871,23 +825,24 @@
           }
         }
       },
-      "System.Dynamic.Runtime/4.3.0": {
+      "System.Dynamic.Runtime/4.0.11": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Linq": "4.3.0",
-          "System.Linq.Expressions": "4.3.0",
-          "System.ObjectModel": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Emit": "4.3.0",
-          "System.Reflection.Emit.ILGeneration": "4.3.0",
-          "System.Reflection.Primitives": "4.3.0",
-          "System.Reflection.TypeExtensions": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Threading": "4.3.0"
+          "System.Collections": "4.0.11",
+          "System.Diagnostics.Debug": "4.0.11",
+          "System.Globalization": "4.0.11",
+          "System.Linq": "4.1.0",
+          "System.Linq.Expressions": "4.1.0",
+          "System.ObjectModel": "4.0.12",
+          "System.Reflection": "4.1.0",
+          "System.Reflection.Emit": "4.0.1",
+          "System.Reflection.Emit.ILGeneration": "4.0.1",
+          "System.Reflection.Primitives": "4.0.1",
+          "System.Reflection.TypeExtensions": "4.1.0",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0",
+          "System.Threading": "4.0.11"
         },
         "compile": {
           "ref/netstandard1.3/System.Dynamic.Runtime.dll": {
@@ -1806,11 +1761,7 @@
       },
       "TableAPI/1.0.0": {
         "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
-        "dependencies": {
-          "NCalc2": "2.1.0",
-          "Nunit": "3.13.2"
-        },
+        "framework": "Unsupported,Version=v0.0",
         "compile": {
           "bin/placeholder/TableAPI.dll": {}
         },
@@ -1821,83 +1772,6 @@
     }
   },
   "libraries": {
-    "Antlr4/4.6.4": {
-      "sha512": "8DtLvhApg7mEHoDXt1wCeL/zV5JyQPJr7e0ZDcl46RRGdnKKZuMSfwXX+PCx+AU9lnlXX0r5qSRsNzEGCFFOBw==",
-      "type": "package",
-      "path": "antlr4/4.6.4",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "antlr4.4.6.4.nupkg.sha512",
-        "antlr4.nuspec",
-        "tools/LICENSE.txt",
-        "tools/THIRD-PARTY-NOTICES.txt"
-      ]
-    },
-    "Antlr4.CodeGenerator/4.6.4": {
-      "sha512": "9JhKPf0STtpBzmxGKIc+nBTPVh033CmGStJza4NtBFKDzTCId039QnVelKfDXzocwbu96efinjYdtzv173Xx2g==",
-      "type": "package",
-      "path": "antlr4.codegenerator/4.6.4",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "antlr4.codegenerator.4.6.4.nupkg.sha512",
-        "antlr4.codegenerator.nuspec",
-        "build/Antlr4.CodeGenerator.props",
-        "build/Antlr4.CodeGenerator.targets",
-        "tools/IKVM.AWT.WinForms.dll",
-        "tools/IKVM.OpenJDK.Beans.dll",
-        "tools/IKVM.OpenJDK.Charsets.dll",
-        "tools/IKVM.OpenJDK.Corba.dll",
-        "tools/IKVM.OpenJDK.Core.dll",
-        "tools/IKVM.OpenJDK.Management.dll",
-        "tools/IKVM.OpenJDK.Media.dll",
-        "tools/IKVM.OpenJDK.Misc.dll",
-        "tools/IKVM.OpenJDK.Naming.dll",
-        "tools/IKVM.OpenJDK.Remoting.dll",
-        "tools/IKVM.OpenJDK.Security.dll",
-        "tools/IKVM.OpenJDK.SwingAWT.dll",
-        "tools/IKVM.OpenJDK.Text.dll",
-        "tools/IKVM.OpenJDK.Util.dll",
-        "tools/IKVM.OpenJDK.XML.API.dll",
-        "tools/IKVM.Runtime.JNI.dll",
-        "tools/IKVM.Runtime.dll",
-        "tools/antlr4-csharp-4.6.4-complete.jar",
-        "tools/ikvm.exe",
-        "tools/ikvm.exe.config",
-        "tools/net40/Antlr4BuildTasks.dll",
-        "tools/netstandard/Antlr4BuildTasks.dll"
-      ]
-    },
-    "Antlr4.Runtime/4.6.4": {
-      "sha512": "DO/MViJ4xpfuIUDBHWWCxpPg14h1Wg9vSD4rUgfVsrqAzPfci2vL0NdR+uNZUlL3O4gsZHYbZq21ZnUM7VjdbA==",
-      "type": "package",
-      "path": "antlr4.runtime/4.6.4",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "antlr4.runtime.4.6.4.nupkg.sha512",
-        "antlr4.runtime.nuspec",
-        "lib/net20/Antlr4.Runtime.dll",
-        "lib/net20/Antlr4.Runtime.xml",
-        "lib/net30/Antlr4.Runtime.dll",
-        "lib/net30/Antlr4.Runtime.xml",
-        "lib/net35-cf/Antlr4.Runtime.dll",
-        "lib/net35-cf/Antlr4.Runtime.xml",
-        "lib/net35-client/Antlr4.Runtime.dll",
-        "lib/net35-client/Antlr4.Runtime.xml",
-        "lib/net40-client/Antlr4.Runtime.dll",
-        "lib/net40-client/Antlr4.Runtime.xml",
-        "lib/net45/Antlr4.Runtime.dll",
-        "lib/net45/Antlr4.Runtime.xml",
-        "lib/netstandard1.1/Antlr4.Runtime.dll",
-        "lib/netstandard1.1/Antlr4.Runtime.xml",
-        "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/Antlr4.Runtime.dll",
-        "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/Antlr4.Runtime.xml"
-      ]
-    },
     "coverlet.collector/1.2.0": {
       "sha512": "ZB+EGXsVBIn8cew7D3S2c+rgIlokKv1dSwsXEoiFQaNXF/BSxp9Rlfz/jV1ehSWH5XpLitfRxFNW3ok7uPDOXA==",
       "type": "package",
@@ -1965,22 +1839,20 @@
         "microsoft.codecoverage.nuspec"
       ]
     },
-    "Microsoft.CSharp/4.4.1": {
-      "sha512": "A5hI3gk6WpcBI0QGZY6/d5CCaYUxJgi7iENn1uYEng+Olo8RfI5ReGVkjXjeu3VR3srLvVYREATXa2M0X7FYJA==",
+    "Microsoft.CSharp/4.0.1": {
+      "sha512": "17h8b5mXa87XYKrrVqdgZ38JefSUqLChUQpXgSnpzsM0nDOhE40FTeNWOJ/YmySGV6tG6T8+hjz6vxbknHJr6A==",
       "type": "package",
-      "path": "microsoft.csharp/4.4.1",
+      "path": "microsoft.csharp/4.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
         "lib/net45/_._",
         "lib/netcore50/Microsoft.CSharp.dll",
-        "lib/netcoreapp2.0/_._",
         "lib/netstandard1.3/Microsoft.CSharp.dll",
-        "lib/netstandard2.0/Microsoft.CSharp.dll",
         "lib/portable-net45+win8+wp8+wpa81/_._",
         "lib/win8/_._",
         "lib/wp80/_._",
@@ -1989,7 +1861,7 @@
         "lib/xamarinmac20/_._",
         "lib/xamarintvos10/_._",
         "lib/xamarinwatchos10/_._",
-        "microsoft.csharp.4.4.1.nupkg.sha512",
+        "microsoft.csharp.4.0.1.nupkg.sha512",
         "microsoft.csharp.nuspec",
         "ref/MonoAndroid10/_._",
         "ref/MonoTouch10/_._",
@@ -2005,7 +1877,6 @@
         "ref/netcore50/ru/Microsoft.CSharp.xml",
         "ref/netcore50/zh-hans/Microsoft.CSharp.xml",
         "ref/netcore50/zh-hant/Microsoft.CSharp.xml",
-        "ref/netcoreapp2.0/_._",
         "ref/netstandard1.0/Microsoft.CSharp.dll",
         "ref/netstandard1.0/Microsoft.CSharp.xml",
         "ref/netstandard1.0/de/Microsoft.CSharp.xml",
@@ -2017,8 +1888,6 @@
         "ref/netstandard1.0/ru/Microsoft.CSharp.xml",
         "ref/netstandard1.0/zh-hans/Microsoft.CSharp.xml",
         "ref/netstandard1.0/zh-hant/Microsoft.CSharp.xml",
-        "ref/netstandard2.0/Microsoft.CSharp.dll",
-        "ref/netstandard2.0/Microsoft.CSharp.xml",
         "ref/portable-net45+win8+wp8+wpa81/_._",
         "ref/win8/_._",
         "ref/wp80/_._",
@@ -2026,9 +1895,7 @@
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "useSharedDesignerContext.txt",
-        "version.txt"
+        "ref/xamarinwatchos10/_._"
       ]
     },
     "Microsoft.NET.Test.Sdk/16.5.0": {
@@ -2504,21 +2371,6 @@
         "mstest.testframework.nuspec"
       ]
     },
-    "NCalc2/2.1.0": {
-      "sha512": "zJ2pSRFKKOKbcg2eIYITIscplcLc6smAdnj4mzR6b7Karky29NR0hlA05RdfKY86qHI2XLjgXMHZaVzL4WvKbQ==",
-      "type": "package",
-      "path": "ncalc2/2.1.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net46/NCalc2.dll",
-        "lib/net46/NCalc2.xml",
-        "lib/netstandard2.0/NCalc2.dll",
-        "lib/netstandard2.0/NCalc2.xml",
-        "ncalc2.2.1.0.nupkg.sha512",
-        "ncalc2.nuspec"
-      ]
-    },
     "NETStandard.Library/1.6.1": {
       "sha512": "WcSp3+vP+yHNgS8EV5J7pZ9IRpeDuARBPN28by8zqff1wJQXm26PVU8L3/fYLBJVU7BtDyqNVWq2KlCVvSSR4A==",
       "type": "package",
@@ -2574,30 +2426,6 @@
         "lib/netstandard2.0/NuGet.Frameworks.xml",
         "nuget.frameworks.5.0.0.nupkg.sha512",
         "nuget.frameworks.nuspec"
-      ]
-    },
-    "NUnit/3.13.2": {
-      "sha512": "u+fz/lXyR4vlamySNAEMrXvh+GhAQiB6/aVZtU5WjivR5zF26Ui0tfteDtWqT90k9D8y6g8rFKYQC97Z7d195w==",
-      "type": "package",
-      "path": "nunit/3.13.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "CHANGES.md",
-        "LICENSE.txt",
-        "NOTICES.txt",
-        "build/NUnit.props",
-        "icon.png",
-        "lib/net35/nunit.framework.dll",
-        "lib/net35/nunit.framework.xml",
-        "lib/net40/nunit.framework.dll",
-        "lib/net40/nunit.framework.xml",
-        "lib/net45/nunit.framework.dll",
-        "lib/net45/nunit.framework.xml",
-        "lib/netstandard2.0/nunit.framework.dll",
-        "lib/netstandard2.0/nunit.framework.xml",
-        "nunit.3.13.2.nupkg.sha512",
-        "nunit.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -3384,10 +3212,10 @@
         "system.diagnostics.tracing.nuspec"
       ]
     },
-    "System.Dynamic.Runtime/4.3.0": {
-      "sha512": "SNVi1E/vfWUAs/WYKhE9+qlS6KqK0YVhnlT0HQtr8pMIA8YX3lwy3uPMownDwdYISBdmAF/2holEIldVp85Wag==",
+    "System.Dynamic.Runtime/4.0.11": {
+      "sha512": "db34f6LHYM0U0JpE+sOmjar27BnqTVkbLJhgfwMpTdgTigG/Hna3m2MYVwnFzGGKnEJk2UXFuoVTr8WUbU91/A==",
       "type": "package",
-      "path": "system.dynamic.runtime/4.3.0",
+      "path": "system.dynamic.runtime/4.0.11",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3451,7 +3279,7 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._",
         "runtimes/aot/lib/netcore50/System.Dynamic.Runtime.dll",
-        "system.dynamic.runtime.4.3.0.nupkg.sha512",
+        "system.dynamic.runtime.4.0.11.nupkg.sha512",
         "system.dynamic.runtime.nuspec"
       ]
     },
@@ -6029,19 +5857,21 @@
   },
   "packageFolders": {
     "C:\\Users\\Admin\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\UnitTestProject1\\SquirrelUnitTests.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\UnitTestProject1\\SquirrelUnitTests.csproj",
       "projectName": "SquirrelUnitTests",
-      "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\UnitTestProject1\\SquirrelUnitTests.csproj",
+      "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\UnitTestProject1\\SquirrelUnitTests.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\UnitTestProject1\\obj\\",
+      "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\UnitTestProject1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6059,8 +5889,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj": {
-              "projectPath": "C:\\Users\\Admin\\RiderProjects\\Squirrel\\TableAPI\\TableAPI.csproj"
+            "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj": {
+              "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj"
             }
           }
         }
@@ -6069,7 +5899,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "netcoreapp3.1": {
@@ -6103,27 +5939,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[3.1.10, 3.1.10]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[3.1.0, 3.1.0]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[3.1.0, 3.1.0]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.104\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Project TableAPI is not compatible with netcoreapp3.1 (.NETCoreApp,Version=v3.1). Project TableAPI supports: net9.0 (.NETCoreApp,Version=v9.0)",
+      "libraryId": "TableAPI",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }

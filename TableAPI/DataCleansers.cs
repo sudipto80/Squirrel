@@ -383,8 +383,15 @@ namespace Squirrel.Cleansing
 		
 		public static Table RemoveIfBetween(this Table tab, string dateColumnName, DateTime startDate, DateTime endDate)
 		{
-			List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(Convert.ToDateTime).ToList();
-			for (int i = 0; i < dates.Count; i++)
+			
+			if (dateColumnName == null) throw new ArgumentNullException(nameof(dateColumnName));
+			if (startDate == null) throw new ArgumentNullException(nameof(startDate));
+			if (endDate == null) throw new ArgumentNullException(nameof(endDate));
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(dateColumnName);
+			
+			var dates = tab.ValuesOf(dateColumnName).Select(Convert.ToDateTime).ToList();
+			for (var i = 0; i < dates.Count; i++)
 			{
 				if (dates[i].CompareTo(startDate) >= -1 && dates[i].CompareTo(endDate) <= 1)
 					tab.Rows.RemoveAt(i);
@@ -870,12 +877,15 @@ namespace Squirrel.Cleansing
 			foreach (string col in columns)
 			{
 
+				foreach (var symbol in SymbolConstants.CurrencySymbols)
+				{
+					newTable = tab.Transform(col, x => x.Replace(",", string.Empty)
+						.Replace(symbol.ToString(), string.Empty)); //Remove US Dollar symbol
 
-				newTable = tab.Transform(col, x => x.Replace(",", string.Empty)
-												.Replace("$", string.Empty)//Remove US Dollar symbol
-												.Replace("£", string.Empty)//Remove GBP Pound symbol
-												.Replace("€", string.Empty)//Remove Euro Symbol
-												.Replace("¥", string.Empty));//Remove Chinese Yen symbol
+				}
+
+			
+				
 			}
 			return newTable;
 		}
