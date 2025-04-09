@@ -1,11 +1,7 @@
-using System;
 using System.Linq;
-using System.Runtime.InteropServices.JavaScript;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
 using Squirrel;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
 namespace SquirrelUnitTest;
 
