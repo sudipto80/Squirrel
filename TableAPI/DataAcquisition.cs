@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using TableAPI;
 
 namespace Squirrel
@@ -366,69 +367,129 @@ namespace Squirrel
 
         private static List<string> getColumnsFromHtmlTable(string tableCode)
         {
+            // //see https://www.technologycrowds.com/2020/06/how-to-parse-html-table-using-html-Agility-Pack-C-Sharp.html
+            //
+            // string pattern = "<th>.*</th>";
+            // if (tableCode.Contains("<th>"))
+            // {
+            //     return Regex.Matches(tableCode, pattern).Cast<Match>().ElementAt(0).Value
+            //         .Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
+            //         .Select(t => t.Trim())
+            //         .Where(t => t.Length > 0)
+            //         .ToList();
+            //
+            // }
+            // else
+            // {
+            //
+            //
+            //
+            //     return tableCode.Substring(tableCode.IndexOf("<tr>") + 5, tableCode.IndexOf("</tr>") - 6)
+            //         .Split(new string[] { "<td>", "</td>" }, StringSplitOptions.RemoveEmptyEntries)
+            //         .Select(t => t.Trim())
+            //         .Where(t => t.Length > 0)
+            //         .ToList();
+            //
+            //
+            // }
 
-            string pattern = "<th>.*</th>";
-            if (tableCode.Contains("<th>"))
-            {
-                return Regex.Matches(tableCode, pattern).Cast<Match>().ElementAt(0).Value
-                    .Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(t => t.Trim())
-                    .Where(t => t.Length > 0)
-                    .ToList();
+            string pattern = @"<th\b[^>]*>(.*?)</th>";
 
-            }
-            else
-            {
-
-
-
-                return tableCode.Substring(tableCode.IndexOf("<tr>") + 5, tableCode.IndexOf("</tr>") - 6)
-                    .Split(new string[] { "<td>", "</td>" }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(t => t.Trim())
-                    .Where(t => t.Length > 0)
-                    .ToList();
-
-
-            }
-
+            return Regex.Matches(tableCode, pattern)
+                .Cast<Match>()
+                .Select(t => 
+                    t.Value.Substring(t.Value.IndexOf('>')+1,
+                            t.Value.LastIndexOf('<')-t.Value.IndexOf('>')-1)
+                        .Trim())
+                .Where(t => t.Length > 0)
+                .ToList();
 
         }
+        private static List<string> GetRowData(string tableCode)
+        {
+            string pattern = @"<td\b[^>]*>(.*?)</td>";
 
+            return Regex.Matches(tableCode, pattern)
+                .Cast<Match>()
+                .Select(t =>
+                    t.Value.Substring(t.Value.IndexOf('>') + 1,
+                            t.Value.LastIndexOf('<') - t.Value.IndexOf('>') - 1)
+                        .Trim())
+							 
+                .ToList();
+
+
+        }   
         private static List<Dictionary<string, string>> getRowsFromHtmlTable(List<string> columns, string tableCode)
         {
             List<Dictionary<string, string>> AllTheRows = new List<Dictionary<string, string>>();
-            tableCode = tableCode.Substring(tableCode.IndexOf("</tr>", StringComparison.InvariantCultureIgnoreCase) +
-                                            5);
-            var rows = Regex.Matches(tableCode, "<td>.*</td>").Cast<Match>().ElementAt(0)
-                .Value.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(t => t.Trim())
-                .ToList();
+            
+            var rows = GetRowData(tableCode);
+            var parts = Enumerable.Range(0, rows.Count / columns.Count)
+                .Select(e => rows.Skip(e * columns.Count + e + 1).Take(columns.Count).ToList()).ToList();
 
-
-            var lines = Enumerable.Range(0, rows.Count / columns.Count)
-                .Select(t => rows.Skip(t * columns.Count).Take(columns.Count))
-
-                .ToList();
-            int currentIndex = 0;
-
-            for (int i = currentIndex; i < rows.Count / columns.Count; i++)
+            for (int index = 0; index<parts.Count; index++)
             {
-                Dictionary<string, string> current = new Dictionary<string, string>();
-                for (int j = 0; j < columns.Count; j++)
+                if (parts[index].Count == columns.Count)
                 {
-                    current.Add(columns[j], lines[i].ElementAt(j));
-                    current[columns[j]] = current[columns[j]].Substring(current[columns[j]].LastIndexOf("<td>") + 4)
-                        .Trim();
+                    var row = parts[index];
+                    Dictionary<string, string> rowData = new Dictionary<string, string>();
+                    for (int i = 0; i < columns.Count; i++)
+                    {
+                        if (row[i].Length > 0 && row[i].Length < columns.Count)
+                            rowData.Add(columns[i], row[i]);
+                    }
+
+                    AllTheRows.Add(rowData);
                 }
-
-                currentIndex = i * columns.Count;
-
-                AllTheRows.Add(current);
             }
-
             return AllTheRows;
+            // tableCode = tableCode.Substring(tableCode.IndexOf("</tr>", StringComparison.InvariantCultureIgnoreCase) +
+            //                                 5);
+            // var rows = Regex.Matches(tableCode, "<td>.*</td>").Cast<Match>().ElementAt(0)
+            //     .Value.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries)
+            //     .Select(t => t.Trim())
+            //     .ToList();
+            //
+            //
+            // var lines = Enumerable.Range(0, rows.Count / columns.Count)
+            //     .Select(t => rows.Skip(t * columns.Count).Take(columns.Count))
+            //
+            //     .ToList();
+            // int currentIndex = 0;
+            //
+            // for (int i = currentIndex; i < rows.Count / columns.Count; i++)
+            // {
+            //     Dictionary<string, string> current = new Dictionary<string, string>();
+            //     for (int j = 0; j < columns.Count; j++)
+            //     {
+            //         current.Add(columns[j], lines[i].ElementAt(j));
+            //         current[columns[j]] = current[columns[j]].Substring(current[columns[j]].LastIndexOf("<td>") + 4)
+            //             .Trim();
+            //     }
+            //
+            //     currentIndex = i * columns.Count;
+            //
+            //     AllTheRows.Add(current);
+            // }
+            //
+            // return AllTheRows;
         }
 
+        private static List<string> sanitizeColumnNames(List<string> columns)
+        {
+            List<int> indices = new List<int>();
+            for(int i = 0; i<columns.Count; i++)
+            {
+                var col = columns[i];
+                if (col.Contains("<") || col.Contains(">"))
+                {
+                    indices.Add(i);
+                }
+            }
+            indices.ForEach( i=> columns.RemoveAt(i));
+            return columns;
+        }
         /// <summary>
         /// Loads a HTML table to the corresponding Table container
         /// </summary>
@@ -436,21 +497,18 @@ namespace Squirrel
         /// <returns>A table with all the data from the html table</returns>
         public static Table LoadHtmlTable(string htmlTable)
         {
-            Table loaded = new Table();
-            StreamReader htmlReader = new StreamReader(htmlTable);
-            string totalTable = htmlReader.ReadToEnd();
-            htmlReader.Close();
-            //sometimes the tags "<td> <th> and <tr> can have extra attributes. We don't care for that. we have to get rid of that
-            totalTable = totalTable.Replace("<td ", "<td><").Replace("<th ", "<th><").Replace("<tr ", "<tr><");
-            totalTable = StripTags(totalTable,
-                new List<string>() { "<td>", "</td>", "<th>", "</th>", "<tr>", "</tr>" });
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(htmlTable);
+            List<List<string>> table =
+                doc.DocumentNode.SelectSingleNode("table")
+                .Descendants("tr")
+                .Skip(1)
+                .Where(tr=>tr.Elements("td").Count()>1)
+                .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim()).ToList())
+                .ToList();
 
-            totalTable = totalTable.Replace("\r", string.Empty).Replace("\t", string.Empty).Replace("\n", string.Empty);
-            var cols = getColumnsFromHtmlTable(totalTable);
-            foreach (var row in getRowsFromHtmlTable(cols, totalTable))
-                loaded.AddRow(row);
-
-            return loaded;
+            var t = new Table();
+            return t;
         }
       
 

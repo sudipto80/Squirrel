@@ -143,6 +143,10 @@
               "target": "Package",
               "version": "[3.1.253, )"
             },
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.12.1, )"
+            },
             "Microsoft.VisualBasic": {
               "target": "Package",
               "version": "[10.3.0, )"
