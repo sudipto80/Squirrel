@@ -490,6 +490,7 @@ namespace Squirrel
             indices.ForEach( i=> columns.RemoveAt(i));
             return columns;
         }
+
         /// <summary>
         /// Loads a HTML table to the corresponding Table container
         /// </summary>
@@ -498,19 +499,54 @@ namespace Squirrel
         public static Table LoadHtmlTable(string htmlTable)
         {
             HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(htmlTable);
+            doc.LoadHtml(File.ReadAllText(htmlTable));
             List<List<string>> table =
-                doc.DocumentNode.SelectSingleNode("table")
-                .Descendants("tr")
-                .Skip(1)
-                .Where(tr=>tr.Elements("td").Count()>1)
-                .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim()).ToList())
-                .ToList();
+                doc.DocumentNode.SelectSingleNode("//table")
+                    .Descendants("tr")  
+                    
+                    .Where(tr => tr.Elements("td").Count() > 1)
+                    .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim())
+                        .ToList())
 
-            var t = new Table();
-            return t;
+                    .ToList();
+
+            var headers = new List<string>();
+            if (doc.DocumentNode.InnerHtml.Contains("<th ") ||
+                doc.DocumentNode.InnerHtml.Contains("<th>"))
+            {
+
+
+                headers = doc.DocumentNode.SelectNodes("//th")
+                    .Select(t => t.InnerText).ToList();
+
+            }
+
+            else
+            {
+                if (headers.Count == 0)
+                {
+                    headers = table[0];
+                    table = table.Skip(1).ToList();
+                }
+            }
+
+
+            var tab = new Table();
+
+            for (int index = 0; index < table.Count; index++)
+            {
+                Dictionary<string, string> row = new Dictionary<string, string>();
+                for (int colIndex = 0; colIndex < headers.Count; colIndex++)
+                {
+                    row.Add(headers[colIndex], table[index][colIndex]);
+                }
+
+                tab.AddRow(row);
+            }
+
+            return tab;
         }
-      
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<string> GetValues(ReadOnlySpan<char> line, ReadOnlySpan<char> delims, string prefix = "")

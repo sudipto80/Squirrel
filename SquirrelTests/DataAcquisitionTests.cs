@@ -12,24 +12,22 @@ public class DataAcquisitionTests
     [TestMethod]
     public void Test_LoadHTML()
     {
+        var crime = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\crimerate.html");
+        Assert.AreEqual(10, crime.RowCount);
+        Assert.IsTrue(
+            crime[crime.RowCount - 1].Values
+                .SequenceEqual(["Andhra Pradesh", "3.6"]));
+
         var olympics = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\olympic_medals.html");
         Assert.AreEqual(146, olympics.RowCount);
-        
+
         Table accidents = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\roadaccidents.html");
         Assert.AreEqual(186, accidents.RowCount);
         Assert.IsTrue(
-             accidents[accidents.RowCount-1].Values
-                 .SequenceEqual(["&nbsp; Zimbabwe","14.6","212.4","n/a","1832","2010"]));
-        
-        // var crime = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\crimerate.html");
-        // Assert.AreEqual(10,crime.RowCount);
-        // Assert.IsTrue(
-        //     crime[crime.RowCount-1].Values
-        //         .SequenceEqual(["Andhra Pradesh","3.6"]));
-        
-        
-
+            accidents[accidents.RowCount - 1].Values
+                .SequenceEqual(["&nbsp;Zimbabwe", "14.6", "212.4", "n/a", "1832", "2010"]));
     }
+
     [TestMethod]
     public void Test_LoadTSV()
     {
