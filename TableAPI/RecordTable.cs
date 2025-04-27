@@ -12,6 +12,20 @@ public class RecordTable<T>
     /// 
     /// </summary>
     public required List<T> _rows = new List<T>();
+
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <param name="converters"></param>
+    /// <param name="propertyValues"></param>
+    /// <typeparam name="TRecordType"></typeparam>
+    /// <returns></returns>
+    // private static TRecordType ToRecord<TRecordType>(IEnumerable<Func<string, object>> converters,
+    //                                                  params IEnumerable<string> propertyValues)
+    // {
+    //     
+    // }
+
     /// <summary>
     /// 
     /// </summary>
@@ -43,7 +57,7 @@ public class RecordTable<T>
         return (TRecordType)constructor.Invoke(typedValues);
     }
     /// <summary>
-    /// 
+    /// Strongly typed table instance from the legacy Table structure
     /// </summary>
     /// <param name="tab"></param>
     /// <returns></returns>
@@ -63,9 +77,9 @@ public class RecordTable<T>
         return table;
     }
     /// <summary>
-    /// 
+    /// Returns the row at the index 
     /// </summary>
-    /// <param name="index"></param>
+    /// <param name="index">Index of the row</param>
     public T this[int index] => _rows[index];
     /// <summary>
     /// 
@@ -86,7 +100,12 @@ public class RecordTable<T>
         return result;
     }
 
-   
+   /// <summary>
+   /// An indexed filter on the table where you also get the index
+   /// of the element in the mix. 
+   /// </summary>
+   /// <param name="predicate"></param>
+   /// <returns></returns>
     public List<T> Filter(Func<T,int,bool> predicate) => 
          this._rows.Where(predicate.Invoke).ToList();
     

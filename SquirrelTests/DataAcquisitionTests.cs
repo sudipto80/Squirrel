@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Security.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Squirrel;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
@@ -9,6 +11,22 @@ namespace SquirrelUnitTest;
 [TestClass]
 public class DataAcquisitionTests
 {
+    [TestMethod]
+    public void Test_AnonLoading()
+    {
+        // A funny dataset but it proves the point
+        var names = new []{"Sam", "Jenny", "Helmut" };
+        var recTab = names.Select(t => new { Name = t, Age = 20 + t.Length })
+                                                .ToRecordTableFromAnonList();
+      
+        Assert.AreEqual(3, recTab.RowCount);
+        Assert.AreEqual("Sam", recTab[0].Name);
+        Assert.AreEqual("Jenny", recTab[1].Name);
+        Assert.AreEqual("Helmut", recTab[2].Name);
+        Assert.AreEqual(23, recTab[0].Age);
+        Assert.AreEqual(25, recTab[1].Age);
+        Assert.AreEqual(26, recTab[2].Age);
+    }
     [TestMethod]
     public void Test_LoadHTML()
     {
@@ -21,7 +39,7 @@ public class DataAcquisitionTests
         var olympics = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\olympic_medals.html");
         Assert.AreEqual(146, olympics.RowCount);
 
-        Table accidents = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\roadaccidents.html");
+        var accidents = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\roadaccidents.html");
         Assert.AreEqual(186, accidents.RowCount);
         Assert.IsTrue(
             accidents[accidents.RowCount - 1].Values

@@ -228,6 +228,16 @@ namespace Squirrel
             return result;
         }
 
+        public static RecordTable<T> ToRecordTableFromAnonList<T>(this IEnumerable<T> list)
+        {
+            var tab = new RecordTable<T>{_rows = []};
+            foreach (var v in list)
+            {
+                tab._rows.Add(v);
+            }
+
+            return tab;
+        }
         /// <summary>
         /// Loads the data from an Excel workbook to a table
         /// </summary>
@@ -365,46 +375,7 @@ namespace Squirrel
         
        
 
-        private static List<string> getColumnsFromHtmlTable(string tableCode)
-        {
-            // //see https://www.technologycrowds.com/2020/06/how-to-parse-html-table-using-html-Agility-Pack-C-Sharp.html
-            //
-            // string pattern = "<th>.*</th>";
-            // if (tableCode.Contains("<th>"))
-            // {
-            //     return Regex.Matches(tableCode, pattern).Cast<Match>().ElementAt(0).Value
-            //         .Split(new string[] { "<th>", "</th>" }, StringSplitOptions.RemoveEmptyEntries)
-            //         .Select(t => t.Trim())
-            //         .Where(t => t.Length > 0)
-            //         .ToList();
-            //
-            // }
-            // else
-            // {
-            //
-            //
-            //
-            //     return tableCode.Substring(tableCode.IndexOf("<tr>") + 5, tableCode.IndexOf("</tr>") - 6)
-            //         .Split(new string[] { "<td>", "</td>" }, StringSplitOptions.RemoveEmptyEntries)
-            //         .Select(t => t.Trim())
-            //         .Where(t => t.Length > 0)
-            //         .ToList();
-            //
-            //
-            // }
-
-            string pattern = @"<th\b[^>]*>(.*?)</th>";
-
-            return Regex.Matches(tableCode, pattern)
-                .Cast<Match>()
-                .Select(t => 
-                    t.Value.Substring(t.Value.IndexOf('>')+1,
-                            t.Value.LastIndexOf('<')-t.Value.IndexOf('>')-1)
-                        .Trim())
-                .Where(t => t.Length > 0)
-                .ToList();
-
-        }
+       
         private static List<string> GetRowData(string tableCode)
         {
             string pattern = @"<td\b[^>]*>(.*?)</td>";
@@ -420,76 +391,7 @@ namespace Squirrel
 
 
         }   
-        private static List<Dictionary<string, string>> getRowsFromHtmlTable(List<string> columns, string tableCode)
-        {
-            List<Dictionary<string, string>> AllTheRows = new List<Dictionary<string, string>>();
-            
-            var rows = GetRowData(tableCode);
-            var parts = Enumerable.Range(0, rows.Count / columns.Count)
-                .Select(e => rows.Skip(e * columns.Count + e + 1).Take(columns.Count).ToList()).ToList();
-
-            for (int index = 0; index<parts.Count; index++)
-            {
-                if (parts[index].Count == columns.Count)
-                {
-                    var row = parts[index];
-                    Dictionary<string, string> rowData = new Dictionary<string, string>();
-                    for (int i = 0; i < columns.Count; i++)
-                    {
-                        if (row[i].Length > 0 && row[i].Length < columns.Count)
-                            rowData.Add(columns[i], row[i]);
-                    }
-
-                    AllTheRows.Add(rowData);
-                }
-            }
-            return AllTheRows;
-            // tableCode = tableCode.Substring(tableCode.IndexOf("</tr>", StringComparison.InvariantCultureIgnoreCase) +
-            //                                 5);
-            // var rows = Regex.Matches(tableCode, "<td>.*</td>").Cast<Match>().ElementAt(0)
-            //     .Value.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries)
-            //     .Select(t => t.Trim())
-            //     .ToList();
-            //
-            //
-            // var lines = Enumerable.Range(0, rows.Count / columns.Count)
-            //     .Select(t => rows.Skip(t * columns.Count).Take(columns.Count))
-            //
-            //     .ToList();
-            // int currentIndex = 0;
-            //
-            // for (int i = currentIndex; i < rows.Count / columns.Count; i++)
-            // {
-            //     Dictionary<string, string> current = new Dictionary<string, string>();
-            //     for (int j = 0; j < columns.Count; j++)
-            //     {
-            //         current.Add(columns[j], lines[i].ElementAt(j));
-            //         current[columns[j]] = current[columns[j]].Substring(current[columns[j]].LastIndexOf("<td>") + 4)
-            //             .Trim();
-            //     }
-            //
-            //     currentIndex = i * columns.Count;
-            //
-            //     AllTheRows.Add(current);
-            // }
-            //
-            // return AllTheRows;
-        }
-
-        private static List<string> sanitizeColumnNames(List<string> columns)
-        {
-            List<int> indices = new List<int>();
-            for(int i = 0; i<columns.Count; i++)
-            {
-                var col = columns[i];
-                if (col.Contains("<") || col.Contains(">"))
-                {
-                    indices.Add(i);
-                }
-            }
-            indices.ForEach( i=> columns.RemoveAt(i));
-            return columns;
-        }
+       
 
         /// <summary>
         /// Loads a HTML table to the corresponding Table container
@@ -503,24 +405,18 @@ namespace Squirrel
             List<List<string>> table =
                 doc.DocumentNode.SelectSingleNode("//table")
                     .Descendants("tr")  
-                    
                     .Where(tr => tr.Elements("td").Count() > 1)
                     .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim())
                         .ToList())
-
                     .ToList();
 
             var headers = new List<string>();
             if (doc.DocumentNode.InnerHtml.Contains("<th ") ||
                 doc.DocumentNode.InnerHtml.Contains("<th>"))
             {
-
-
                 headers = doc.DocumentNode.SelectNodes("//th")
                     .Select(t => t.InnerText).ToList();
-
             }
-
             else
             {
                 if (headers.Count == 0)
@@ -529,16 +425,14 @@ namespace Squirrel
                     table = table.Skip(1).ToList();
                 }
             }
-
-
             var tab = new Table();
-
-            for (int index = 0; index < table.Count; index++)
+            for (var index = 0; index < table.Count; index++)
             {
-                Dictionary<string, string> row = new Dictionary<string, string>();
+                var t = table[index];
+                var row = new Dictionary<string, string>();
                 for (int colIndex = 0; colIndex < headers.Count; colIndex++)
                 {
-                    row.Add(headers[colIndex], table[index][colIndex]);
+                    row.Add(headers[colIndex], t[colIndex]);
                 }
 
                 tab.AddRow(row);
@@ -889,13 +783,11 @@ namespace Squirrel
             {
                 foreach (string col in tab.ColumnHeaders)
                 {
-                    if (tab.Rows[i].ContainsKey(col))
-                    {
-                        if (align == Alignment.Right)
-                            Console.Write(" " + tab.Rows[i][col].PadLeft(longestLengths[col]) + new string(' ', 4));
-                        if (align == Alignment.Left)
-                            Console.Write(" " + tab.Rows[i][col].PadRight(longestLengths[col]) + new string(' ', 4));
-                    }
+                    if (!tab.Rows[i].ContainsKey(col)) continue;
+                    if (align == Alignment.Right)
+                        Console.Write(" " + tab.Rows[i][col].PadLeft(longestLengths[col]) + new string(' ', 4));
+                    if (align == Alignment.Left)
+                        Console.Write(" " + tab.Rows[i][col].PadRight(longestLengths[col]) + new string(' ', 4));
                 }
 
                 Console.WriteLine();
