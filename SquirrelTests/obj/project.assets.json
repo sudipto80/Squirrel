@@ -15,6 +15,15 @@
           }
         }
       },
+      "Apache.Arrow/13.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Apache.Arrow.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Apache.Arrow.dll": {}
+        }
+      },
       "CoreCLR-NCalc/3.1.253": {
         "type": "package",
         "dependencies": {
@@ -43,6 +52,37 @@
         "runtime": {
           "lib/net8.0/HtmlAgilityPack.dll": {
             "related": ".deps.json;.pdb;.xml"
+          }
+        }
+      },
+      "IronCompress/1.6.3": {
+        "type": "package",
+        "dependencies": {
+          "Snappier": "1.1.6",
+          "ZstdSharp.Port": "0.8.1"
+        },
+        "compile": {
+          "lib/net8.0/IronCompress.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/IronCompress.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/libnironcompress.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-x64/native/libnironcompress.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-arm64/native/libnironcompress.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/win-x64/native/nironcompress.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
           }
         }
       },
@@ -86,6 +126,19 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.CSharp.dll": {}
+        }
+      },
+      "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.NET.Test.Sdk/16.5.0": {
@@ -485,6 +538,64 @@
           "build/_._": {}
         }
       },
+      "Parquet.Net/5.1.1": {
+        "type": "package",
+        "dependencies": {
+          "IronCompress": "1.6.3",
+          "Microsoft.IO.RecyclableMemoryStream": "3.0.1"
+        },
+        "compile": {
+          "lib/net8.0/Parquet.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Parquet.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "ParquetSharp/19.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Apache.Arrow": "13.0.0"
+        },
+        "compile": {
+          "lib/net6.0/ParquetSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/ParquetSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/ParquetSharp.targets": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/ParquetSharpNative.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-x64/native/ParquetSharpNative.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-arm64/native/ParquetSharpNative.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-x64/native/ParquetSharpNative.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/ParquetSharpNative.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
       "runtime.native.System/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -498,6 +609,54 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "dependencies": {
+          "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+          "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+          "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+        }
+      },
+      "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          }
+        }
+      },
+      "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-x64/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
+      "runtime.win-x86.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-x86/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "Snappier/1.1.6": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Snappier.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Snappier.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.Collections/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -508,6 +667,35 @@
         "compile": {
           "ref/netstandard1.3/System.Collections.dll": {
             "related": ".xml"
+          }
+        }
+      },
+      "System.Data.SqlClient/4.9.0": {
+        "type": "package",
+        "dependencies": {
+          "runtime.native.System.Data.SqlClient.sni": "4.4.0"
+        },
+        "compile": {
+          "lib/net8.0/System.Data.SqlClient.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/System.Data.SqlClient.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/net8.0/System.Data.SqlClient.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/net8.0/System.Data.SqlClient.dll": {
+            "assetType": "runtime",
+            "rid": "win"
           }
         }
       },
@@ -754,22 +942,13 @@
           }
         }
       },
-      "System.Reflection.Emit/4.0.1": {
+      "System.Reflection.Emit/4.7.0": {
         "type": "package",
-        "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Reflection": "4.1.0",
-          "System.Reflection.Emit.ILGeneration": "4.0.1",
-          "System.Reflection.Primitives": "4.0.1",
-          "System.Runtime": "4.1.0"
-        },
         "compile": {
-          "ref/netstandard1.1/_._": {
-            "related": ".xml"
-          }
+          "ref/netcoreapp2.0/_._": {}
         },
         "runtime": {
-          "lib/netstandard1.3/System.Reflection.Emit.dll": {}
+          "lib/netcoreapp2.0/_._": {}
         }
       },
       "System.Reflection.Emit.ILGeneration/4.0.1": {
@@ -1076,6 +1255,34 @@
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
       },
+      "Tesseract/5.2.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Reflection.Emit": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Tesseract.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Tesseract.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/_._": {}
+        }
+      },
+      "ZstdSharp.Port/0.8.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/ZstdSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/ZstdSharp.dll": {}
+        }
+      },
       "TableAPI/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -1083,7 +1290,11 @@
           "CoreCLR-NCalc": "3.1.253",
           "HtmlAgilityPack": "1.12.1",
           "Microsoft.VisualBasic": "10.3.0",
-          "Nunit": "3.13.2"
+          "Nunit": "3.13.2",
+          "Parquet.Net": "5.1.1",
+          "ParquetSharp": "19.0.1",
+          "System.Data.SqlClient": "4.9.0",
+          "Tesseract": "5.2.0"
         },
         "compile": {
           "bin/placeholder/TableAPI.dll": {}
@@ -1108,6 +1319,22 @@
         "lib/net45/Antlr4.Runtime.Standard.xml",
         "lib/netstandard2.0/Antlr4.Runtime.Standard.dll",
         "lib/netstandard2.0/Antlr4.Runtime.Standard.xml"
+      ]
+    },
+    "Apache.Arrow/13.0.0": {
+      "sha512": "+QdmlKEMlN+vWR/3IyUSSZY8DaQWJT9qb3X5STGgXaEc9lF9hwBF0Hznz5i6Nq7J8BV4POW1Dt1QCezxUWqaHA==",
+      "type": "package",
+      "path": "apache.arrow/13.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "apache.arrow.13.0.0.nupkg.sha512",
+        "apache.arrow.nuspec",
+        "lib/net6.0/Apache.Arrow.dll",
+        "lib/netcoreapp3.1/Apache.Arrow.dll",
+        "lib/netstandard1.3/Apache.Arrow.dll",
+        "lib/netstandard2.0/Apache.Arrow.dll"
       ]
     },
     "CoreCLR-NCalc/3.1.253": {
@@ -1203,6 +1430,27 @@
         "readme.md"
       ]
     },
+    "IronCompress/1.6.3": {
+      "sha512": "ygrMPrh20nVW8irdGZpMj9rXnz8WPDNN4fpq9JF1pGNL53Jg484OQOwaD4HaF6mxxIjhzKigRUFopjY/GdDfgg==",
+      "type": "package",
+      "path": "ironcompress/1.6.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "ironcompress.1.6.3.nupkg.sha512",
+        "ironcompress.nuspec",
+        "lib/net6.0/IronCompress.dll",
+        "lib/net8.0/IronCompress.dll",
+        "lib/netstandard2.0/IronCompress.dll",
+        "lib/netstandard2.1/IronCompress.dll",
+        "runtimes/linux-arm64/native/libnironcompress.so",
+        "runtimes/linux-x64/native/libnironcompress.so",
+        "runtimes/osx-arm64/native/libnironcompress.dylib",
+        "runtimes/win-x64/native/nironcompress.dll"
+      ]
+    },
     "Microsoft.CodeCoverage/16.5.0": {
       "sha512": "PM5YLtyN45EyUGePJpaNogndlaQPrMgQQXHKMhMESC6KfSVvt+j7+dxBi8NYC6X6dZVysf7ngwhSW3wwvPJRSQ==",
       "type": "package",
@@ -1296,6 +1544,24 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
+      ]
+    },
+    "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
+      "sha512": "s/s20YTVY9r9TPfTrN5g8zPF1YhwxyqO6PxUkrYTGI2B+OGPe9AdajWZrLhFqXIvqIW23fnUE4+ztrUWNU1+9g==",
+      "type": "package",
+      "path": "microsoft.io.recyclablememorystream/3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll",
+        "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.xml",
+        "lib/netstandard2.0/Microsoft.IO.RecyclableMemoryStream.dll",
+        "lib/netstandard2.0/Microsoft.IO.RecyclableMemoryStream.xml",
+        "lib/netstandard2.1/Microsoft.IO.RecyclableMemoryStream.dll",
+        "lib/netstandard2.1/Microsoft.IO.RecyclableMemoryStream.xml",
+        "microsoft.io.recyclablememorystream.3.0.1.nupkg.sha512",
+        "microsoft.io.recyclablememorystream.nuspec"
       ]
     },
     "Microsoft.NET.Test.Sdk/16.5.0": {
@@ -1985,6 +2251,53 @@
         "nunit.nuspec"
       ]
     },
+    "Parquet.Net/5.1.1": {
+      "sha512": "DmHwUT6OJ5tRJvXiYioEqchihbfCM7Lnd3SLJUqT8fHqbNhaYPXVQrU1FLpiGh1WbtD0kI6Lemu7ucbP17FuWg==",
+      "type": "package",
+      "path": "parquet.net/5.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net8.0/Parquet.dll",
+        "lib/net8.0/Parquet.pdb",
+        "lib/net8.0/Parquet.xml",
+        "lib/netstandard2.0/Parquet.dll",
+        "lib/netstandard2.0/Parquet.pdb",
+        "lib/netstandard2.0/Parquet.xml",
+        "lib/netstandard2.1/Parquet.dll",
+        "lib/netstandard2.1/Parquet.pdb",
+        "lib/netstandard2.1/Parquet.xml",
+        "parquet.net.5.1.1.nupkg.sha512",
+        "parquet.net.nuspec"
+      ]
+    },
+    "ParquetSharp/19.0.1": {
+      "sha512": "2ccG/PZWZ0Tj1bvAubVchG1JmbUpb+6gdV2jdiw/E5pSUFkRElG6fcDnclRXpbgXFgxlOFmvq0uRY5QaGdclPA==",
+      "type": "package",
+      "path": "parquetsharp/19.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "build/ParquetSharp.targets",
+        "buildTransitive/ParquetSharp.targets",
+        "lib/net471/ParquetSharp.dll",
+        "lib/net471/ParquetSharp.xml",
+        "lib/net6.0/ParquetSharp.dll",
+        "lib/net6.0/ParquetSharp.xml",
+        "lib/netstandard2.1/ParquetSharp.dll",
+        "lib/netstandard2.1/ParquetSharp.xml",
+        "parquetsharp.19.0.1.nupkg.sha512",
+        "parquetsharp.nuspec",
+        "runtimes/linux-arm64/native/ParquetSharpNative.so",
+        "runtimes/linux-x64/native/ParquetSharpNative.so",
+        "runtimes/osx-arm64/native/ParquetSharpNative.dylib",
+        "runtimes/osx-x64/native/ParquetSharpNative.dylib",
+        "runtimes/win-x64/native/ParquetSharpNative.dll"
+      ]
+    },
     "runtime.native.System/4.3.0": {
       "sha512": "c/qWt2LieNZIj1jGnVNsE2Kl23Ya2aSTBuXMD6V7k9KWr6l16Tqdwq+hJScEpWER9753NWC8h96PaVNY5Ld7Jw==",
       "type": "package",
@@ -1997,6 +2310,89 @@
         "lib/netstandard1.0/_._",
         "runtime.native.system.4.3.0.nupkg.sha512",
         "runtime.native.system.nuspec"
+      ]
+    },
+    "runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "A8v6PGmk+UGbfWo5Ixup0lPM4swuSwOiayJExZwKIOjTlFFQIsu3QnDXECosBEyrWSPryxBVrdqtJyhK3BaupQ==",
+      "type": "package",
+      "path": "runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.native.system.data.sqlclient.sni.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "LbrynESTp3bm5O/+jGL8v0Qg5SJlTV08lpIpFesXjF6uGNMWqFnUQbYBJwZTeua6E/Y7FIM1C54Ey1btLWupdg==",
+      "type": "package",
+      "path": "runtime.win-arm64.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-arm64.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-arm64/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "38ugOfkYJqJoX9g6EYRlZB5U2ZJH51UP8ptxZgdpS07FgOEToV+lS11ouNK2PM12Pr6X/PpT5jK82G3DwH/SxQ==",
+      "type": "package",
+      "path": "runtime.win-x64.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-x64.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-x64/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-x86.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "YhEdSQUsTx+C8m8Bw7ar5/VesXvCFMItyZF7G1AUY+OM0VPZUOeAVpJ4Wl6fydBGUYZxojTDR3I6Bj/+BPkJNA==",
+      "type": "package",
+      "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-x86.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-x86/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Snappier/1.1.6": {
+      "sha512": "aLJu7Q0mVk0e9QwjJLEh70tXQ0Url8fHITrHXwqF+eq7N20jGMOhkmTXUUjpPim+rCm0I4fARcVBRzJPSipN+w==",
+      "type": "package",
+      "path": "snappier/1.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Snappier.dll",
+        "lib/net6.0/Snappier.xml",
+        "lib/net7.0/Snappier.dll",
+        "lib/net7.0/Snappier.xml",
+        "lib/net8.0/Snappier.dll",
+        "lib/net8.0/Snappier.xml",
+        "lib/netstandard2.0/Snappier.dll",
+        "lib/netstandard2.0/Snappier.xml",
+        "snappier.1.1.6.nupkg.sha512",
+        "snappier.nuspec"
       ]
     },
     "System.Collections/4.3.0": {
@@ -2065,6 +2461,39 @@
         "ref/xamarinwatchos10/_._",
         "system.collections.4.3.0.nupkg.sha512",
         "system.collections.nuspec"
+      ]
+    },
+    "System.Data.SqlClient/4.9.0": {
+      "sha512": "j4KJO+vC62NyUtNHz854njEqXbT8OmAa5jb1nrGfYWBOcggyYUQE0w/snXeaCjdvkSKWuUD+hfvlbN8pTrJTXg==",
+      "type": "package",
+      "path": "system.data.sqlclient/4.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "buildTransitive/net461/System.Data.SqlClient.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.Data.SqlClient.targets",
+        "lib/net462/System.Data.SqlClient.dll",
+        "lib/net462/System.Data.SqlClient.xml",
+        "lib/net6.0/System.Data.SqlClient.dll",
+        "lib/net6.0/System.Data.SqlClient.xml",
+        "lib/net8.0/System.Data.SqlClient.dll",
+        "lib/net8.0/System.Data.SqlClient.xml",
+        "lib/netstandard2.0/System.Data.SqlClient.dll",
+        "lib/netstandard2.0/System.Data.SqlClient.xml",
+        "runtimes/unix/lib/net6.0/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/net6.0/System.Data.SqlClient.xml",
+        "runtimes/unix/lib/net8.0/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/net8.0/System.Data.SqlClient.xml",
+        "runtimes/win/lib/net6.0/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net6.0/System.Data.SqlClient.xml",
+        "runtimes/win/lib/net8.0/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net8.0/System.Data.SqlClient.xml",
+        "system.data.sqlclient.4.9.0.nupkg.sha512",
+        "system.data.sqlclient.nuspec"
       ]
     },
     "System.Diagnostics.Debug/4.3.0": {
@@ -2870,21 +3299,34 @@
         "system.reflection.nuspec"
       ]
     },
-    "System.Reflection.Emit/4.0.1": {
-      "sha512": "P2wqAj72fFjpP6wb9nSfDqNBMab+2ovzSDzUZK7MVIm54tBJEPr9jWfSjjoTpPwj1LeKcmX3vr0ttyjSSFM47g==",
+    "System.Reflection.Emit/4.7.0": {
+      "sha512": "VR4kk8XLKebQ4MZuKuIni/7oh+QGFmZW3qORd1GvBq/8026OpW501SzT/oypwiQl4TvT8ErnReh/NzY9u+C6wQ==",
       "type": "package",
-      "path": "system.reflection.emit/4.0.1",
+      "path": "system.reflection.emit/4.7.0",
       "files": [
         ".nupkg.metadata",
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
         "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
         "lib/net45/_._",
         "lib/netcore50/System.Reflection.Emit.dll",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.1/System.Reflection.Emit.dll",
+        "lib/netstandard1.1/System.Reflection.Emit.xml",
         "lib/netstandard1.3/System.Reflection.Emit.dll",
+        "lib/netstandard2.0/System.Reflection.Emit.dll",
+        "lib/netstandard2.0/System.Reflection.Emit.xml",
+        "lib/netstandard2.1/_._",
+        "lib/xamarinios10/_._",
         "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
         "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
         "ref/net45/_._",
+        "ref/netcoreapp2.0/_._",
         "ref/netstandard1.1/System.Reflection.Emit.dll",
         "ref/netstandard1.1/System.Reflection.Emit.xml",
         "ref/netstandard1.1/de/System.Reflection.Emit.xml",
@@ -2896,9 +3338,19 @@
         "ref/netstandard1.1/ru/System.Reflection.Emit.xml",
         "ref/netstandard1.1/zh-hans/System.Reflection.Emit.xml",
         "ref/netstandard1.1/zh-hant/System.Reflection.Emit.xml",
+        "ref/netstandard2.0/System.Reflection.Emit.dll",
+        "ref/netstandard2.0/System.Reflection.Emit.xml",
+        "ref/netstandard2.1/_._",
+        "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
-        "system.reflection.emit.4.0.1.nupkg.sha512",
-        "system.reflection.emit.nuspec"
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/aot/lib/netcore50/System.Reflection.Emit.dll",
+        "runtimes/aot/lib/netcore50/System.Reflection.Emit.xml",
+        "system.reflection.emit.4.7.0.nupkg.sha512",
+        "system.reflection.emit.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Reflection.Emit.ILGeneration/4.0.1": {
@@ -4070,6 +4522,45 @@
         "system.xml.xdocument.nuspec"
       ]
     },
+    "Tesseract/5.2.0": {
+      "sha512": "YB7feJlrTWSXtK8+WaCcseGSPK/1r2d2FWeKGyndlrPwYClrzTlCoHD4/oQEUjKafmpkWlhTZZ7pxiRJYZgj6w==",
+      "type": "package",
+      "path": "tesseract/5.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/Tesseract.targets",
+        "lib/net47/Tesseract.dll",
+        "lib/net48/Tesseract.dll",
+        "lib/netstandard2.0/Tesseract.dll",
+        "lib/netstandard2.0/Tesseract.xml",
+        "tesseract.5.2.0.nupkg.sha512",
+        "tesseract.nuspec",
+        "x64/leptonica-1.82.0.dll",
+        "x64/tesseract50.dll",
+        "x86/leptonica-1.82.0.dll",
+        "x86/tesseract50.dll"
+      ]
+    },
+    "ZstdSharp.Port/0.8.1": {
+      "sha512": "19tNz33kn2EkyViFXuxfVn338UJaRmkwBphVqP2dVJIYQUQgFrgG5h061mxkRRg1Ax6r+6WOj1FxaFZ5qaWqqg==",
+      "type": "package",
+      "path": "zstdsharp.port/0.8.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net462/ZstdSharp.dll",
+        "lib/net5.0/ZstdSharp.dll",
+        "lib/net6.0/ZstdSharp.dll",
+        "lib/net7.0/ZstdSharp.dll",
+        "lib/net8.0/ZstdSharp.dll",
+        "lib/netcoreapp3.1/ZstdSharp.dll",
+        "lib/netstandard2.0/ZstdSharp.dll",
+        "lib/netstandard2.1/ZstdSharp.dll",
+        "zstdsharp.port.0.8.1.nupkg.sha512",
+        "zstdsharp.port.nuspec"
+      ]
+    },
     "TableAPI/1.0.0": {
       "type": "project",
       "path": "../TableAPI/TableAPI.csproj",
@@ -4174,7 +4665,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.105/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.106/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

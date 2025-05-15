@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Squirrel;
+using TableAPI;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace SquirrelUnitTest;
@@ -11,6 +12,16 @@ namespace SquirrelUnitTest;
 [TestClass]
 public class DataAcquisitionTests
 {
+    [TestMethod]
+    public void Test_Anon()
+    {
+        DataAcquisition.LoadParquet(@"C:\Users\Admin\Downloads\titanic.parquet");
+        //var tips = DataAcquisition.LoadCsv(@"..\..\..\Data\tips.csv");
+        
+        
+
+
+    }
     [TestMethod]
     public void Test_AnonLoading()
     {
@@ -55,17 +66,34 @@ public class DataAcquisitionTests
 
 
     }
+
     [TestMethod]
     public void Test_LoadCSV()
     {
-        Table births = DataAcquisition.LoadCsv(@"C:\Users\Admin\Documents\GitHub\Squirrel\SquirrelTests\Data\births.csv");
+
+        int.TryParse("($42,000)",
+            System.Globalization.NumberStyles.AllowParentheses
+            | System.Globalization.NumberStyles.AllowCurrencySymbol |
+            System.Globalization.NumberStyles.AllowThousands, null, out int result);
+        
+        Table births = 
+            DataAcquisition.LoadCsv(@"C:\Users\Admin\Documents\GitHub\Squirrel\SquirrelTests\Data\births.csv");
+        var brthTab = births.AsRecordTable<BirthRow>(); 
+            //RecordTable<BirthRow>.FromTable(births);
+        var sqt = brthTab.ToSqlTable();
+        var cmd = sqt.CreateTableScript;
+        var sqtRows = sqt.RowInsertCommands;
+
+
+
         Assert.AreEqual(4, births.ColumnHeaders.Count);
-        Assert.AreEqual("year", births.ColumnHeaders.ElementAt(0));
-        Assert.AreEqual("state", births.ColumnHeaders.ElementAt(1));
-        Assert.AreEqual("sex", births.ColumnHeaders.ElementAt(2));
-        Assert.AreEqual("births", births.ColumnHeaders.ElementAt(3));
+        Assert.IsTrue(births.ColumnHeaders.SequenceEqual(["year", "state", "sex", "births"]));
+        // Assert.AreEqual("year", births.ColumnHeaders.ElementAt(0));
+        // Assert.AreEqual("state", births.ColumnHeaders.ElementAt(1));
+        // Assert.AreEqual("sex", births.ColumnHeaders.ElementAt(2));
+        // Assert.AreEqual("births", births.ColumnHeaders.ElementAt(3));
         Assert.AreEqual(2654, births.RowCount);
-        Assert.IsTrue(births["sex"].Distinct().SequenceEqual(new string[] { "boy", "girl" }));            
+        Assert.IsTrue(births["sex"].Distinct().SequenceEqual(["boy", "girl"]));
         Assert.IsTrue(births["births"][0] == births[0]["births"]);
         Assert.AreEqual("4721", births["births"][0]);
     }

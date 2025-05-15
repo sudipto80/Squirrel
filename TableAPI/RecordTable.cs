@@ -12,19 +12,7 @@ public class RecordTable<T>
     /// 
     /// </summary>
     public required List<T> _rows = new List<T>();
-
-    /// <summary>
-    /// TODO:
-    /// </summary>
-    /// <param name="converters"></param>
-    /// <param name="propertyValues"></param>
-    /// <typeparam name="TRecordType"></typeparam>
-    /// <returns></returns>
-    // private static TRecordType ToRecord<TRecordType>(IEnumerable<Func<string, object>> converters,
-    //                                                  params IEnumerable<string> propertyValues)
-    // {
-    //     
-    // }
+    public string Name { get; set; }
 
     /// <summary>
     /// 
@@ -74,6 +62,7 @@ public class RecordTable<T>
             table._rows.Add(ToRecord<T>(rowValues));
         }
 
+        table.Name = tab.Name;
         return table;
     }
     /// <summary>
@@ -108,7 +97,25 @@ public class RecordTable<T>
    /// <returns></returns>
     public List<T> Filter(Func<T,int,bool> predicate) => 
          this._rows.Where(predicate.Invoke).ToList();
-    
-    
-    
+
+    public SqlTable<T> ToSqlTable()
+    {
+        SqlTable<T> sqt = new SqlTable<T>();
+        sqt.Name = typeof(T).Name;
+        foreach (var colName in _rows[0]
+                     .GetType().GetProperties().Select(p => p.Name))
+        {
+            sqt.ColumnNames.Add(colName);
+        }
+
+        foreach (var row in _rows)
+        {
+            sqt.Rows.Add(row);
+        }
+
+        sqt.Name = Name;
+        return sqt;
+        
+    }
+
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,6 +9,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using Parquet;
+using Parquet.Schema;
+using ParquetSharp;
 using TableAPI;
 
 namespace Squirrel
@@ -78,41 +82,17 @@ namespace Squirrel
             return new Table();
         }
 
-        /// <summary>
-        /// Loads data from a SQL Server database.
-        /// </summary>
-        /// <param name="connectionString">The connection string to the SQL Server database.</param>
-        /// <param name="query">The SQL query to execute.</param>
-        /// <returns>A table with all the values from the SQL Server database.</returns>
-        public static Table LoadSqlServer(string connectionString, string query)
-        {
-            // Method implementation goes here
-            return new Table();
-        }
-
-        /// <summary>
-        /// Loads data from a SQLite database.
-        /// </summary>
-        /// <param name="connectionString">The connection string to the SQLite database.</param>
-        /// <param name="query">The SQL query to execute.</param>
-        /// <returns>A table with all the values from the SQLite database.</returns>
-        public static Table LoadSQLite(string connectionString, string query)
-        {
-            // Method implementation goes here
-            
-            return new Table();
-        }
        
-
         /// <summary>
         /// Loads data from a JSON file.
         /// </summary>
         /// <param name="jsonFileName">The name of the JSON file.</param>
         /// <returns>A table with all the values from the JSON file.</returns>
-        public static Table LoadJson(string jsonFileName)
+        public static RecordTable<T> LoadJson<T>(string jsonFileName)
         {
+            RecordTable<T> t = new RecordTable<T>() { _rows =  []};
             // Method implementation goes here
-            return new Table();
+            return t;
         }
 
         /// <summary>
@@ -126,16 +106,7 @@ namespace Squirrel
             return new Table();
         }
 
-        /// <summary>
-        /// Loads data from a Parquet file.
-        /// </summary>
-        /// <param name="parquetFileName">The name of the Parquet file.</param>
-        /// <returns>A table with all the values from the Parquet file.</returns>
-        public static Table LoadParquet(string parquetFileName)
-        {
-            // Method implementation goes here
-            return new Table();
-        }
+        
 
         /// <summary>
         /// Loads data from an Avro file.
@@ -161,39 +132,7 @@ namespace Squirrel
 
 
 
-        /// <summary>
-        /// Deletes the tags from a HTML line
-        /// </summary>
-        /// <param name="codeLine">HTML code from which tags has to be removed</param>
-        /// <param name="exceptTheseTags">Remove all tags except this one</param>
-        /// <returns></returns>
-        private static string StripTags(string codeLine, List<string> exceptTheseTags)
-        {
-            string tag = string.Empty;
-            string html = string.Empty;
-            var tags = new List<string>();
-            for (int i = 0; i < codeLine.Length; i++)
-            {
-                tag = string.Empty;
-                if (codeLine[i] == '<')
-                {
-                    i++;
-                    do
-                    {
-                        tag = tag + codeLine[i];
-                        i++;
-                    } while (codeLine[i] != '>');
-
-                    tags.Add("<" + tag + ">");
-                }
-            }
-
-            tags.RemoveAll(t => exceptTheseTags.Contains(t));
-            foreach (string k in codeLine.Split(tags.ToArray(), StringSplitOptions.RemoveEmptyEntries))
-                html = html + k + " ";
-            //the html
-            return html;
-        }
+       
 
         /// <summary>
         /// Creates a table out of a list of anonynous type objects. 
@@ -228,6 +167,12 @@ namespace Squirrel
             return result;
         }
 
+        /// <summary>
+        /// Creates a strongly typed table instance RecordTable<T>
+        /// </summary>
+        /// <param name="list"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static RecordTable<T> ToRecordTableFromAnonList<T>(this IEnumerable<T> list)
         {
             var tab = new RecordTable<T>{_rows = []};
@@ -598,7 +543,7 @@ namespace Squirrel
         /// Loads a CSV file to a respective Table data structure.
         /// </summary>
         /// <param name="csvFileName">The file for which values has to be loaded into a table data structure.</param>
-        /// <param name="wrappedWihDoubleQuotes"></param>
+        /// <param name="hasHeader">True if the CSV has headers. Default is set to true.</param>
         /// <returns>A table which has all the values in the CSV file</returns>
         public static Table LoadCsv(string csvFileName, bool hasHeader = true)
         {
@@ -649,6 +594,7 @@ namespace Squirrel
         /// <returns>A table loaded with all the values in the file.</returns>
         public static Table LoadFlatFile(string fileName, bool hasHeader, char[] delimeters)
         {
+            var name = Path.GetFileNameWithoutExtension(fileName);
             string prefix = "";
             string suffix = "";
             string lastOne = "";
@@ -678,29 +624,19 @@ namespace Squirrel
                     string[] values = null;
                     if (line.Trim().Length > 0)
                     {
-                        //if (delimeters.Length == 1 && delimeters[0] == ',')
-                        //    values = GetValues(line, delimeters).ToArray();
-                        //else
-
-
                         values = GetValues(line, delimeters, prefix).ToArray();
-
                         if (values.Length == 0)
                             values = line.Split(delimeters, StringSplitOptions.None);
-
                         if (values.Length == columns.Count)
                         {
-                            lastOne = values.Last();//.Substring(1);
-                            //lastOne = lastOne.Substring(0, lastOne.Length - 1);
-                            
+                            lastOne = values.Last();
                             if (lastOne.StartsWith("\"") || lastOne.EndsWith("\""))
                             {
-                                            
-                                prefix = prefix + line;
+                                prefix += line;
                                 continue;
                             }
                            
-                            Dictionary<string, string> tempRow = new Dictionary<string, string>();
+                            var tempRow = new Dictionary<string, string>();
                                 for (int i = 0; i < values.Length; i++)
                                 {
                                     try
@@ -728,6 +664,7 @@ namespace Squirrel
                 }
             }
 
+            loadedCsv.Name = name;
             return loadedCsv;
         }
 
@@ -945,5 +882,36 @@ namespace Squirrel
         /// <returns>A record table</returns>
         public static RecordTable<T> AsRecordTable<T>(this Table tab) => RecordTable<T>.FromTable(tab);
 
+        public static void LoadParquet(string path)
+        {
+            using var file = new ParquetFileReader(path);
+
+            for (int rowGroup = 0; rowGroup < file.FileMetaData.NumRowGroups; ++rowGroup)
+            {
+                using var rowGroupReader = file.RowGroup(rowGroup);
+                var groupNumRows = checked((int)rowGroupReader.MetaData.NumRows);
+
+                var colNames
+                    = ((ParquetSharp.RowGroupMetaData)rowGroupReader.MetaData).Schema.GroupNode.Fields
+                    .Select(x => x.Name).ToList();
+
+                var colVals = rowGroupReader.Column(3).LogicalReader()
+                    .Apply(new ColumnPrinter())
+                    .Split(new char[]{','})
+                    .ToList();
+                
+                var groupTimestamps = rowGroupReader.Column(0).LogicalReader<DateTime>().ReadAll(groupNumRows);
+                var groupObjectIds = rowGroupReader.Column(1).LogicalReader<int>().ReadAll(groupNumRows);
+                var groupValues = rowGroupReader.Column(2).LogicalReader<float>().ReadAll(groupNumRows);
+
+                Console.WriteLine("Read Parquet file:");
+                for (int i = 0; i < groupNumRows; ++i)
+                {
+                    Console.WriteLine($"Timestamp: {groupTimestamps[i]}, ObjectId: {groupObjectIds[i]}, Value: {groupValues[i]}");
+                }
+            }
+
+            file.Close();
+        }
     }
 }
