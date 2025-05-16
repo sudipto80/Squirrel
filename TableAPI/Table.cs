@@ -711,7 +711,17 @@ namespace Squirrel
 		/// <summary>
 		/// Read-only property for getting rows of the table
 		/// </summary>
-		public List<Dictionary<string, string>> Rows => _rows;
+		public List<Dictionary<string, string>> Rows
+		{
+			get
+			{
+				return _rows;
+			}
+			set
+			{
+				_rows = value;
+			}
+		}
 
 		/// <summary>
 		/// Extracts words from values of a given column 

@@ -70,19 +70,12 @@ public class DataAcquisitionTests
     [TestMethod]
     public void Test_LoadCSV()
     {
-
-        int.TryParse("($42,000)",
-            System.Globalization.NumberStyles.AllowParentheses
-            | System.Globalization.NumberStyles.AllowCurrencySymbol |
-            System.Globalization.NumberStyles.AllowThousands, null, out int result);
+        var book1 = DataAcquisition.LoadExcel(@"C:\personal\Book1.xlsx", "Accidents");
         
+        
+      
         Table births = 
             DataAcquisition.LoadCsv(@"C:\Users\Admin\Documents\GitHub\Squirrel\SquirrelTests\Data\births.csv");
-        var brthTab = births.AsRecordTable<BirthRow>(); 
-            //RecordTable<BirthRow>.FromTable(births);
-        var sqt = brthTab.ToSqlTable();
-        var cmd = sqt.CreateTableScript;
-        var sqtRows = sqt.RowInsertCommands;
 
 
 

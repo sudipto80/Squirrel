@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Squirrel;
@@ -8,14 +9,19 @@ namespace SquirrelUnitTest;
 [TestClass]
 public class CsvSpectrumTests
 {
-       /// <summary>
+    /// <summary>
+    /// Location of CSV Spectrum test data files
+    /// </summary>
+    private const string CsvSpectrumDataPath = @"..\..\..\Data\CsvSpectrum";
+
+    /// <summary>
     /// 
     /// </summary>
     [TestMethod]
     public void CsvSpectrum_comma_in_quotes_csv()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\comma_in_quotes.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath,"comma_in_quotes.csv"));
         var expectedHeaders = new[] { "first", "last", "address", "city", "zip" };
         Assert.AreEqual(5, tab.ColumnHeaders.Count);
         Assert.IsTrue(expectedHeaders.SequenceEqual(tab.ColumnHeaders));
@@ -116,10 +122,7 @@ public class CsvSpectrumTests
     {
         var tab =
             DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\newlines.csv");
-
         Assert.AreEqual(3, tab.RowCount);
-
-
     }
 
     [TestMethod]
@@ -127,10 +130,7 @@ public class CsvSpectrumTests
     {
         var tab =
             DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\newlines_crlf.csv");
-
         Assert.AreEqual(3, tab.RowCount);
-
-
     }
 
     [TestMethod]

@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ExcelDataReader;
 using HtmlAgilityPack;
 using Parquet;
 using Parquet.Schema;
@@ -76,10 +77,39 @@ namespace Squirrel
         /// <param name="fileName">The name of the Excel file.</param>
         /// <param name="sheetNames">The names of the sheets to load.</param>
         /// <returns>A table with all the values from the specified sheets.</returns>
-        public static Table LoadExcelWithMultipleSheets(string fileName, params string[] sheetNames)
+        public static Table LoadExcel(string filePath, string sheetName = "Sheet1")
         {
-            // Method implementation goes here
-            return new Table();
+            var loaded = new Table();
+            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            {
+                // Make sure this is called before any ExcelDataReader operations
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                // Auto-detect format, supports:
+                //  - Binary Excel files (2.0-2003 format; *.xls)
+                //  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    var result = reader.AsDataSet();
+                    var index  = result.Tables.IndexOf(sheetName);
+                    var t = result.Tables[index];
+                    loaded = LoadDataTable(t);
+                    loaded.Name = t.TableName;
+                    // The result of each spreadsheet is in result.Tables
+                }
+            }
+            var colHeaderNames = loaded.Rows[0].Keys.ToList();
+            var revColNameMap = loaded.Rows[0];
+            var colValues =
+                colHeaderNames.ToDictionary(col => revColNameMap[col], 
+                    col => loaded[col].Skip(1).ToList());
+            var modLoad = new Table();
+            foreach (var col in colValues.Keys)
+            {
+                modLoad.AddColumn(col, colValues[col]);
+            }
+
+            modLoad.Name = loaded.Name;
+            return modLoad;
         }
 
        
