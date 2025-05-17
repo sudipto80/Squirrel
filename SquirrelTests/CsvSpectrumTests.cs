@@ -9,8 +9,8 @@ namespace SquirrelUnitTest;
 [TestClass]
 public class CsvSpectrumTests
 {
-    // Change this line
-    private static readonly string CsvSpectrumDataPath = Path.Combine("..","..","..","Data","CsvSpectrum");
+    private static readonly string CsvSpectrumDataPath = 
+        Path.Combine("..","..","..","Data","CsvSpectrum");
 
     /// <summary>
     /// 

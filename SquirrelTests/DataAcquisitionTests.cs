@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,14 +13,16 @@ namespace SquirrelUnitTest;
 [TestClass]
 public class DataAcquisitionTests
 {
-    [TestMethod]
-    public void Test_Anon()
-    {
-        DataAcquisition.LoadParquet(@"C:\Users\Admin\Downloads\titanic.parquet");
-        //var tips = DataAcquisition.LoadCsv(@"..\..\..\Data\tips.csv");
-        
-        
+    private static readonly string TestDataPath = 
+        Path.Combine("..","..","..","Data");
 
+    [TestMethod]
+    public void Test_LoadARFF()
+    {
+        Table play = DataAcquisition.LoadArff( Path.Combine(TestDataPath, "weather.nominal.arff"));
+        Assert.AreEqual(14, play.RowCount);
+        Assert.IsTrue((new string[] { "outlook", "temperature", "humidity", "windy", "play" }).All(t => play.ColumnHeaders.Contains(t)));
+        Assert.IsTrue(play.ValuesOf("outlook").Distinct().All(m => m== "sunny" || m== "overcast" || m == "rainy" ));
 
     }
     [TestMethod]
@@ -41,16 +44,16 @@ public class DataAcquisitionTests
     [TestMethod]
     public void Test_LoadHTML()
     {
-        var crime = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\crimerate.html");
+        var crime = DataAcquisition.LoadHtmlTable(Path.Combine(TestDataPath, "crimerate.html"));
         Assert.AreEqual(10, crime.RowCount);
         Assert.IsTrue(
             crime[crime.RowCount - 1].Values
                 .SequenceEqual(["Andhra Pradesh", "3.6"]));
 
-        var olympics = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\olympic_medals.html");
+        var olympics = DataAcquisition.LoadHtmlTable(Path.Combine(TestDataPath, "olympic_medals.html"));
         Assert.AreEqual(146, olympics.RowCount);
 
-        var accidents = DataAcquisition.LoadHtmlTable(@"..\..\..\Data\roadaccidents.html");
+        var accidents = DataAcquisition.LoadHtmlTable(Path.Combine(TestDataPath, "roadaccidents.html"));
         Assert.AreEqual(186, accidents.RowCount);
         Assert.IsTrue(
             accidents[accidents.RowCount - 1].Values
@@ -60,7 +63,7 @@ public class DataAcquisitionTests
     [TestMethod]
     public void Test_LoadTSV()
     {
-        Table data = DataAcquisition.LoadTsv(@"..\..\..\Data\data.tsv", true);
+        Table data = DataAcquisition.LoadTsv(Path.Combine(TestDataPath, "data.tsv"), true);
         Assert.AreEqual(3, data.RowCount);
         Assert.AreEqual("Jane", data["Name"][0]);
 
@@ -70,21 +73,12 @@ public class DataAcquisitionTests
     [TestMethod]
     public void Test_LoadCSV()
     {
-        var book1 = DataAcquisition.LoadExcel(@"C:\personal\Book1.xlsx", "Accidents");
-        
-        
-      
-        Table births = 
-            DataAcquisition.LoadCsv(@"C:\Users\Admin\Documents\GitHub\Squirrel\SquirrelTests\Data\births.csv");
 
-
-
+        Table births =
+            DataAcquisition.LoadCsv(Path.Combine(TestDataPath, "births.csv"));
         Assert.AreEqual(4, births.ColumnHeaders.Count);
         Assert.IsTrue(births.ColumnHeaders.SequenceEqual(["year", "state", "sex", "births"]));
-        // Assert.AreEqual("year", births.ColumnHeaders.ElementAt(0));
-        // Assert.AreEqual("state", births.ColumnHeaders.ElementAt(1));
-        // Assert.AreEqual("sex", births.ColumnHeaders.ElementAt(2));
-        // Assert.AreEqual("births", births.ColumnHeaders.ElementAt(3));
+      
         Assert.AreEqual(2654, births.RowCount);
         Assert.IsTrue(births["sex"].Distinct().SequenceEqual(["boy", "girl"]));
         Assert.IsTrue(births["births"][0] == births[0]["births"]);

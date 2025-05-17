@@ -517,15 +517,7 @@ namespace SquirrelUnitTest
             Assert.Inconclusive("WIP");
 
         }
-        [TestMethod]
-        public void Test_LoadARFF()
-        {
-            Table play = DataAcquisition.LoadArff(@"..\..\..\Data\weather.nominal.arff");
-            Assert.AreEqual(14, play.RowCount);
-            Assert.IsTrue((new string[] { "outlook", "temperature", "humidity", "windy", "play" }).All(t => play.ColumnHeaders.Contains(t)));
-            Assert.IsTrue(play.ValuesOf("outlook").Distinct().All(m => m== "sunny" || m== "overcast" || m == "rainy" ));
-
-        }
+     
         [TestMethod]
         public void Test_GetAs()
         {
