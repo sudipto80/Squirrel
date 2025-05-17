@@ -9,10 +9,8 @@ namespace SquirrelUnitTest;
 [TestClass]
 public class CsvSpectrumTests
 {
-    /// <summary>
-    /// Location of CSV Spectrum test data files
-    /// </summary>
-    private const string CsvSpectrumDataPath = @"..\..\..\Data\CsvSpectrum";
+    // Change this line
+    private static readonly string CsvSpectrumDataPath = Path.Combine("..","..","..","Data","CsvSpectrum");
 
     /// <summary>
     /// 
@@ -20,8 +18,9 @@ public class CsvSpectrumTests
     [TestMethod]
     public void CsvSpectrum_comma_in_quotes_csv()
     {
+        var filePath = Path.Combine(CsvSpectrumDataPath, "comma_in_quotes.csv");
         var tab =
-            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath,"comma_in_quotes.csv"));
+            DataAcquisition.LoadCsv(filePath);
         var expectedHeaders = new[] { "first", "last", "address", "city", "zip" };
         Assert.AreEqual(5, tab.ColumnHeaders.Count);
         Assert.IsTrue(expectedHeaders.SequenceEqual(tab.ColumnHeaders));
@@ -42,7 +41,8 @@ public class CsvSpectrumTests
     public void CsvSpectrum_empty_csv()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\empty.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "empty.csv"));
+            
 
         Assert.AreEqual(2, tab.RowCount);
         Assert.AreEqual(3, tab.ColumnHeaders.Count);
@@ -68,8 +68,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_empty_crlf()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\empty_crlf.csv");
-
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "empty_crlf.csv"));
         Assert.AreEqual(2, tab.RowCount);
         Assert.AreEqual(3, tab.ColumnHeaders.Count);
         Assert.IsTrue(tab.ColumnHeaders.SequenceEqual(["a", "b", "c"]));
@@ -82,7 +81,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_escaped_quotes()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\escaped_quotes.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "escaped_quotes.csv"));
 
         Assert.AreEqual(2, tab.RowCount);
         Assert.AreEqual(2, tab.ColumnHeaders.Count);
@@ -96,8 +95,8 @@ public class CsvSpectrumTests
     public void CsvSpectrum_json()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\json.csv");
-
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "json.csv"));
+            
         Assert.AreEqual(1, tab.RowCount);
         Assert.AreEqual(tab["val", 0], @"{""type"": ""Point"", ""coordinates"": [102.0, 0.5]}");
     }
@@ -106,7 +105,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_location_coordinates()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\location_coordinates.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "location_coordinates.csv"));
 
         Assert.AreEqual(1, tab.RowCount);
         Assert.AreEqual(4, tab.ColumnHeaders.Count);
@@ -121,7 +120,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_newlines()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\newlines.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "newlines.csv"));
         Assert.AreEqual(3, tab.RowCount);
     }
 
@@ -129,7 +128,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_newlines_crlf()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\newlines_crlf.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "newlines_crlf.csv"));
         Assert.AreEqual(3, tab.RowCount);
     }
 
@@ -137,7 +136,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_quotes_and_newlines()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\quotes_and_newlines.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "quotes_and_newlines.csv"));
 
         Assert.AreEqual(2, tab.RowCount);
         Assert.AreEqual(@"ha ""ha"" ha",tab["b",0]);
@@ -150,7 +149,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_simple()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\simple.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "simple.csv"));
 
         Assert.AreEqual(1, tab.RowCount);
         
@@ -163,7 +162,8 @@ public class CsvSpectrumTests
     public void CsvSpectrum_simple_crlf()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\simple_crlf.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "simple_crlf.csv"));
+            
 
         Assert.AreEqual(1, tab.RowCount);
         
@@ -175,7 +175,7 @@ public class CsvSpectrumTests
     public void CsvSpectrum_utf8()
     {
         var tab =
-            DataAcquisition.LoadCsv(@"..\..\..\Data\CsvSpectrum\utf8.csv");
+            DataAcquisition.LoadCsv(Path.Combine(CsvSpectrumDataPath, "utf8.csv"));
 
         Assert.AreEqual(2, tab.RowCount);
         
