@@ -55,6 +55,14 @@
               "target": "Package",
               "version": "[3.1.253, )"
             },
+            "ExcelDataReader.DataSet": {
+              "target": "Package",
+              "version": "[3.8.0-develop00474, )"
+            },
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.12.1, )"
+            },
             "Microsoft.VisualBasic": {
               "target": "Package",
               "version": "[10.3.0, )"
@@ -62,6 +70,30 @@
             "Nunit": {
               "target": "Package",
               "version": "[3.13.2, )"
+            },
+            "Parquet.Net": {
+              "target": "Package",
+              "version": "[5.1.1, )"
+            },
+            "ParquetSharp": {
+              "target": "Package",
+              "version": "[19.0.1, )"
+            },
+            "System.Data.OleDb": {
+              "target": "Package",
+              "version": "[10.0.0-preview.4.25258.110, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "System.Text.Encoding.CodePages": {
+              "target": "Package",
+              "version": "[10.0.0-preview.4.25258.110, )"
+            },
+            "Tesseract": {
+              "target": "Package",
+              "version": "[5.2.0, )"
             }
           },
           "imports": [
@@ -80,7 +112,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.106/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -107,7 +139,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\9.0.104\\FSharp\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\9.0.106\\FSharp\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -161,7 +193,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.106\\RuntimeIdentifierGraph.json"
         }
       }
     }

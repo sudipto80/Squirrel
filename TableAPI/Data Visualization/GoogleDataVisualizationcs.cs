@@ -56,8 +56,9 @@ namespace Squirrel
         public static string ToHistogramByGoogleDataVisualization(this Dictionary<string, int> hist, string column1,
                                        string column2, string title)
         {
-            string data = string.Empty;
-            data = hist.Select(z => "['" + z.Key + "'," + z.Value.ToString() + "]").Aggregate((f, s) => f + "," + s);
+            string data = hist.Select(z 
+                                    => "['" + z.Key + "'," + z.Value.ToString() + "]")
+                              .Aggregate((f, s) => f + "," + s);
             string template = @"<html>
               <head>
                 <script type=""text/javascript"" src=""https://www.google.com/jsapi""></script>

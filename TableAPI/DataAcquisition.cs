@@ -74,8 +74,8 @@ namespace Squirrel
         /// <summary>
         /// Loads data from an Excel file with multiple sheets.
         /// </summary>
-        /// <param name="fileName">The name of the Excel file.</param>
-        /// <param name="sheetNames">The names of the sheets to load.</param>
+        /// <param name="filePath">The path of the Excel file.</param>
+        /// <param name="sheetName">The name of the sheet to load.</param>
         /// <returns>A table with all the values from the specified sheets.</returns>
         public static Table LoadExcel(string filePath, string sheetName = "Sheet1")
         {
@@ -120,7 +120,7 @@ namespace Squirrel
         /// <returns>A table with all the values from the JSON file.</returns>
         public static RecordTable<T> LoadJson<T>(string jsonFileName)
         {
-            RecordTable<T> t = new RecordTable<T>() { _rows =  []};
+            RecordTable<T> t = new RecordTable<T>() { Rows =  []};
             // Method implementation goes here
             return t;
         }
@@ -175,7 +175,8 @@ namespace Squirrel
         /// <summary>
         /// Creates a table out of a list of anonymous type objects.
         /// This is useful when you are creating a bunch of objects
-        /// of anonymous type and want to
+        /// of anonymous type and want to create a table using those objects  
+        /// as rows of the table.
         /// </summary>
         /// <typeparam name="T">Type of the anonymous type</typeparam>
         /// <param name="list">list of anonymous objects</param>
@@ -205,10 +206,10 @@ namespace Squirrel
         /// <returns></returns>
         public static RecordTable<T> ToRecordTableFromAnonList<T>(this IEnumerable<T> list)
         {
-            var tab = new RecordTable<T>{_rows = []};
+            var tab = new RecordTable<T>{Rows = []};
             foreach (var v in list)
             {
-                tab._rows.Add(v);
+                tab.Rows.Add(v);
             }
 
             return tab;
@@ -369,9 +370,9 @@ namespace Squirrel
        
 
         /// <summary>
-        /// Loads a HTML table to the corresponding Table container
+        /// Loads an HTML table to the corresponding Table container
         /// </summary>
-        /// <param name="htmlTable">The HTML code that creates the table</param>
+        /// <param name="htmlTable">The file that holds the HTML code that creates the table</param>
         /// <returns>A table with all the data from the html table</returns>
         public static Table LoadHtmlTable(string htmlTable)
         {
@@ -413,6 +414,7 @@ namespace Squirrel
                 tab.AddRow(row);
             }
 
+            tab.Name = Path.GetFileNameWithoutExtension(htmlTable);
             return tab;
         }
 

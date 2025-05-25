@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleDemo", "ConsoleDemo\ConsoleDemo.csproj", "{A732D192-0258-4014-BD5A-D5990DA4FEB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableAPI", "..\TableAPI\TableAPI.csproj", "{13FAF5DC-ED00-4645-AD75-2E55E4D4EBF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquirrelUnitTests", "..\SquirrelTests\SquirrelUnitTests.csproj", "{D926FFE0-C686-450E-A0EE-94E8CAA15854}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A732D192-0258-4014-BD5A-D5990DA4FEB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A732D192-0258-4014-BD5A-D5990DA4FEB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A732D192-0258-4014-BD5A-D5990DA4FEB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A732D192-0258-4014-BD5A-D5990DA4FEB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13FAF5DC-ED00-4645-AD75-2E55E4D4EBF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13FAF5DC-ED00-4645-AD75-2E55E4D4EBF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13FAF5DC-ED00-4645-AD75-2E55E4D4EBF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13FAF5DC-ED00-4645-AD75-2E55E4D4EBF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D926FFE0-C686-450E-A0EE-94E8CAA15854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D926FFE0-C686-450E-A0EE-94E8CAA15854}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D926FFE0-C686-450E-A0EE-94E8CAA15854}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D926FFE0-C686-450E-A0EE-94E8CAA15854}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

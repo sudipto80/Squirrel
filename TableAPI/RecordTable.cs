@@ -11,8 +11,10 @@ public class RecordTable<T>
     /// <summary>
     /// 
     /// </summary>
-    public required List<T> _rows = new List<T>();
+    public required List<T> Rows = new List<T>();
     public string Name { get; set; }
+    
+    
 
     /// <summary>
     /// 
@@ -53,13 +55,13 @@ public class RecordTable<T>
     {
         var table = new RecordTable<T>
         {
-            _rows = []
+            Rows = []
         };
         foreach (var rowValues
                  in tab.Rows.Select(row 
                      => row.Keys.Select(k => row[k]).ToList()))
         {
-            table._rows.Add(ToRecord<T>(rowValues));
+            table.Rows.Add(ToRecord<T>(rowValues));
         }
 
         table.Name = tab.Name;
@@ -69,11 +71,11 @@ public class RecordTable<T>
     /// Returns the row at the index 
     /// </summary>
     /// <param name="index">Index of the row</param>
-    public T this[int index] => _rows[index];
+    public T this[int index] => Rows[index];
     /// <summary>
     /// 
     /// </summary>
-    public int RowCount => _rows.Count;
+    public int RowCount => Rows.Count;
 
     /// <summary>
     /// 
@@ -84,7 +86,7 @@ public class RecordTable<T>
     {
         var result = new RecordTable<T>
         {
-            _rows = _rows.Where(predicate).ToList()
+            Rows = Rows.Where(predicate).ToList()
         };
         return result;
     }
@@ -96,19 +98,19 @@ public class RecordTable<T>
    /// <param name="predicate"></param>
    /// <returns></returns>
     public List<T> Filter(Func<T,int,bool> predicate) => 
-         this._rows.Where(predicate.Invoke).ToList();
+         this.Rows.Where(predicate.Invoke).ToList();
 
     public SqlTable<T> ToSqlTable()
     {
         SqlTable<T> sqt = new SqlTable<T>();
         sqt.Name = typeof(T).Name;
-        foreach (var colName in _rows[0]
+        foreach (var colName in Rows[0]
                      .GetType().GetProperties().Select(p => p.Name))
         {
             sqt.ColumnNames.Add(colName);
         }
 
-        foreach (var row in _rows)
+        foreach (var row in Rows)
         {
             sqt.Rows.Add(row);
         }
