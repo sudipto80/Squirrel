@@ -889,5 +889,77 @@ namespace Squirrel.Cleansing
 			}
 			return newTable;
 		}
+
+		public static Table ReplaceXWithY(this Table tab, 
+			Dictionary<string, KeyValuePair<string, string>> values)
+		{
+			Table cleaned = new Table();
+			foreach (var col in tab.ColumnHeaders)
+			{
+				cleaned.AddColumn(col, tab[col]);
+			}
+
+			foreach (var m in values.Keys)
+			{
+				cleaned = ReplaceXWithY(cleaned, m, values[m].Key, values[m].Value);
+			}
+
+			return cleaned;
+		}
+		public static Table ReplaceXsWithY(this Table tab, string columnName, string y, params string[] xs)
+		{
+			foreach(var x in xs)
+			{
+				tab = tab.ReplaceXWithY(columnName, x, y);
+			}
+
+			return tab;
+		}
+		public static Table ReplaceXWithY(this Table tab, string columnName, string x, string y)
+		{
+			Table cleanedTable = new Table();
+			foreach (var col in tab.ColumnHeaders)
+			{
+				if (!columnName.Equals(col))
+				{
+					cleanedTable.AddColumn(col, tab[col]);
+				}
+			}
+			var colValues = tab[columnName];
+			List<string> modColValues = new List<string>();
+			foreach (var colValue in colValues)
+			{
+				modColValues.Add(colValue.Trim().Equals(x.Trim()) ? y : colValue);
+			}
+			cleanedTable.AddColumn(columnName, modColValues);
+			return cleanedTable;
+		}
+
+		/// <summary>
+		/// Removes rows from the table where the combinations are wrong 
+		/// or are impossible. For example, 
+		/// </summary>
+		/// <param name="tab"></param>
+		/// <param name="combinations"></param>
+		/// <returns></returns>
+		public static Table RemoveCombinations(this Table tab, Dictionary<string,HashSet<string>> combinations)
+		{
+			Table cleaned = new Table();
+			return cleaned;
+		}
+		public static Table RemoveCombinations(this Table tab, List<BadValueCombination> badValues)
+		{
+			return tab;
+		}
+		/// <summary>
+		/// Drops the given columns 
+		/// </summary>
+		/// <param name="tab"></param>
+		/// <param name="columnToDrop"></param>
+		/// <returns></returns>
+		public static Table DropColumns(this Table tab, params IEnumerable<string> columnToDrop)
+		{
+			return tab.Pick( tab.ColumnHeaders.Except(columnToDrop).ToArray());
+		}
 	}
 }
