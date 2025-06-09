@@ -12,7 +12,7 @@ namespace Squirrel
 	
 	/// <summary>
 	/// The alignment for the pretty dump
-	/// </summary>
+	/// </summary    >
 	public enum Alignment 
 	{ 
 		/// <summary>
@@ -1759,6 +1759,21 @@ namespace Squirrel
 			return ShowMe(query).RowCount;
 		}
 		#endregion
+
+		public Table()
+		{
+			
+		}
+		public Table(Table another)
+		{
+			
+			foreach(var row in another.Rows)
+			{
+				this.AddRow(row);
+			}
+
+			
+		}
 	  
 	}
 

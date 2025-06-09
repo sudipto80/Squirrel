@@ -45,6 +45,10 @@ namespace Squirrel.Cleansing
 			Max
 		}
 
+		static DataCleansers()
+		{
+		}
+
 		private static Dictionary<string,string> _handleMissingValue(this Dictionary<string,string> row,Table tab,
 									string columnName,
 									   MissingValueHandlingStrategy strategy)
@@ -547,6 +551,27 @@ namespace Squirrel.Cleansing
 			indicesToRemove.ForEach(k => tab.Rows.RemoveAt(k));
 			return tab;
 		}
+
+		public static Table RemoveCombination<T, U>(this Table tab, string column1, string column2,
+			Func<T, U, bool> predicate)
+		{
+			int i = 0;
+			List<int> indicesToRemove = new List<int>();
+			List<T> castedList1 = tab.ValuesOf(column1).Cast<T>().ToList();
+			List<U> castedList2 = tab.ValuesOf(column2).Cast<U>().ToList();
+			
+			for (; i < castedList1.Count; i++)
+			{
+				T temp1 = castedList1[i];
+				U temp2 = castedList2[i];
+ 				if (predicate(temp1,temp2))
+				{
+					indicesToRemove.Add(i);
+				}
+			}
+			indicesToRemove.ForEach(k => tab.Rows.RemoveAt(k));
+			return tab;
+		}
 		/// <summary>
 		/// Rempves list of rows that doesn't match a given condition. 
 		/// </summary>
@@ -940,26 +965,20 @@ namespace Squirrel.Cleansing
 		/// or are impossible. For example, 
 		/// </summary>
 		/// <param name="tab"></param>
-		/// <param name="combinations"></param>
+		/// <param name="badCombination"></param>
 		/// <returns></returns>
-		public static Table RemoveCombinations(this Table tab, Dictionary<string,HashSet<string>> combinations)
+		public static Table RemoveCombinations(this Table tab, string badCombination)
 		{
-			Table cleaned = new Table();
+			Table cleaned = new Table(tab);
+			//Category=[Electronics];Unit=[Liters]
+
+				
 			return cleaned;
 		}
 		public static Table RemoveCombinations(this Table tab, List<BadValueCombination> badValues)
 		{
 			return tab;
 		}
-		/// <summary>
-		/// Drops the given columns 
-		/// </summary>
-		/// <param name="tab"></param>
-		/// <param name="columnToDrop"></param>
-		/// <returns></returns>
-		public static Table DropColumns(this Table tab, params IEnumerable<string> columnToDrop)
-		{
-			return tab.Pick( tab.ColumnHeaders.Except(columnToDrop).ToArray());
-		}
+		
 	}
 }
