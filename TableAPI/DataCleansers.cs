@@ -551,7 +551,6 @@ namespace Squirrel.Cleansing
 			indicesToRemove.ForEach(k => tab.Rows.RemoveAt(k));
 			return tab;
 		}
-
 		public static Table RemoveCombination<T, U>(this Table tab, string column1, string column2,
 			Func<T, U, bool> predicate)
 		{
@@ -569,7 +568,8 @@ namespace Squirrel.Cleansing
 					indicesToRemove.Add(i);
 				}
 			}
-			indicesToRemove.ForEach(k => tab.Rows.RemoveAt(k));
+			indicesToRemove.OrderByDescending(x => x).ToList()
+				.ForEach(k => tab.Rows.RemoveAt(k));     
 			return tab;
 		}
 		/// <summary>

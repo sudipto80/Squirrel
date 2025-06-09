@@ -40,8 +40,18 @@ Dictionary<string, HashSet<string>> combinations
 //Electronics and Textile can't have Liters as the unit 
 Func<string, string, bool> badCom1 = (x,y) => x.Equals("Electronics") && y.Equals("Liters");
 Func<string, string, bool> badCom2 = (x,y) => x.Equals("Textiles") && y.Equals("Liters");
-badCombs.RemoveCombination("Category", "Unit", badCom1)
-        .RemoveCombination("Category","Unit", badCom2)
+
+Func<string,string,bool> categoryUnitViolations = 
+    (x,y) => (x.Equals("Electronics") || x.Equals("Textiles")) && y.Equals("Liters");
+List<Func<string,string,bool>> badCombinations = [badCom1, badCom2];
+
+    
+
+
+badCombs
+        //.RemoveCombination("Category", "Unit", badCom1)
+        //.RemoveCombination("Category","Unit", badCom2)
+        .RemoveCombination("Category","Unit", categoryUnitViolations)
         .PrettyDump(rowColor:ConsoleColor.Red);
 
 Console.WriteLine(badCombs.RowCount);
