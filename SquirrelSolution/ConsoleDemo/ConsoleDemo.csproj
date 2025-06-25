@@ -12,4 +12,9 @@
       <ProjectReference Include="..\..\TableAPI\TableAPI.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Aspose.OCR" Version="25.5.0" />
+      <PackageReference Include="IronOcr" Version="2025.6.2" />
+    </ItemGroup>
+
 </Project>
