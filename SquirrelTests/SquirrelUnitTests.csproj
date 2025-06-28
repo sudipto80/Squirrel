@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TableAPI\TableAPI.csproj" />
+    <ProjectReference Include="..\Squirrel\Squirrel.csproj" />
   </ItemGroup>
 
 </Project>

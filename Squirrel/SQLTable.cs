@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.VisualBasic;
 using Squirrel;
 
-namespace TableAPI;
+namespace Squirrel;
 
 
 

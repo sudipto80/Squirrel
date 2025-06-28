@@ -1,7 +1,7 @@
 ﻿using Squirrel;
 using System.Collections.Generic;
 
-namespace TableAPI;
+namespace Squirrel;
 
 public static class TableListExtensions
 {

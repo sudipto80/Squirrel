@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Squirrel;
-using TableAPI;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace SquirrelUnitTest;
@@ -32,8 +31,10 @@ public class DataAcquisitionTests
         Table play = DataAcquisition.LoadArff( Path.Combine(TestDataPath, "weather.nominal.arff"));
         
         Assert.AreEqual(14, play.RowCount);
-        Assert.IsTrue((new string[] { "outlook", "temperature", "humidity", "windy", "play" }).All(t => play.ColumnHeaders.Contains(t)));
-        Assert.IsTrue(play.ValuesOf("outlook").Distinct().All(m => m== "sunny" || m== "overcast" || m == "rainy" ));
+        Assert.IsTrue(new[] { "outlook", "temperature", "humidity", "windy", "play" }
+            .All(t => play.ColumnHeaders.Contains(t)));
+        Assert.IsTrue(play.ValuesOf("outlook").Distinct()
+            .All(m => m== "sunny" || m== "overcast" || m == "rainy" ));
 
     }
     [TestMethod]

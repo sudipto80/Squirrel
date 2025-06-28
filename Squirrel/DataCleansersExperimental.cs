@@ -1,4 +1,4 @@
-﻿using TableAPI;
+﻿using Squirrel;
 
 namespace Squirrel.DataCleansing;
 

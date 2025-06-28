@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleDemo", "ConsoleDemo\ConsoleDemo.csproj", "{A732D192-0258-4014-BD5A-D5990DA4FEB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableAPI", "..\TableAPI\TableAPI.csproj", "{13FAF5DC-ED00-4645-AD75-2E55E4D4EBF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel", "..\Squirrel\Squirrel.csproj", "{13FAF5DC-ED00-4645-AD75-2E55E4D4EBF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquirrelUnitTests", "..\SquirrelTests\SquirrelUnitTests.csproj", "{D926FFE0-C686-450E-A0EE-94E8CAA15854}"
 EndProject

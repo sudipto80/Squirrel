@@ -1447,7 +1447,7 @@
           "lib/net8.0/ZstdSharp.dll": {}
         }
       },
-      "TableAPI/1.0.0": {
+      "Squirrel/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
@@ -1464,10 +1464,10 @@
           "Tesseract": "5.2.0"
         },
         "compile": {
-          "bin/placeholder/TableAPI.dll": {}
+          "bin/placeholder/Squirrel.dll": {}
         },
         "runtime": {
-          "bin/placeholder/TableAPI.dll": {}
+          "bin/placeholder/Squirrel.dll": {}
         }
       }
     }
@@ -4997,10 +4997,10 @@
         "zstdsharp.port.nuspec"
       ]
     },
-    "TableAPI/1.0.0": {
+    "Squirrel/1.0.0": {
       "type": "project",
-      "path": "../TableAPI/TableAPI.csproj",
-      "msbuildProject": "../TableAPI/TableAPI.csproj"
+      "path": "../Squirrel/Squirrel.csproj",
+      "msbuildProject": "../Squirrel/Squirrel.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5008,46 +5008,37 @@
       "MSTest.TestAdapter >= 2.1.0",
       "MSTest.TestFramework >= 2.1.0",
       "Microsoft.NET.Test.Sdk >= 16.5.0",
-      "TableAPI >= 1.0.0",
+      "Squirrel >= 1.0.0",
       "coverlet.collector >= 1.2.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "/Users/sudiptamukherjee/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
+      "projectUniqueName": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/SquirrelUnitTests.csproj",
       "projectName": "SquirrelUnitTests",
-      "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\obj\\",
+      "projectPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/SquirrelUnitTests.csproj",
+      "packagesPath": "/Users/sudiptamukherjee/.nuget/packages/",
+      "outputPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/sudiptamukherjee/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj": {
-              "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\TableAPI\\TableAPI.csproj"
+            "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/Squirrel/Squirrel.csproj": {
+              "projectPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/Squirrel/Squirrel.csproj"
             }
           }
         }
@@ -5062,7 +5053,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
@@ -5101,7 +5092,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.107/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

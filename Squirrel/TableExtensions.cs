@@ -1,6 +1,6 @@
 ﻿using Squirrel;
 
-namespace TableAPI;
+namespace Squirrel;
 
 public static class TableExtensions
 {

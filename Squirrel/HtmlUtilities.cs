@@ -1,4 +1,4 @@
-namespace TableAPI;
+namespace Squirrel;
 
 public class HtmlUtilities
 {

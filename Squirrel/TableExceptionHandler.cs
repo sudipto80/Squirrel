@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Squirrel;
 
-namespace TableAPI
+namespace Squirrel
 {
     /// <summary>
     /// 

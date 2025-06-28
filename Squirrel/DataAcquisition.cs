@@ -13,7 +13,7 @@ using HtmlAgilityPack;
 using Parquet;
 using Parquet.Schema;
 using ParquetSharp;
-using TableAPI;
+using Squirrel;
 
 namespace Squirrel
 {

@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using NCalc; 
 using Squirrel.Cleansing;
-using TableAPI;
+using Squirrel;
 
 
 namespace Squirrel
