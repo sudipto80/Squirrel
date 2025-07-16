@@ -147,4 +147,15 @@ First 50 Examples (Not there yet!)
 7. [Calculating speed of a bungee jumper](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-07.md)
 8. [Finding most popular baby names in centuries](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-08.md)
 9. [Stock Price Analysis](https://github.com/sudipto80/Squirrel/blob/master/example-09.md)
+10. 
+
+# Sponsors
+A big thank you to Alfas.ai for supporting this project 
+
+<img src="https://cdn.prod.website-files.com/67ae50dd8dc3c526a35c36ca/67bdff27725edb47b56db77f_A.ai%20(Website)-cropped.svg"></img>
+
+Thanks!
+
+[alfas](https://www.alfas.ai/) 
+
 
