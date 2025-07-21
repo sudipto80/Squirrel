@@ -125,6 +125,11 @@ namespace Squirrel
             
 
         }
+
+        public static double StandardDeviation(this IEnumerable<double> values)
+        {
+            
+        }
         public static Vector<double> Pow(Vector<double> vector, int power)
         {
             // Create a new vector to store the results

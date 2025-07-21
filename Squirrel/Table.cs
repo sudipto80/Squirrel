@@ -9,121 +9,6 @@ using Squirrel;
 
 namespace Squirrel
 {
-	
-	/// <summary>
-	/// The alignment for the pretty dump
-	/// </summary    >
-	public enum Alignment 
-	{ 
-		/// <summary>
-		/// Aligns the content to left
-		/// </summary>
-		Left,
-		/// <summary>
-		/// Aligns the content to right
-		/// </summary>
-		Right 
-	}
-	/// <summary>
-	/// Sorting Direction. This enum is used with Sorting methods SortBy and SortInThisOrder
-	/// </summary>
-	public enum SortDirection
-	{
-		/// <summary>
-		/// To be used when sorting in the ascending order
-		/// </summary>
-		Ascending,
-		/// <summary>
-		/// To be used when to be sorting in the descending order
-		/// </summary>
-		Descending 
-	}
-	/// <summary>
-	/// The Algorithm to use for outlier detection
-	/// </summary>
-	public enum OutlierDetectionAlgorithm 
-	{
-		/// <summary>
-		/// Inter Quantile Range
-		/// </summary>
-		IqrInterval, 
-		/// <summary>
-		/// Z Score
-		/// </summary>
-		ZScore 
-	}
-	/// <summary>
-	/// Method to be used for aggregation/consolidation
-	/// </summary>
-	public enum AggregationMethod 
-	{
-		/// <summary>
-		/// Summation of the sequence
-		/// </summary>
-		[Description("by summing")]
-		Sum, 
-		/// <summary>
-		/// Average of the sequence
-		/// </summary>
-		[Description("by average,by mean")]        
-		Average, 
-		/// <summary>
-		/// Maximum value of the sequence
-		/// </summary>
-		[Description("by max,by maximum value")]
-		Max,
-		/// <summary>
-		/// Minimum value of the sequence
-		/// </summary>
-		[Description("by min,by minimum value")]
-		Min, 
-		/// <summary>
-		/// Total count of the sequence
-		/// </summary>
-		[Description("by number of entries,by count")]
-		Count,
-		/// <summary>
-		/// Standard deviation of the sequence      
-		/// </summary>
-		[Description("by standard deviation")]        
-		StandardDeviation, 
-		/// <summary>
-		/// Calculates the variance of the sequence 
-		/// </summary>
-		[Description("by variance")]
-		Variance, 
-		/// <summary>
-		/// Number of instance above average
-		/// </summary>
-		[Description("more than average")]
-		AboveAverageCount,  
-		/// <summary>
-		/// Number of instances which are below the average value
-		/// </summary>
-		[Description("less than average")]
-		BelowAverageCount,
-		/// <summary>
-		/// Number of instances that has the value equal to average
-		/// </summary>
-		[Description("just average,average")]
-		AverageCount,
-		/// <summary>
-		/// Measures the skewness of the given sequence
-		/// </summary>
-		[Description("skewed")]
-		Skew, 
-		/// <summary>
-		/// Measures the Kurtosis of the given sequence
-		/// </summary>
-		[Description("kurtosis")]       
-		Kurtosis, 
-		/// <summary>
-		/// Measures the range of values of the given sequence.
-		/// </summary>
-		[Description("by range")]
-		Range 
-	}
-
 
 	/// <summary>
 	/// The Table class. This is the represenation of the ubiquitous Table structure. 
@@ -784,12 +669,10 @@ namespace Squirrel
 		public Table AddColumn(string columnName, string formula, int decimalDigits)
 		{
 			this.ThrowIfTableIsNull();
-			//this.ThrowIfColumnsAreNotPresentInTable(columnName);
-			if (columnName == null)
-				throw new ArgumentNullException($"{nameof(columnName)} is null ");
-			if (formula == null)
-				throw new ArgumentNullException($"nameof(formula) is null");
-			if (decimalDigits < 0)
+            //this.ThrowIfColumnsAreNotPresentInTable(columnName);
+            ArgumentNullException.ThrowIfNull(columnName);
+            ArgumentNullException.ThrowIfNull(formula);
+            if (decimalDigits < 0)
 				throw new ArgumentNullException($"{nameof(decimalDigits)} is null");
 			
 			string copyFormula = formula;
@@ -987,6 +870,8 @@ namespace Squirrel
 							case AggregationMethod.Min:
 								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Min().ToString());
 								break;
+							default:
+								throw new ArgumentOutOfRangeException(nameof(how), how, null);
 						}
 					}
 				}
@@ -1157,32 +1042,60 @@ namespace Squirrel
 				foreach (string col in allNumericColumns)
 				{
 					if (col == columnName) continue;
-					if (how == AggregationMethod.Count)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Count().ToString());
-					if (how == AggregationMethod.Max)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Max()
-							.ToString(CultureInfo.InvariantCulture));
-					if (how == AggregationMethod.Min)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Min()
-							.ToString(CultureInfo.InvariantCulture));
-					if (how == AggregationMethod.Sum)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Sum()
-							.ToString(CultureInfo.InvariantCulture));
-					if (how == AggregationMethod.Average)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Average()
-							.ToString(CultureInfo.InvariantCulture));
-					if (how == AggregationMethod.AboveAverageCount)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).AboveAverageCount()
-							.ToString());
-					if(how == AggregationMethod.BelowAverageCount)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).BelowAverageCount()
-							.ToString());
-					if (how == AggregationMethod.Range)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Range()
-							.ToString(CultureInfo.InvariantCulture));
-					if (how == AggregationMethod.Kurtosis)
-						aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()
-							.ToString(CultureInfo.InvariantCulture));
+					switch (how)
+					{
+						case AggregationMethod.Count:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Count().ToString());
+							break;
+						case AggregationMethod.Max:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Max()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.Min:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Min()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.Sum:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Sum()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.Average:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Average()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.AboveAverageCount:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).AboveAverageCount()
+								.ToString());
+							break;
+						case AggregationMethod.BelowAverageCount:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).BelowAverageCount()
+								.ToString());
+							break;
+						case AggregationMethod.Range:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).Range()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.Kurtosis:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.StandardDeviation:
+							aggRow.Add(col,  tempTable[col].Select(Convert.ToDouble).ToList().StandardDeviation()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.Variance:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Variance()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.AverageCount:
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()
+								.ToString(CultureInfo.InvariantCulture));
+							break;
+						case AggregationMethod.Skew:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException(nameof(how), how, null);
+					}
 				}                
 				aggregatedTable.AddRow(aggRow);
 			}

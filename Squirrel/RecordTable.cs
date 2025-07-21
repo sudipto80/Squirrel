@@ -102,8 +102,10 @@ public class RecordTable<T>
 
     public SqlTable<T> ToSqlTable()
     {
-        SqlTable<T> sqt = new SqlTable<T>();
-        sqt.Name = typeof(T).Name;
+        var sqt = new SqlTable<T>
+        {
+            Name = typeof(T).Name
+        };
         foreach (var colName in Rows[0]
                      .GetType().GetProperties().Select(p => p.Name))
         {
