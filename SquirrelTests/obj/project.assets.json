@@ -5013,32 +5013,41 @@
     ]
   },
   "packageFolders": {
-    "/Users/sudiptamukherjee/.nuget/packages/": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/SquirrelUnitTests.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
       "projectName": "SquirrelUnitTests",
-      "projectPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/SquirrelUnitTests.csproj",
-      "packagesPath": "/Users/sudiptamukherjee/.nuget/packages/",
-      "outputPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/obj/",
+      "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "/Users/sudiptamukherjee/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/Squirrel/Squirrel.csproj": {
-              "projectPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/Squirrel/Squirrel.csproj"
+            "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\Squirrel\\Squirrel.csproj": {
+              "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\Squirrel\\Squirrel.csproj"
             }
           }
         }
@@ -5053,7 +5062,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -5092,7 +5101,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.108/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

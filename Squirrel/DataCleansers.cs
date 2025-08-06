@@ -915,6 +915,12 @@ namespace Squirrel.Cleansing
 			return newTable;
 		}
 
+		/// <summary>
+		/// Replaces a particular value 
+		/// </summary>
+		/// <param name="tab"></param>
+		/// <param name="values"></param>
+		/// <returns></returns>
 		public static Table ReplaceXWithY(this Table tab, 
 			Dictionary<string, KeyValuePair<string, string>> values)
 		{
@@ -940,6 +946,14 @@ namespace Squirrel.Cleansing
 
 			return tab;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="tab"></param>
+		/// <param name="columnName"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
 		public static Table ReplaceXWithY(this Table tab, string columnName, string x, string y)
 		{
 			Table cleanedTable = new Table();
