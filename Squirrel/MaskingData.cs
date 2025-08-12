@@ -20,5 +20,5 @@ public static class MaskingData
     {
         return tab;
     }
-    public static Table MaskColumnsWithStr
+   
 }
