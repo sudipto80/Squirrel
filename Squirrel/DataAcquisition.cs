@@ -8,6 +8,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Amazon;
+using Amazon.S3;
+using Amazon.S3.Model;
 using ExcelDataReader;
 using HtmlAgilityPack;
 using Parquet;
@@ -944,6 +947,44 @@ namespace Squirrel
             }
 
             file.Close();
+        }
+        /// <summary>
+        /// Reads data from S3 bucket
+        /// </summary>
+        /// <param name="accessKey"></param>
+        /// <param name="secretKey"></param>
+        /// <param name="bucketName"></param>
+        /// <param name="resourceName"></param>
+        /// <returns></returns>
+        /// <remarks>Look here http://bit.ly/4mCY5PL</remarks>
+        public static async Task<Table> LoadFromS3(string accessKey, string secretKey,
+            string bucketName, string resourceName)
+        {
+            var s3Client = new AmazonS3Client(
+                accessKey,
+                secretKey,
+                RegionEndpoint.USEast1
+            );
+            
+            //READ Content of S3 
+            // Download a specific object
+            var getRequest = new GetObjectRequest
+            {
+                BucketName = bucketName, 
+                Key = resourceName// The file path/name in S3
+            };
+
+            StreamWriter sw = new StreamWriter("test.csv");
+            using (var response = await s3Client.GetObjectAsync(getRequest))
+            using (var responseStream = response.ResponseStream)
+            using (var reader = new StreamReader(responseStream))
+            {
+                sw.WriteLine(reader.ReadToEnd());
+            }
+            sw.Close();
+            //TODO: Depending on the extension
+            // We can load any pdefined functions.
+            return DataAcquisition.LoadCsv("test.csv");
         }
     }
 }

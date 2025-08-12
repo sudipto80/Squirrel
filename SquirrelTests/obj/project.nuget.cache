@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "SdeTUJNrn9I=",
+  "dgSpecHash": "I90Mh2ihX98=",
   "success": true,
   "projectFilePath": "C:\\Users\\Admin\\Documents\\GitHub\\Squirrel\\SquirrelTests\\SquirrelUnitTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\antlr4.runtime.standard\\4.13.1\\antlr4.runtime.standard.4.13.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\apache.arrow\\13.0.0\\apache.arrow.13.0.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\awssdk.core\\4.0.0.21\\awssdk.core.4.0.0.21.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\awssdk.s3\\4.0.6.4\\awssdk.s3.4.0.6.4.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\coreclr-ncalc\\3.1.253\\coreclr-ncalc.3.1.253.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\coverlet.collector\\1.2.0\\coverlet.collector.1.2.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\exceldatareader\\3.8.0-develop00474\\exceldatareader.3.8.0-develop00474.nupkg.sha512",

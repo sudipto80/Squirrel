@@ -139,6 +139,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[4.0.6.4, )"
+            },
             "CoreCLR-NCalc": {
               "target": "Package",
               "version": "[3.1.253, )"
