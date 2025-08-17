@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "TdYID8phz8A=",
+  "dgSpecHash": "Xe6Sr3aZfGc=",
   "success": true,
   "projectFilePath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/SquirrelUnitTests.csproj",
   "expectedPackageFiles": [
     "/Users/sudiptamukherjee/.nuget/packages/antlr4.runtime.standard/4.13.1/antlr4.runtime.standard.4.13.1.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/apache.arrow/13.0.0/apache.arrow.13.0.0.nupkg.sha512",
+    "/Users/sudiptamukherjee/.nuget/packages/awssdk.core/4.0.0.21/awssdk.core.4.0.0.21.nupkg.sha512",
+    "/Users/sudiptamukherjee/.nuget/packages/awssdk.s3/4.0.6.4/awssdk.s3.4.0.6.4.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/coreclr-ncalc/3.1.253/coreclr-ncalc.3.1.253.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/coverlet.collector/1.2.0/coverlet.collector.1.2.0.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/exceldatareader/3.8.0-develop00474/exceldatareader.3.8.0-develop00474.nupkg.sha512",
@@ -79,5 +81,12 @@
     "/Users/sudiptamukherjee/.nuget/packages/tesseract/5.2.0/tesseract.5.2.0.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/zstdsharp.port/0.8.1/zstdsharp.port.0.8.1.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

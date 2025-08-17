@@ -128,7 +128,7 @@ namespace Squirrel
 
         public static double StandardDeviation(this IEnumerable<double> values)
         {
-            return 0;
+            throw new NotImplementedException();
         }
         public static Vector<double> Pow(Vector<double> vector, int power)
         {

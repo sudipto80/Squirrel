@@ -126,25 +126,50 @@ namespace Squirrel.Cleansing
 		/// TODO : Cleans table wherever there are duplicate values for a given column.
 		/// </summary>
 		/// <param name="tab"></param>
-		/// <param name="columnName"></param>
-		/// <returns></returns>
+		/// <param name="columnNames">Names on the column based on which the
+		/// hash for each row will be calculated.
+		/// </param>
+		/// <returns>The cleaned table</returns>
 		public static Table DistinctBy(this Table tab, params string[] columnNames)
 		{
-			//To do
-			return tab;
+			tab.ThrowIfTableIsNull();
+
+			Dictionary<string, List<Dictionary<string, string>>> noDups =
+				new Dictionary<string, List<Dictionary<string, string>>>();
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				var hash = string.Empty;
+				try
+				{
+					hash = tab.Rows[i]
+						.Where(t => columnNames.Contains(t.Key))
+						.OrderBy(m => m.Key).Select(m => m.Value).Aggregate((x, y) => x + y);
+				}
+				catch (NullReferenceException ex)
+				{
+					//When Rows is null 
+
+				}
+				catch (InvalidOperationException ex)
+					//When sequence contains no element Aggregate will throw this exception
+				{
+
+				}
+
+				if (!noDups.ContainsKey(hash))
+					noDups.Add(hash, new List<Dictionary<string, string>>() {tab.Rows[i]});
+				else
+					noDups[hash].Add(tab.Rows[i]);
+			}
+
+			var noDuplicates = new Table();
+		  
+			noDuplicates.Rows.AddRange(noDups.Select(t => t.Value.First()));
+			return noDuplicates;
 		}
 
-		/// <summary>
-		/// TODO : Cleans table wherever there are duplicate values for a given column.
-		/// </summary>
-		/// <param name="tab"></param>
-		/// <param name="columnName"></param>
-		/// <returns></returns>
-		public static Table DistinctBy(this Table tab, string columnName)
-		{
-			//To do
-			return tab;
-		}
+	
 		/// <summary>
 		/// Removes duplicate rows from the table
 		/// </summary>
@@ -1240,6 +1265,12 @@ namespace Squirrel.Cleansing
 			return newTable;
 		}
 
+		/// <summary>
+		/// Replaces a particular value 
+		/// </summary>
+		/// <param name="tab"></param>
+		/// <param name="values"></param>
+		/// <returns></returns>
 		public static Table ReplaceXWithY(this Table tab, 
 			Dictionary<string, KeyValuePair<string, string>> values)
 		{
@@ -1265,6 +1296,14 @@ namespace Squirrel.Cleansing
 
 			return tab;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="tab"></param>
+		/// <param name="columnName"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
 		public static Table ReplaceXWithY(this Table tab, string columnName, string x, string y)
 		{
 			Table cleanedTable = new Table();

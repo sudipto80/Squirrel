@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="4.0.6.4" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.8.0-develop00474" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
