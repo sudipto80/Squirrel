@@ -7,8 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Squirrel;
 using System.Data;
-
-
+using System.IO;
 using Squirrel.Cleansing;
 
 namespace SquirrelUnitTest
@@ -16,6 +15,8 @@ namespace SquirrelUnitTest
     [TestClass]
     public class DataCleansingTests
     {
+        private static readonly string TestDataPath = 
+            Path.Combine("..","..","..","Data");
 
         [TestMethod]
         public void Test_RemoveIfBetween()
@@ -197,6 +198,32 @@ namespace SquirrelUnitTest
 
             Assert.AreEqual(2, test.Rows.Count);
             Assert.AreEqual(1, test.RemoveIfNotBetween("Age", 0, 100).RowCount);
+
+        }
+
+        [TestMethod]
+        public void RemoveOutliersFromRealisticEmployeeDataset()
+        {
+            Table employees = DataAcquisition.LoadCsv(Path.Combine(TestDataPath, "employees.csv"));
+            int loadedRows = employees.RowCount;
+            Assert.AreEqual(3, employees.ExtractOutliers("Salary").RowCount);
+            
+           Assert.AreEqual(employees.RowCount-3,
+               employees.RemoveOutliers("Salary").RowCount);
+           // Make sure that the loaded original table is unaffected. 
+           Assert.AreEqual(loadedRows,employees.RowCount);
+
+        }
+
+        [TestMethod]
+        public void TestTrucated()
+        {
+            Table employees = DataAcquisition.LoadCsv(Path.Combine(TestDataPath, "employees.csv"));
+            int loadedRows = employees.RowCount;
+            var trunc = employees.Truncate("Department",4);
+
+            Assert.AreEqual("Engi", trunc["Department"][0]);
+            Assert.AreEqual("Engineering", employees["Department"][0]);
 
         }
     }

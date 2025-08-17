@@ -6,6 +6,9 @@
   <SmartDefault Name="French-Weekday-Names" Value="Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche"/>
   <SmartDefault Name="German-Weekday-Names" Value="Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag,Sonntag"/>
   <SmartDefault Name="Spanish-Weekday-Names" Value="Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo"/>
+  <SmartDefault Name="Italian-Weekday-Names" Value="Lunedì,Martedì,Mercoledì,Giovedì,Venerdì,Sabato,Domenica"/>
+  <SmartDefault Name="Portuguese-Weekday-Names" Value="Segunda-feira,Terça-feira,Quarta-feira,Quinta-feira,Sexta-feira,Sábado,Domingo"/>
+
   <SmartDefault Name="English-Month-Names" Value="January,February,March,April,May,June,July,August,September,October,November,December"/>
   <SmartDefault Name="English-Month-Names-Short" Value="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"/>
   <SmartDefault Name="German-Month-Names" Value="Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember"/>
@@ -16,9 +19,72 @@
   <SmartDefault Name="Italian-Month-Names-Short" Value="Gen,Feb,Mar,Apr,Mag,Giu,Lug,Ago,Set,Ott,Nov,Dic"/>
   <SmartDefault Name="Spanish-Month-Names" Value="Enero,Febrero,Marzo,Abril,Mayo,Junio,Julio,Agosto,Septiembre,Octubre,Noviembre,Diciembre"/>
   <SmartDefault Name="Spanish-Month-Names-Short" Value="Ene,Feb,Mar,Abr,May,Jun,Jul,Ago,Sep,Oct,Nov,Dic"/>
+  <SmartDefault Name="Portuguese-Month-Names" Value="Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro"/>
+  <SmartDefault Name="Portuguese-Month-Names-Short" Value="Jan,Fev,Mar,Abr,Mai,Jun,Jul,Ago,Set,Out,Nov,Dez"/>
+
   <SmartDefault Name="T-Shirt-Sizes" Value="XS,S,M,L,XL,XXL"/>
+  <SmartDefault Name="T-Shirt-Sizes-Extended" Value="XXS,XS,S,M,L,XL,XXL,XXXL"/>
+  <SmartDefault Name="Shoe-Sizes-US-Men" Value="7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,12.5,13"/>
+  <SmartDefault Name="Shoe-Sizes-US-Women" Value="5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11"/>
+  <SmartDefault Name="Pants-Sizes-Waist" Value="28,30,32,34,36,38,40,42,44"/>
+
   <SmartDefault Name="Sense-of-Time" Value="Hourly,Weekly,Monthly,Quarterly,Yearly"/>
+  <SmartDefault Name="Time-Periods-Extended" Value="Minute,Hourly,Daily,Weekly,Bi-Weekly,Monthly,Quarterly,Semi-Annually,Yearly"/>
+
   <SmartDefault Name="Roman-Numerals-1-To-10" Value="I,II,III,IV,V,VI,VII,VIII,IX,X"/>
+  <SmartDefault Name="Roman-Numerals-1-To-20" Value="I,II,III,IV,V,VI,VII,VIII,IX,X,XI,XII,XIII,XIV,XV,XVI,XVII,XVIII,XIX,XX"/>
+
   <SmartDefault Name="SizesCommon" Value="Small,Medium,Large"/>
+  <SmartDefault Name="SizesExtended" Value="Extra Small,Small,Medium,Large,Extra Large"/>
   <SmartDefault Name="CarSizes" Value="Compact,Sedan,SUV"/>
+  <SmartDefault Name="Car-Types" Value="Hatchback,Sedan,Coupe,Convertible,SUV,Truck,Van,Wagon"/>
+
+  <!-- Geographic and Location -->
+  <SmartDefault Name="US-States-Abbreviated" Value="AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY"/>
+  <SmartDefault Name="Canadian-Provinces-Abbreviated" Value="AB,BC,MB,NB,NL,NT,NS,NU,ON,PE,QC,SK,YT"/>
+  <SmartDefault Name="Continents" Value="Africa,Antarctica,Asia,Europe,North America,Oceania,South America"/>
+  <SmartDefault Name="Compass-Directions" Value="North,Northeast,East,Southeast,South,Southwest,West,Northwest"/>
+  <SmartDefault Name="Compass-Directions-Short" Value="N,NE,E,SE,S,SW,W,NW"/>
+
+  <!-- Colors -->
+  <SmartDefault Name="Basic-Colors" Value="Red,Orange,Yellow,Green,Blue,Indigo,Violet"/>
+  <SmartDefault Name="Common-Colors" Value="Black,White,Gray,Red,Blue,Green,Yellow,Orange,Purple,Pink,Brown"/>
+  <SmartDefault Name="Web-Safe-Colors" Value="Black,Silver,Gray,White,Maroon,Red,Purple,Fuchsia,Green,Lime,Olive,Yellow,Navy,Blue,Teal,Aqua"/>
+
+  <!-- Business and Education -->
+  <SmartDefault Name="Education-Levels" Value="High School,Associate Degree,Bachelor's Degree,Master's Degree,Doctoral Degree"/>
+  <SmartDefault Name="Company-Sizes" Value="Startup,Small,Medium,Large,Enterprise"/>
+  <SmartDefault Name="Industries" Value="Technology,Healthcare,Finance,Education,Manufacturing,Retail,Construction,Agriculture,Transportation,Entertainment"/>
+  <SmartDefault Name="Job-Levels" Value="Entry Level,Junior,Mid Level,Senior,Lead,Manager,Director,VP,Executive"/>
+
+  <!-- Ratings and Priorities -->
+  <SmartDefault Name="Priority-Levels" Value="Low,Medium,High,Critical"/>
+  <SmartDefault Name="Star-Ratings" Value="1 Star,2 Stars,3 Stars,4 Stars,5 Stars"/>
+  <SmartDefault Name="Satisfaction-Levels" Value="Very Dissatisfied,Dissatisfied,Neutral,Satisfied,Very Satisfied"/>
+  <SmartDefault Name="Agreement-Scale" Value="Strongly Disagree,Disagree,Neutral,Agree,Strongly Agree"/>
+
+  <!-- Technology -->
+  <SmartDefault Name="File-Extensions-Common" Value=".txt,.doc,.docx,.pdf,.xls,.xlsx,.ppt,.pptx,.jpg,.png,.gif,.mp4,.mp3,.zip"/>
+  <SmartDefault Name="Programming-Languages" Value="JavaScript,Python,Java,C#,C++,PHP,Ruby,Swift,Kotlin,Go,Rust,TypeScript"/>
+  <SmartDefault Name="Database-Types" Value="MySQL,PostgreSQL,MongoDB,SQLite,Oracle,SQL Server,Redis,Cassandra"/>
+  <SmartDefault Name="Operating-Systems" Value="Windows,macOS,Linux,iOS,Android"/>
+
+  <!-- Sports and Games -->
+  <SmartDefault Name="Popular-Sports" Value="Soccer,Basketball,Football,Baseball,Tennis,Golf,Swimming,Running,Cycling,Volleyball"/>
+  <SmartDefault Name="Card-Suits" Value="Hearts,Diamonds,Clubs,Spades"/>
+  <SmartDefault Name="Chess-Pieces" Value="Pawn,Rook,Knight,Bishop,Queen,King"/>
+
+  <!-- Age Groups -->
+  <SmartDefault Name="Age-Groups" Value="Child,Teenager,Young Adult,Adult,Senior"/>
+  <SmartDefault Name="Age-Ranges" Value="0-12,13-17,18-24,25-34,35-44,45-54,55-64,65+"/>
+
+  <!-- Communication -->
+  <SmartDefault Name="Communication-Types" Value="Email,Phone,Text,Video Call,In Person,Chat"/>
+  <SmartDefault Name="Languages-Common" Value="English,Spanish,French,German,Italian,Portuguese,Chinese,Japanese,Korean,Arabic,Russian,Hindi"/>
+
+  <!-- Status and States -->
+  <SmartDefault Name="Project-Status" Value="Not Started,In Progress,On Hold,Completed,Cancelled"/>
+  <SmartDefault Name="Order-Status" Value="Pending,Processing,Shipped,Delivered,Cancelled,Returned"/>
+  <SmartDefault Name="Payment-Status" Value="Pending,Paid,Failed,Refunded,Cancelled"/>
+  <SmartDefault Name="Account-Status" Value="Active,Inactive,Suspended,Pending,Closed"/>
 </SmartDefaultEntries>

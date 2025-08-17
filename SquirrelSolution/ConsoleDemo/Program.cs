@@ -62,8 +62,10 @@ using Squirrel.Cleansing;
 //
 // Console.WriteLine(badCombs.RowCount);
 
-Aspose.OCR.AsposeOcr recognitionEngine = new Aspose.OCR.AsposeOcr();
-Aspose.OCR.OcrInput source = new Aspose.OCR.OcrInput(Aspose.OCR.InputType.SingleImage);
-source.Add("C:\\Users\\Admin\\Downloads\\receipt2.jpg");
-Aspose.OCR.OcrOutput results = recognitionEngine.Recognize(source);
-Console.WriteLine(results[0].RecognitionText);
+using Squirrel;
+
+var tab = DataAcquisition.LoadHtmlTable(@"/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelSolution/ConsoleDemo/medals.html");
+
+tab.Top(4).PrettyDump();
+
+Console.WriteLine(tab.RowCount);

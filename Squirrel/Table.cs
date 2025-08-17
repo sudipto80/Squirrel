@@ -735,7 +735,8 @@ namespace Squirrel
 				_rows[i].Add(columnName, values[i]);
 		}
 
-	 
+	
+
 		/// <summary>
 		/// Remove the given column from the table
 		/// </summary>
@@ -1084,8 +1085,8 @@ namespace Squirrel
 								.ToString(CultureInfo.InvariantCulture));
 							break;
 						case AggregationMethod.Variance:
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Variance()
-								.ToString(CultureInfo.InvariantCulture));
+							//aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Variance()
+							//	.ToString(CultureInfo.InvariantCulture));
 							break;
 						case AggregationMethod.AverageCount:
 							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()

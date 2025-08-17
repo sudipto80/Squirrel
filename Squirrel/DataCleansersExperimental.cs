@@ -49,6 +49,7 @@ public static class DataCleansersExperimental
 		/// <param name="columnName"></param>
 		/// <returns></returns>
 		public static NormalizationStrategy InferRequiredStrategy(this Table tab, string columnName)
+		
 		{
 			//If the values of the cells are less than 5 characters long,
 			//then they are probably hard to pronounce and are possible acronyms.

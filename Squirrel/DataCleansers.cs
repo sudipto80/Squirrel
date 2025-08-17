@@ -241,13 +241,22 @@ namespace Squirrel.Cleansing
 										 .ToList();
 			//Get the IQR Range
 			var iqrRange = BasicStatistics.IqrRange(allValues);
+			Table outliersRemoved = new Table();
+			var leaveRows = new HashSet<int>();
 			for (int i = 0; i < allValues.Count; i++)
 			{
 				//Any value which is less or more than the given range is a possible outlier
 				if (allValues[i] < iqrRange.Item1 || allValues[i] > iqrRange.Item2)
-					tab.Rows.RemoveAt(i);
+					leaveRows.Add(i);// tab.Rows.RemoveAt(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!leaveRows.Contains(i))
+					outliersRemoved.Rows.Add(tab.Rows[i]);
+			}
+
+			return outliersRemoved;
 		}
 		/// <summary>
 		/// Removes those rows at which the value of the given column falls under the given range
@@ -264,13 +273,25 @@ namespace Squirrel.Cleansing
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
-			var vals = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
+			Table removed = new Table();
+			var toBeRemoved = new List<int>();
+			var vals = tab.ValuesOf(columnName)
+									  .Select(Convert.ToDecimal)
+									  .ToList();
+			// Find indices of rows to be removed
 			for (int i = 0; i < vals.Count(); i++)
 			{
 				if (low <= vals[i] && vals[i] <= high)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+			//
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+
+			return removed;
 		}
 		/// <summary>
 		/// Removes rows from the table that are not between the given values. 
@@ -288,13 +309,20 @@ namespace Squirrel.Cleansing
 		/// </example>
 		public static Table RemoveIfNotBetween(this Table tab, string columnName, decimal low, decimal high)
 		{
-			List<decimal> vals = tab.ValuesOf(columnName).Select(t => Convert.ToDecimal(t)).ToList();
-			for (int i = 0; i < vals.Count(); i++)
+			Table removed = new Table();
+			var toBeRemoved = new List<int>();
+			var vals = tab.ValuesOf(columnName).Select(t => Convert.ToDecimal(t)).ToList();
+			for (var i = 0; i < vals.Count; i++)
 			{
 				if (!(low <= vals[i] && vals[i] <= high))
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+			for (var i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Remove those rows where the values match the given regular expression
@@ -309,13 +337,23 @@ namespace Squirrel.Cleansing
 		/// </example>
 		public static Table RemoveMatches(this Table tab, string columnName, string regexPattern)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			Table removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<string> values = tab.ValuesOf(columnName).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (Regex.Match(values[i], regexPattern).Success)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if(!toBeRemoved.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Remove those rows where the values don't match with the given regular expression
@@ -327,14 +365,22 @@ namespace Squirrel.Cleansing
 		/// <seealso cref="RemoveMatches"/>
 		public static Table RemoveNonMatches(this Table tab,string columnName, string regexPattern)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			Table removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<string> values = tab.ValuesOf(columnName).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (!Regex.Match(values[i], regexPattern).Success)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
-
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Removes those rows from the given table where the value of the given date 
@@ -346,6 +392,10 @@ namespace Squirrel.Cleansing
 		/// <returns>A table with those rows where the date occurs before the given date; removed.</returns>
 		public static Table RemoveIfBefore(this Table tab, string dateColumnName, DateTime date)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(dateColumnName);
+			Table removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<DateTime> dates = tab.ValuesOf(dateColumnName)
 									   .Select(m => Convert.ToDateTime(m))
 									   .ToList();
@@ -353,9 +403,17 @@ namespace Squirrel.Cleansing
 			for (int i = 0; i < dates.Count; i++)
 			{
 				if (dates[i].CompareTo(date) < 0)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Removes those rows from the given table for the given column
@@ -367,14 +425,26 @@ namespace Squirrel.Cleansing
 		/// <seealso cref="RemoveIfBefore"/>
 		public static Table RemoveIfAfter(this Table tab, string dateColumnName, DateTime date)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(dateColumnName);
+			Table removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(Convert.ToDateTime).ToList();
 
 			for (var i = 0; i < dates.Count; i++)
 			{
-				if (dates[i].CompareTo(date) >= 1) tab.Rows.RemoveAt(i);
+				if (dates[i].CompareTo(date) >= 1)
+					toBeRemoved.Add(i);
 			}
 
-			return tab;
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Remove all the rows where the date does fall in the given range.
@@ -387,7 +457,10 @@ namespace Squirrel.Cleansing
 		
 		public static Table RemoveIfBetween(this Table tab, string dateColumnName, DateTime startDate, DateTime endDate)
 		{
-			
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(dateColumnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			if (dateColumnName == null) throw new ArgumentNullException(nameof(dateColumnName));
 			if (startDate == null) throw new ArgumentNullException(nameof(startDate));
 			if (endDate == null) throw new ArgumentNullException(nameof(endDate));
@@ -398,9 +471,18 @@ namespace Squirrel.Cleansing
 			for (var i = 0; i < dates.Count; i++)
 			{
 				if (dates[i].CompareTo(startDate) >= -1 && dates[i].CompareTo(endDate) <= 1)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+
+			return removed;
 		}
 		/// <summary>
 		/// Remove all the rows where the date doesn't fall in between the given range.
@@ -412,13 +494,27 @@ namespace Squirrel.Cleansing
 		/// <returns>A cleansed table with the violating rows removed.</returns>
 		public static Table RemoveIfNotBetween(this Table tab, string dateColumnName, DateTime startDate, DateTime endDate)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(dateColumnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
+			
 			List<DateTime> dates = tab.ValuesOf(dateColumnName).Select(Convert.ToDateTime).ToList();
 			for (int i = 0; i < dates.Count; i++)
 			{
-				if (!(dates[i].CompareTo(startDate) >= -1 && dates[i].CompareTo(endDate) <= 1))
-					tab.Rows.RemoveAt(i);
+				if (!(dates[i].CompareTo(startDate) >= -1
+				      && dates[i].CompareTo(endDate) <= 1))
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Removes items that are not in the list of expected values.
@@ -429,11 +525,23 @@ namespace Squirrel.Cleansing
 		/// <returns>A cleansed table.</returns>
 		public static Table RemoveIfNotAnyOf(this Table tab,string columnName, params string[] expectedValues)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<string> values = tab.ValuesOf(columnName).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (!expectedValues.Contains(values[i]))
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
+			}
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					toBeRemoved.Add(i);
+				}
 			}
 			return tab;
 		}
@@ -446,13 +554,23 @@ namespace Squirrel.Cleansing
 		/// <returns>A cleansed table with rows with illegal values removed.</returns>
 		public static Table RemoveIfAnyOf(this Table tab,string columnName, params string[] illegalValues)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<string> values = tab.ValuesOf(columnName).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (illegalValues.Contains(values[i]))
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Removes items that are less than the given value
@@ -463,13 +581,23 @@ namespace Squirrel.Cleansing
 		/// <returns>A Table with violating values removed.</returns>
 		public static Table RemoveLessThan(this Table tab, string columnName, decimal value)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<decimal> values = tab.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (values[i] < value)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Removes items that are equal to or less than the given value 
@@ -480,13 +608,25 @@ namespace Squirrel.Cleansing
 		/// <returns>A table with violating values removed from the specified column.</returns>
 		public static Table RemoveLessThanOrEqualTo(this Table tab, string columnName, decimal value)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			var values = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (values[i] <= value)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 
 	  
@@ -500,13 +640,23 @@ namespace Squirrel.Cleansing
 		/// <example>Table cleansed = tab.RemoveGreaterThan("Age",120);</example>
 		public static Table RemoveGreaterThan(this Table tab, string columnName, decimal value)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<decimal> values = tab.ValuesOf(columnName).Select(m => Convert.ToDecimal(m)).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (values[i] > value)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+			return removed;
 		}
 		/// <summary>
 		/// Removes values greater than or equal to the given value for the given column
@@ -517,14 +667,29 @@ namespace Squirrel.Cleansing
 		/// <returns>A table with violating values removed.</returns>
 		public static Table RemoveGreaterThanOrEqualTo(this Table tab, string columnName, decimal value)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			List<decimal> values = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
 			for (int i = 0; i < values.Count; i++)
 			{
 				if (values[i] >= value)
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
+
+		
+
 		/// <summary>
 		/// Generic remove function. 
 		/// </summary>
@@ -535,22 +700,82 @@ namespace Squirrel.Cleansing
 		/// <param name="predicate">The predicated that dictates the delete operation</param>
 		/// <returns>A table with the defaulters removed</returns>
 		public static Table RemoveIf<T>(this Table tab, string columnName, Func<T, bool> predicate)
-					 where T : IEquatable<T>
+			where T : IEquatable<T>
 		{
-			int i = 0;
-			List<int> indicesToRemove = new List<int>();
-			List<T> castedList = tab.ValuesOf(columnName).Cast<T>().ToList();
-			for (; i < castedList.Count; i++)
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			
+			if (predicate == null)
+				throw new ArgumentNullException(nameof(predicate));
+
+			var columnValues = tab.ValuesOf(columnName);
+			if (columnValues == null)
+				throw new InvalidOperationException($"Column '{columnName}' not found in table.");
+
+			var indicesToRemove = new List<int>();
+
+			for (int i = 0; i < columnValues.Count; i++)
 			{
-				T temp = castedList[i];
-				if (predicate(temp))
+				var value = columnValues[i];
+				try
 				{
-					indicesToRemove.Add(i);
+					// Try to convert the value to type T
+					T convertedValue;
+
+					if (value == null)
+					{
+						if (default(T) == null)
+						{
+							convertedValue = default(T);
+						}
+						else
+						{
+							continue; // Skip null values for non-nullable types
+						}
+					}
+					else if (value is T directCast)
+					{
+						convertedValue = directCast;
+					}
+					else
+					{
+						// Attempt conversion using Convert.ChangeType
+						convertedValue = (T)Convert.ChangeType(value, typeof(T));
+					}
+
+					// Apply the predicate
+					if (predicate(convertedValue))
+					{
+						indicesToRemove.Add(i);
+					}
+				}
+				catch (InvalidCastException)
+				{
+					// Log or handle the cast failure - could throw, skip, or use default behavior
+					throw new InvalidOperationException(
+						$"Cannot convert value '{value}' at index {i} to type {typeof(T).Name}");
+				}
+				catch (FormatException)
+				{
+					throw new InvalidOperationException(
+						$"Cannot convert value '{value}' at index {i} to type {typeof(T).Name} - invalid format");
+				}
+				catch (OverflowException)
+				{
+					throw new InvalidOperationException(
+						$"Value '{value}' at index {i} is outside the range of type {typeof(T).Name}");
 				}
 			}
-			indicesToRemove.ForEach(k => tab.Rows.RemoveAt(k));
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!indicesToRemove.Contains(i))
+					removed.Rows.Add(tab.Rows[i]);
+			}
+			return removed;
 		}
+
 		public static Table RemoveCombination<T, U>(this Table tab, string column1, string column2,
 			Func<T, U, bool> predicate)
 		{
@@ -572,29 +797,23 @@ namespace Squirrel.Cleansing
 				.ForEach(k => tab.Rows.RemoveAt(k));     
 			return tab;
 		}
-		/// <summary>
-		/// Rempves list of rows that doesn't match a given condition. 
+		
+		/// Removes rows from the table where the predicate returns false (keeps rows where predicate returns true).
+		/// This is the inverse of RemoveIf - it removes rows that do NOT match the condition.
 		/// </summary>
-		/// <typeparam name="T">The data type of the column</typeparam>
-		/// <param name="tab"></param>
-		/// <param name="columnName">The column name</param>
-		/// <param name="predicate">The predicate based on which the rows will be deleted.</param>
-		/// <returns>A table with rows removed.</returns>
-		public static Table RemoveIfNot<T>(this Table tab, string columnName, Func<T, bool> predicate) where T : IEquatable<T>
+		/// <typeparam name="T">The type to convert column values to</typeparam>
+		/// <param name="tab">The table to modify</param>
+		/// <param name="columnName">The column to evaluate</param>
+		/// <param name="predicate">The condition to test - rows where this returns false will be removed</param>
+		/// <returns>The modified table</returns>
+		public static Table RemoveIfNot<T>(this Table tab, string columnName, Func<T, bool> predicate)
+			where T : IEquatable<T>
 		{
-			int i = 0;
-			List<int> indicesToRemove = new List<int>();
-			List<T> castedList = tab.ValuesOf(columnName).Cast<T>().ToList();
-			for (; i < castedList.Count; i++)
-			{
-				T temp = castedList[i];
-				if (!predicate(temp))
-				{
-					indicesToRemove.Add(i);
-				}
-			}
-			indicesToRemove.ForEach(k => tab.Rows.RemoveAt(k));
-			return tab;
+			if (predicate == null)
+				throw new ArgumentNullException(nameof(predicate));
+    
+			// Simply invert the predicate and use RemoveIf
+			return tab.RemoveIf<T>(columnName, value => !predicate(value));
 		}
 
 		/// <summary>
@@ -625,13 +844,23 @@ namespace Squirrel.Cleansing
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if( badValues.Any( badValue =>  
+					   tab.Rows[i][columnName].Contains(badValue)))
+					toBeRemoved.Add(i);
+			}
 
 			for (int i = 0; i < tab.RowCount; i++)
 			{
-				if( badValues.Any( badValue =>  tab.Rows[i][columnName].Contains(badValue)))
-					tab.Rows.RemoveAt(i);
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
 			}
-			return tab;
+			return removed;
 		}
 		/// <summary>
 		/// 
@@ -644,13 +873,22 @@ namespace Squirrel.Cleansing
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
-
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			for (int i = 0; i < tab.RowCount; i++)
 			{
 				if (!goodValues.All(goodValue => tab.Rows[i][columnName].Contains(goodValue)))
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 		/// <summary>
 		/// 
@@ -663,13 +901,22 @@ namespace Squirrel.Cleansing
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
-
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			for (int i = 0; i < tab.RowCount; i++)
 			{
 				if (badPrefixes.Any(badPrefix => tab.Rows[i][columnName].StartsWith(badPrefix)))
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 		/// <summary>
 		/// 
@@ -682,16 +929,25 @@ namespace Squirrel.Cleansing
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
-
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
 			for (int i = 0; i < tab.RowCount; i++)
 			{
 				if (!badSuffixes.Any(badSuffix => tab.Rows[i][columnName].EndsWith(badSuffix)))
-					tab.Rows.RemoveAt(i);
+					toBeRemoved.Add(i);
 			}
-			return tab;
+
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 		/// <summary>
-		/// Removes rows from teh table that don't start with any of the given list of good prefixes. 
+		/// Removes rows from the table that don't start with any of the given list of good prefixes. 
 		/// </summary>
 		/// <param name="tab">The Table instance from which rows have to be removed</param>
 		/// <param name="columnName">The column where to look for values</param>
@@ -706,13 +962,23 @@ namespace Squirrel.Cleansing
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!goodPrefixes.Any(goodPrefix => 
+					    tab.Rows[i][columnName].StartsWith(goodPrefix)))
+					toBeRemoved.Add(i);
+			}
 
 			for (int i = 0; i < tab.RowCount; i++)
 			{
-				if (!goodPrefixes.Any(goodPrefix => tab.Rows[i][columnName].StartsWith(goodPrefix)))
-					tab.Rows.RemoveAt(i);
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
 			}
-			return tab;
+			return removed;
 		}
 		/// <summary>
 		/// Remove rows where the values of the given column don't end with the given list of suffixes
@@ -727,16 +993,25 @@ namespace Squirrel.Cleansing
 		/// var cleaned = tab.RemoveIfDoesNotEndWith("Quarter","i","ii","iii","iv");</example>
 		public static Table RemoveIfDoesNotEndWith(this Table tab, string columnName, params string[] goodSuffixes)
 		{
-
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var removed = new Table();
+			var toBeRemoved = new List<int>();
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!goodSuffixes.Any(goodSuffix => 
+					    tab.Rows[i][columnName].EndsWith(goodSuffix)))
+					toBeRemoved.Add(i);
+			}
 
 			for (int i = 0; i < tab.RowCount; i++)
 			{
-				if (!goodSuffixes.Any(goodSuffix => tab.Rows[i][columnName].EndsWith(goodSuffix)))
-					tab.Rows.RemoveAt(i);
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
 			}
-			return tab;
+			return removed;
 		}
 		/// <summary>
 		/// 
@@ -748,6 +1023,9 @@ namespace Squirrel.Cleansing
 		public static Table MarkAsMissingIfNotAnyOf(this Table tab, string columnName, 
 													 params string[] possibleValues)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			
 			return tab;
 		}
 
@@ -773,7 +1051,8 @@ namespace Squirrel.Cleansing
 			return tab;
 		}
 		/// <summary>
-		/// 
+		/// Removes rows with impossible value combinations.
+		/// The 
 		/// </summary>
 		/// <param name="tab"></param>
 		/// <param name="possibleValueCombos"></param>
@@ -788,21 +1067,32 @@ namespace Squirrel.Cleansing
 			return tab;
 		}
 		/// <summary>
-		/// 
+		/// Removes rows with holes in them.
+		/// A hole is an empty cell that has no value. 
 		/// </summary>
 		/// <param name="tab"></param>
 		/// <returns></returns>
 		public static Table RemoveIncompleteRows(this Table tab)
 		{
-			for (int i = 0; i < tab.RowCount; i++)
+			tab.ThrowIfTableIsNull();
+			var toBeRemoved = new List<int>();
+			for (var i = 0; i < tab.RowCount; i++)
 			{
 				foreach (var col in tab.ColumnHeaders)
 				{
 					if(tab[col][i].Trim().Length == 0)
-						tab.Rows.RemoveAt(i);
+						toBeRemoved.Add(i);
 				}
 			}
-			return tab;
+			var removed = new Table();
+			for (int i = 0; i < tab.RowCount; i++)
+			{
+				if (!toBeRemoved.Contains(i))
+				{
+					removed.Rows.Add(tab.Rows[i]);
+				}
+			}
+			return removed;
 		}
 		/// <summary>
 		/// 
@@ -814,6 +1104,8 @@ namespace Squirrel.Cleansing
 		public static Table Normalize(this Table tab, string columnName,
 			 NormalizationStrategy strategy = NormalizationStrategy.SentenceCase)
 		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
             Table normalizedTable = new Table(); 
             foreach (var col in tab.ColumnHeaders)
             {
@@ -837,12 +1129,19 @@ namespace Squirrel.Cleansing
 		/// <returns></returns>
 		public static Table Normalize(this Table tab, Dictionary<string, NormalizationStrategy> normalizationSchemes)
 		{
+			tab.ThrowIfTableIsNull();
+			foreach (var col in normalizationSchemes.Keys)
+			{
+				tab.ThrowIfColumnsAreNotPresentInTable(col);
+			}
+
+			Table normalizedTable = tab;
 			foreach (var key in normalizationSchemes.Keys)
             {
                 //Normalize one column at a time
-                tab = tab.Normalize(key, normalizationSchemes[key]);
+                normalizedTable = normalizedTable.Normalize(key, normalizationSchemes[key]);
             }
-            return tab;
+            return normalizedTable;
 		}
 		/// <summary>
 		/// 
@@ -853,7 +1152,28 @@ namespace Squirrel.Cleansing
 		/// <returns></returns>
 		public static Table Truncate(this Table tab, string columnName, int length)
 		{
-			return tab;
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+			var trunctatedValues = 
+				tab.ValuesOf(columnName)
+					.Select(t => t.Substring(0, length))
+					.ToList();
+			
+			Table truncated = new Table();
+			foreach (var col in tab.ColumnHeaders)
+			{
+				if (col.Equals(columnName))
+				{
+					truncated.AddColumn(col, trunctatedValues);
+				
+				}
+				else
+				{
+					truncated.AddColumn(col, tab.ValuesOf(col));
+				} 
+					
+			}
+			return truncated;
 		}
 		/// <summary>
 		/// 
@@ -863,7 +1183,12 @@ namespace Squirrel.Cleansing
 		/// <returns></returns>
 		public static Table Truncate(this Table tab, Dictionary<string, int> truncateLengths)
 		{
-			return tab;
+			var truncated = tab;
+			foreach (var key in truncateLengths.Keys)
+			{
+				truncated = truncated.Truncate(key, truncateLengths[key]);
+			}
+			return truncated;
 		}
 
 		/// <summary>
