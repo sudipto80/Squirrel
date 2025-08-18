@@ -6,5 +6,6 @@ public enum MaskingStrategy
     StartExceptLastFour,
     StarExceptFirstFour,
     StarExceptFirstTwoAndLastTwo,
-    
+
+    StarExceptLastFour
 }
