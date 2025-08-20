@@ -71,4 +71,15 @@ public static class MaskingData
         }
         return maskedTable;
     }
+    
+    /// <summary>
+    /// Automatically masks an entire table using detected strategies
+    /// </summary>
+    /// <param name="tab">Original table data</param>
+    /// <returns>Masked table with same structure</returns>
+    public static Table AutoMask(this Table tab)
+    {
+        var strategies = tab.DetectTableMaskingStrategies();
+        return tab.MaskColumnsWithStrategies(strategies);
+    }
 }

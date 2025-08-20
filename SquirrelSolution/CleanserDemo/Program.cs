@@ -11,7 +11,12 @@ class Program
         var emps = DataAcquisition.LoadCsv(
             @"/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelSolution/CleanserDemo/outliers.csv");
        
-        
-        emps.MaskColumn("Name",MaskingStrategy.StarExceptLastFour).PrettyDump(header:"Masked");
+        // Dictionary<string,MaskingStrategy> strategies = new Dictionary<string, MaskingStrategy>();
+        // strategies.Add("Name", MaskingStrategy.None);
+        // strategies.Add("Salary", MaskingStrategy.Hidden);
+        // strategies.Add("Age", MaskingStrategy.AgeGroup);
+        //
+        emps.AutoMask().PrettyDump(header:"Auto Masked");
+        //emps.MaskColumnsWithStrategies(strategies).PrettyDump(header:"Masked");
     }
 }

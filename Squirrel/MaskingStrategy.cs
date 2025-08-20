@@ -6,19 +6,19 @@
 public enum MaskingStrategy
 {
     
-    /// <summary>Show first and last character, mask everything else with *</summary>
+    /// <summary>Show the first and last character, mask everything else with *</summary>
     StarExceptFirstAndLast,
     
-    /// <summary>Show first character, mask everything except last 4 characters</summary>
+    /// <summary>Show the first character, mask everything except last 4 characters</summary>
     StarExceptFirstAndLastFour,
     
-    /// <summary>Show first 4 characters, mask everything else</summary>
+    /// <summary>Show the first 4 characters, mask everything else</summary>
     StarExceptFirstFour,
     
     /// <summary>Show first 2 and last 2 characters, mask everything else</summary>
     StarExceptFirstTwoAndLastTwo,
     
-    /// <summary>Show last 4 characters, mask everything else</summary>
+    /// <summary>Show the last 4 characters, mask everything else</summary>
     StarExceptLastFour,
     
    
@@ -35,28 +35,28 @@ public enum MaskingStrategy
     Masked,
     
     // === Partial Display Strategies ===
-    /// <summary>Show only first character, mask rest</summary>
+    /// <summary>Show only the first character, mask rest</summary>
     StarExceptFirst,
     
-    /// <summary>Show only first 2 characters, mask rest</summary>
+    /// <summary>Show only the first 2 characters, mask rest</summary>
     StarExceptFirstTwo,
     
-    /// <summary>Show only first 3 characters, mask rest</summary>
+    /// <summary>Show only the first 3 characters, mask rest</summary>
     StarExceptFirstThree,
     
     /// <summary>Show only last character, mask rest</summary>
     StarExceptLast,
     
-    /// <summary>Show only last 2 characters, mask rest</summary>
+    /// <summary>Show only the last 2 characters, mask rest</summary>
     StarExceptLastTwo,
     
-    /// <summary>Show only last 3 characters, mask rest</summary>
+    /// <summary>Show only the last 3 characters, mask rest</summary>
     StarExceptLastThree,
     
-    /// <summary>Show first 3 and last 3 characters, mask middle</summary>
+    /// <summary>Show first 3 and last 3 characters, mask the middle</summary>
     StarExceptFirstThreeAndLastThree,
     
-    /// <summary>Show first 4 and last 4 characters, mask middle</summary>
+    /// <summary>Show first 4 and last 4 characters, mask the middle</summary>
     StarExceptFirstFourAndLastFour,
     
     // === Email-Specific Strategies ===
@@ -126,10 +126,10 @@ public enum MaskingStrategy
     AlternatingEvenShow,
     
     // === Length-Preserving Strategies ===
-    /// <summary>Replace with same number of * characters</summary>
+    /// <summary>Replace it with the same number of * characters</summary>
     PreserveLengthStar,
     
-    /// <summary>Replace with same number of X characters</summary>
+    /// <summary>Replace it with the same number of X characters</summary>
     PreserveLengthX,
     
     // === Special Cases ===
@@ -139,9 +139,14 @@ public enum MaskingStrategy
     /// <summary>Truncate to specific length and add ...</summary>
     TruncateWithEllipsis,
     
-    /// <summary>Show character count only (e.g., [8 characters])</summary>
+    /// <summary>Show character counts only (e.g., [8 characters])</summary>
     ShowLengthOnly,
     
     /// <summary>Show data type only (e.g., [STRING], [NUMBER])</summary>
-    ShowTypeOnly
+    ShowTypeOnly,
+    
+    // === Age-Specific Strategies ===
+    /// <summary>Convert numeric age to age group (e.g., 25 → "Adult", 16 → "Teenager")</summary>
+    AgeGroup
 }
+
