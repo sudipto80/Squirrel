@@ -9,10 +9,7 @@ public static class MaskingHelpers
 
     private static readonly Random _random = new Random();
     
-    private static bool IsColumnNameMatch(string columnName, string[] keywords)
-    {
-        return keywords.Any(keyword => columnName.Contains(keyword));
-    }
+   
     /// <summary>
     /// Automatically detects the most appropriate masking strategy based on column values
     /// </summary>
@@ -33,19 +30,19 @@ public static class MaskingHelpers
         var lowerColumnName = columnName.ToLowerInvariant();
         
         // Check for specific data types based on column name
-        if (IsColumnNameMatch(lowerColumnName, new[] { "email", "mail", "e-mail" }))
+        if (Utilities.IsColumnNameMatch(lowerColumnName, new[] { "email", "mail", "e-mail" }))
             return MaskingStrategy.EmailPartial;
             
-        if (IsColumnNameMatch(lowerColumnName, new[] { "phone", "telephone", "mobile", "cell" }))
+        if (Utilities.IsColumnNameMatch(lowerColumnName, new[] { "phone", "telephone", "mobile", "cell" }))
             return MaskingStrategy.PhoneAreaCodeAndLastFour;
             
-        if (IsColumnNameMatch(lowerColumnName, new[] { "credit", "card", "cc", "payment" }))
+        if (Utilities.IsColumnNameMatch(lowerColumnName, new[] { "credit", "card", "cc", "payment" }))
             return MaskingStrategy.CreditCardLastFour;
             
-        if (IsColumnNameMatch(lowerColumnName, new[] { "age", "years", "yr" }))
+        if (Utilities.IsColumnNameMatch(lowerColumnName, new[] { "age", "years", "yr" }))
             return MaskingStrategy.AgeGroup;
             
-        if (IsColumnNameMatch(lowerColumnName, new[] { "ssn", "social", "security", "tax", "id" }))
+        if (Utilities.IsColumnNameMatch(lowerColumnName, new[] { "ssn", "social", "security", "tax", "id" }))
             return MaskingStrategy.StarExceptLastFour;
 
         // Analyze actual data patterns

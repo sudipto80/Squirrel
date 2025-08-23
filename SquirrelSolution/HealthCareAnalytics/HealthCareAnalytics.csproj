@@ -9,7 +9,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Squirrel\Squirrel.csproj" />
-      <ProjectReference Include="..\Universe\Universe.csproj" />
     </ItemGroup>
 
 </Project>

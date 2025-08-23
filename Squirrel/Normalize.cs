@@ -49,6 +49,9 @@ namespace Squirrel
         /// 
         /// </summary>
         TerminateAtFirstNonAlphaNumeric,
+        /// <summary>
+        /// 
+        /// </summary>
         NameCase
     };
     /// <summary>

@@ -1,0 +1,10 @@
+name,age,course,gender
+Alice,23,CS,Female
+Bob,NA,Math,Male
+Charlie,19,Physics,Male
+Diana,NA,Biology,Female
+Eve,22,Antho,Female
+Frank,20,Eng,Male
+Grace,NA,Psychology,Female
+
+CS, Math, Physics, Biology, Eng, Psychology

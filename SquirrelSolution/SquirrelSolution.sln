@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Universe", "Universe\Univer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanserDemo", "CleanserDemo\CleanserDemo.csproj", "{744126B2-3FC8-4401-A4EB-38BC5A20EB6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCareAnalytics", "HealthCareAnalytics\HealthCareAnalytics.csproj", "{67611DB4-3B7D-4034-B2D2-C5A781D19266}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{744126B2-3FC8-4401-A4EB-38BC5A20EB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{744126B2-3FC8-4401-A4EB-38BC5A20EB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{744126B2-3FC8-4401-A4EB-38BC5A20EB6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67611DB4-3B7D-4034-B2D2-C5A781D19266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67611DB4-3B7D-4034-B2D2-C5A781D19266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67611DB4-3B7D-4034-B2D2-C5A781D19266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67611DB4-3B7D-4034-B2D2-C5A781D19266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

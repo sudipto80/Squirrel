@@ -1,0 +1,6 @@
+Name, Age,Email,Purchase_Amount
+John Smith,25,john.smith@email.com,$45.99
+,thirty-two,SARAH@GMAIL.COM,99
+Bob  Johnson ,28,bob..johnson@yahoo,45.5O
+Alice Brown,N/A,alice@company.co.uk,"1,250.75"
+Mike Davis,35,,NULL

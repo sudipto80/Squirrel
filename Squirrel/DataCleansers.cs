@@ -24,6 +24,14 @@ namespace Squirrel.Cleansing
 		public enum MissingValueHandlingStrategy
 		{
 			/// <summary>
+			/// 
+			/// </summary>
+			Zero,
+			/// <summary>
+			/// 
+			/// </summary>
+			Infinity,
+			/// <summary>
 			/// Mark missing values with NA if NA is not already a representation of the missing value
 			/// </summary>
 			MarkWithNa,
@@ -48,29 +56,56 @@ namespace Squirrel.Cleansing
 		static DataCleansers()
 		{
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="row"></param>
+		/// <param name="tab"></param>
+		/// <param name="columnName"></param>
+		/// <param name="strategy"></param>
+		/// <returns></returns>
 		private static Dictionary<string,string> _handleMissingValue(this Dictionary<string,string> row,Table tab,
 									string columnName,
 									   MissingValueHandlingStrategy strategy)
 		{
-			if (strategy == MissingValueHandlingStrategy.MarkWithNa)
+			row[columnName] = strategy switch
 			{
-				row[columnName] = "NA";
-			}
-			if (strategy == MissingValueHandlingStrategy.Max)
-			{
-				row[columnName] = tab[columnName].Where(z => z.Trim().Length > 0).Select(Convert.ToDecimal).Max().ToString(CultureInfo.InvariantCulture);
-			}
-			if (strategy == MissingValueHandlingStrategy.Min)
-			{
-				row[columnName] = tab[columnName].Where(z => z.Trim().Length > 0).Select(Convert.ToDecimal).Max().ToString(CultureInfo.InvariantCulture);
-			}
-			if (strategy == MissingValueHandlingStrategy.Average)
-			{
-				row[columnName] = tab[columnName].Where(z => z.Trim().Length > 0).Select(Convert.ToDecimal).Max().ToString(CultureInfo.InvariantCulture);
-			}
+				MissingValueHandlingStrategy.MarkWithNa => "NA",
+				MissingValueHandlingStrategy.Zero => "0",
+				MissingValueHandlingStrategy.Max => tab[columnName]
+					.Where(z => z.Trim().Length > 0)
+					.Select(Cleanse)
+					.Max()
+					.ToString(CultureInfo.InvariantCulture),
+				MissingValueHandlingStrategy.Min => tab[columnName]
+					.Where(z => z.Trim().Length > 0)
+					.Select(Cleanse)
+					.Max()
+					.ToString(CultureInfo.InvariantCulture),
+				MissingValueHandlingStrategy.Average => tab[columnName]
+					.Where(z => z.Trim().Length > 0)
+					.Select(Cleanse)
+					.Average()
+					.ToString(CultureInfo.InvariantCulture),
+				_ => row[columnName]
+			};
 			return row;
-
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="t"></param>
+		/// <returns></returns>
+		private static decimal Cleanse(string t)
+		{
+			try
+			{
+				return Convert.ToDecimal(t);
+			}
+			catch (Exception ex)
+			{
+				return 0M;
+			}
 		}
 
 		/// <summary>
@@ -84,30 +119,28 @@ namespace Squirrel.Cleansing
 			MissingValueHandlingStrategy strategy = MissingValueHandlingStrategy.MarkWithNa,
 			params string[] missingValueRepresentations)
 		{
-			//If any of the missing value representative string appears in numeric column
-			//replace with zero
-
-			//else if it occurs in non-numeric column, replace with empty strings.
 			Table temp = new Table();
-
 			foreach (var row in tab.Rows)
 			{
 				Dictionary<string, string> currentRow = new Dictionary<string, string>();
 				foreach (var colHead in tab.ColumnHeaders)
 				{
-					if (missingValueRepresentations.Any(z => z.Equals(row[colHead])))
+					if (missingValueRepresentations
+					    .Any(z => z.Equals(row[colHead])))
 					{
-						temp.AddRow(_handleMissingValue(row, tab, colHead, strategy));
-
+						currentRow[colHead] = 
+							_handleMissingValue(row, tab, colHead, strategy)[colHead];
 					}
 					else
 					{
-						temp.AddRow(row);
+						currentRow[colHead] = row[colHead];
 					}
-
 				}
+				temp.Rows.Add(currentRow);
 			}
 			return temp;
+			
+			
 		}
 
 		/// <summary>
@@ -1038,6 +1071,7 @@ namespace Squirrel.Cleansing
 			}
 			return removed;
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -1045,13 +1079,29 @@ namespace Squirrel.Cleansing
 		/// <param name="columnName"></param>
 		/// <param name="possibleValues"></param>
 		/// <returns></returns>
-		public static Table MarkAsMissingIfNotAnyOf(this Table tab, string columnName, 
-													 params string[] possibleValues)
+		public static Table MarkAsMissingIfNotAnyOf(this Table tab, string columnName,
+			string missingMarker,
+			params string[] possibleValues)
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
-			
-			return tab;
+			var missingMarked = new Table();
+			foreach (var row in tab.Rows)
+			{
+				var currentRow = row;
+				if (Array.IndexOf(possibleValues, currentRow[columnName]) == -1)
+				{
+					currentRow[columnName] = missingMarker;
+				}
+				else
+				{
+					currentRow[columnName] = row[columnName];
+				}
+
+				missingMarked.AddRow(currentRow);
+			}
+
+			return missingMarked;
 		}
 
 		/// <summary>
