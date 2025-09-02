@@ -44,7 +44,7 @@ public enum AggregationMethod
     [Description("by variance")]
     Variance, 
     /// <summary>
-    /// Number of instance above average
+    /// Number of instances above average
     /// </summary>
     [Description("more than average")]
     AboveAverageCount,  

@@ -1077,11 +1077,11 @@ namespace Squirrel
 								.ToString(CultureInfo.InvariantCulture));
 							break;
 						case AggregationMethod.Kurtosis:
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).ToList().Kurtosis()
 								.ToString(CultureInfo.InvariantCulture));
 							break;
 						case AggregationMethod.StandardDeviation:
-							aggRow.Add(col,  tempTable[col].Select(Convert.ToDouble).ToList().StandardDeviation()
+							aggRow.Add(col,  tempTable[col].Select(Convert.ToDecimal).ToList().StandardDeviation()
 								.ToString(CultureInfo.InvariantCulture));
 							break;
 						case AggregationMethod.Variance:
@@ -1089,7 +1089,7 @@ namespace Squirrel
 							//	.ToString(CultureInfo.InvariantCulture));
 							break;
 						case AggregationMethod.AverageCount:
-							aggRow.Add(col, tempTable[col].Select(Convert.ToDouble).ToList().Kurtosis()
+							aggRow.Add(col, tempTable[col].Select(Convert.ToDecimal).ToList().Kurtosis()
 								.ToString(CultureInfo.InvariantCulture));
 							break;
 						case AggregationMethod.Skew:

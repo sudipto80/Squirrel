@@ -756,10 +756,15 @@ namespace Squirrel
                 foreach (string col in tab.ColumnHeaders)
                 {
                     if (!tab.Rows[i].ContainsKey(col)) continue;
-                    if (align == Alignment.Right)
-                        Console.Write(" " + tab.Rows[i][col].PadLeft(longestLengths[col]) + new string(' ', 4));
-                    if (align == Alignment.Left)
-                        Console.Write(" " + tab.Rows[i][col].PadRight(longestLengths[col]) + new string(' ', 4));
+                    switch (align)
+                    {
+                        case Alignment.Right:
+                            Console.Write($" {tab.Rows[i][col].PadLeft(longestLengths[col])}{new string(' ', 4)}");
+                            break;
+                        case Alignment.Left:
+                            Console.Write($" {tab.Rows[i][col].PadRight(longestLengths[col])}{new string(' ', 4)}");
+                            break;
+                    }
                 }
 
                 Console.WriteLine();

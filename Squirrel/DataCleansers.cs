@@ -64,9 +64,10 @@ namespace Squirrel.Cleansing
 		/// <param name="columnName"></param>
 		/// <param name="strategy"></param>
 		/// <returns></returns>
-		private static Dictionary<string,string> _handleMissingValue(this Dictionary<string,string> row,Table tab,
-									string columnName,
-									   MissingValueHandlingStrategy strategy)
+		private static Dictionary<string,string> _handleMissingValue(this Dictionary<string,string> row,
+			                                                         Table tab,
+			                                                         string columnName,
+			                                                         MissingValueHandlingStrategy strategy)
 		{
 			row[columnName] = strategy switch
 			{
@@ -91,11 +92,13 @@ namespace Squirrel.Cleansing
 			};
 			return row;
 		}
+
 		/// <summary>
-		/// 
+		/// Parses and converts the provided string representation of a number into a decimal.
+		/// If the conversion fails, it returns 0.
 		/// </summary>
-		/// <param name="t"></param>
-		/// <returns></returns>
+		/// <param name="t">The string value to be converted into a decimal.</param>
+		/// <returns>The converted decimal value, or 0 if the conversion fails.</returns>
 		private static decimal Cleanse(string t)
 		{
 			try
@@ -108,13 +111,14 @@ namespace Squirrel.Cleansing
 			}
 		}
 
+
 		/// <summary>
-		/// TO:DO
+		/// Replaces missing values in the given table according to the specified handling strategy and representations of missing values.
 		/// </summary>
-		/// <param name="tab"></param>
-		/// <param name="strategy"></param>
-		/// <param name="missingValueRepresentations"></param>
-		/// <returns></returns>
+		/// <param name="tab">The table containing data rows and columns to process for missing values.</param>
+		/// <param name="strategy">The strategy to use for handling missing values, such as replacing with zero, average, default, etc.</param>
+		/// <param name="missingValueRepresentations">An array of string representations that indicate missing values in the table.</param>
+		/// <returns>A new table with missing values handled according to the provided strategy and representations.</returns>
 		public static Table ReplaceMissingValuesByDefault(this Table tab,
 			MissingValueHandlingStrategy strategy = MissingValueHandlingStrategy.MarkWithNa,
 			params string[] missingValueRepresentations)
@@ -245,7 +249,7 @@ namespace Squirrel.Cleansing
 			noDuplicates.Rows.AddRange(noDups.Select(t => t.Value.First()));
 			return noDuplicates;
 		}
-		
+
 		/// <summary>
 		/// Extracts the rows which have outlier values for the given column name 
 		/// </summary>
@@ -265,18 +269,135 @@ namespace Squirrel.Cleansing
 			{
 				allValues = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
 			}
-			catch(FormatException ex)
+			catch (FormatException ex)
 			{
 				throw new FormatException($"some values of column {columnName} can't be converted to decimal ");
 			}
-			var iqrRange = BasicStatistics.IqrRange(allValues);
-			for (int i = 0; i < allValues.Count; i++)
+
+			var outlierIndices = algo switch
 			{
-				if (allValues[i] < iqrRange.Item1 || allValues[i] > iqrRange.Item2)
-					outliers.Rows.Add(tab.Rows[i]);
+				OutlierDetectionAlgorithm.IqrInterval => GetIqrOutliers(allValues),
+				OutlierDetectionAlgorithm.ZScore => GetZScoreOutliers(allValues),
+				OutlierDetectionAlgorithm.ModifiedZScore => GetModifiedZScoreOutliers(allValues),
+				OutlierDetectionAlgorithm.StandardDeviation => GetStandardDeviationOutliers(allValues),
+				OutlierDetectionAlgorithm.Percentile => GetPercentileOutliers(allValues),
+				_ => throw new ArgumentException($"Unsupported outlier detection algorithm: {algo}")
+			};
+
+			foreach (int index in outlierIndices)
+			{
+				outliers.Rows.Add(tab.Rows[index]);
 			}
+
 			return outliers;
 		}
+
+		/// <summary>
+		/// Identifies the indices of outlier values in the provided list of decimal values based on the interquartile range (IQR).
+		/// Outliers are values that fall outside the IQR range.
+		/// </summary>
+		/// <param name="values">The list of decimal values to be analyzed for outliers.</param>
+		/// <returns>A hash set containing the indices of outlier values in the input list.</returns>
+		private static HashSet<int> GetIqrOutliers(List<decimal> values)
+		{
+			var outlierIndices = new HashSet<int>();
+			var iqrRange = BasicStatistics.IqrRange(values);
+
+			for (int i = 0; i < values.Count; i++)
+			{
+				if (values[i] < iqrRange.Item1 || values[i] > iqrRange.Item2)
+					outlierIndices.Add(i);
+			}
+
+			return outlierIndices;
+		}
+
+		/// <summary>
+		/// Identifies indexes of outliers in a dataset based on the Z-Score method.
+		/// Outliers are determined by comparing the Z-Score of each value to the specified threshold.
+		/// </summary>
+		/// <param name="values">A list of decimal values representing the dataset to analyze for outliers.</param>
+		/// <param name="threshold">The Z-Score threshold above which a value is considered an outlier. Default is 3.0.</param>
+		/// <returns>A set of integer indexes corresponding to the positions of outlier values in the dataset.</returns>
+		private static HashSet<int> GetZScoreOutliers(List<decimal> values, decimal threshold = 3.0m)
+		{
+			var outlierIndices = new HashSet<int>();
+			var mean = Convert.ToDouble(values.Average());
+			var stdDev =  BasicStatistics.StandardDeviation(values);
+
+			for (int i = 0; i < values.Count; i++)
+			{
+				var diff = Convert.ToDouble(values[i]) - mean;
+				var zScore = Math.Abs(diff / stdDev);
+				if (zScore > (double)threshold)
+					outlierIndices.Add(i);
+			}
+
+			return outlierIndices;
+		}
+
+		/// <summary>
+		/// Identifies outliers in a list of decimal values using the Modified Z-Score method.
+		/// </summary>
+		/// <param name="values">The list of decimal values to analyze for outliers.</param>
+		/// <param name="threshold">The threshold value for determining outliers; values with an absolute modified Z-Score greater than this are considered outliers. Default is 3.5.</param>
+		/// <returns>A set of indices corresponding to the positions of outliers in the input list.</returns>
+		private static HashSet<int> GetModifiedZScoreOutliers(List<decimal> values, decimal threshold = 3.5m)
+		{
+			var outlierIndices = new HashSet<int>();
+			var median = BasicStatistics.Median(values);
+			var mad = BasicStatistics.MedianAbsoluteDeviation(values);
+
+			for (int i = 0; i < values.Count; i++)
+			{
+				var modifiedZScore = 0.6745m * (values[i] - median) / mad;
+				if (Math.Abs(modifiedZScore) > threshold)
+					outlierIndices.Add(i);
+			}
+
+			return outlierIndices;
+		}
+
+		/// <summary>
+		/// Identifies outlier indices in the provided list of decimal values based on standard deviation.
+		/// Values that fall outside the specified number of standard deviations from the mean are considered outliers.
+		/// </summary>
+		/// <param name="values">The list of decimal values to analyze for outliers.</param>
+		/// <param name="multiplier">The number of standard deviations from the mean that defines the bounds for outliers. Defaults to 2.0.</param>
+		/// <returns>A set of indices in the input list corresponding to the identified outliers.</returns>
+		private static HashSet<int> GetStandardDeviationOutliers(List<decimal> values, decimal multiplier = 2.0m)
+		{
+			var outlierIndices = new HashSet<int>();
+			var mean = values.Average();
+			var stdDev = BasicStatistics.StandardDeviation(values);
+			var lowerBound = mean - (multiplier * (decimal)stdDev);
+			var upperBound = mean + (multiplier * (decimal)stdDev);
+
+			for (int i = 0; i < values.Count; i++)
+			{
+				if (values[i] < lowerBound || values[i] > upperBound)
+					outlierIndices.Add(i);
+			}
+
+			return outlierIndices;
+		}
+
+		private static HashSet<int> GetPercentileOutliers(List<decimal> values, decimal lowerPercentile = 5.0m,
+			decimal upperPercentile = 95.0m)
+		{
+			var outlierIndices = new HashSet<int>();
+			var lowerBound = BasicStatistics.Percentile(values, lowerPercentile);
+			var upperBound = BasicStatistics.Percentile(values, upperPercentile);
+
+			for (int i = 0; i < values.Count; i++)
+			{
+				if (values[i] < lowerBound || values[i] > upperBound)
+					outlierIndices.Add(i);
+			}
+
+			return outlierIndices;
+		}
+
 		/// <summary>
 		/// Remove all rows that correspond to a value for the given column which is an outlier
 		/// </summary>
@@ -290,31 +411,43 @@ namespace Squirrel.Cleansing
 		/// Table outliersRemoved = tableWithOutliers.RemoveOutliers("Age");
 		/// </example>
 		public static Table RemoveOutliers(this Table tab, string columnName,
-											OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IqrInterval)
+			OutlierDetectionAlgorithm algo = OutlierDetectionAlgorithm.IqrInterval)
 		{
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
-			var allValues = tab.ValuesOf(columnName)
-										 .Select(Convert.ToDecimal)
-										 .ToList();
-			//Get the IQR Range
-			var iqrRange = BasicStatistics.IqrRange(allValues);
-			Table outliersRemoved = new Table();
-			var leaveRows = new HashSet<int>();
-			for (int i = 0; i < allValues.Count; i++)
+
+			List<decimal> allValues;
+			try
 			{
-				//Any value which is less or more than the given range is a possible outlier
-				if (allValues[i] < iqrRange.Item1 || allValues[i] > iqrRange.Item2)
-					leaveRows.Add(i);// tab.Rows.RemoveAt(i);
+				allValues = tab.ValuesOf(columnName).Select(Convert.ToDecimal).ToList();
 			}
+			catch (FormatException ex)
+			{
+				throw new FormatException($"some values of column {columnName} can't be converted to decimal ");
+			}
+
+			var outlierIndices = algo switch
+			{
+				OutlierDetectionAlgorithm.IqrInterval => GetIqrOutliers(allValues),
+				OutlierDetectionAlgorithm.ZScore => GetZScoreOutliers(allValues),
+				OutlierDetectionAlgorithm.ModifiedZScore => GetModifiedZScoreOutliers(allValues),
+				OutlierDetectionAlgorithm.StandardDeviation => GetStandardDeviationOutliers(allValues),
+				OutlierDetectionAlgorithm.Percentile => GetPercentileOutliers(allValues),
+				_ => throw new ArgumentException($"Unsupported outlier detection algorithm: {algo}")
+			};
+
+			var outlierIndicesSet = new HashSet<int>(outlierIndices);
+			var cleanedTable = new Table();
 
 			for (int i = 0; i < tab.RowCount; i++)
 			{
-				if (!leaveRows.Contains(i))
-					outliersRemoved.Rows.Add(tab.Rows[i]);
+				if (!outlierIndicesSet.Contains(i))
+				{
+					cleanedTable.Rows.Add(tab.Rows[i]);
+				}
 			}
 
-			return outliersRemoved;
+			return cleanedTable;
 		}
 		/// <summary>
 		/// Removes those rows at which the value of the given column falls under the given range
@@ -339,7 +472,7 @@ namespace Squirrel.Cleansing
 			// Find indices of rows to be removed
 			for (int i = 0; i < vals.Count(); i++)
 			{
-				if (low <= vals[i] && vals[i] <= high)
+				if (vals[i] >=low && vals[i] <= high)
 					toBeRemoved.Add(i);
 			}
 			//
@@ -520,8 +653,6 @@ namespace Squirrel.Cleansing
 			var removed = new Table();
 			var toBeRemoved = new List<int>();
 			if (dateColumnName == null) throw new ArgumentNullException(nameof(dateColumnName));
-			if (startDate == null) throw new ArgumentNullException(nameof(startDate));
-			if (endDate == null) throw new ArgumentNullException(nameof(endDate));
 			tab.ThrowIfTableIsNull();
 			tab.ThrowIfColumnsAreNotPresentInTable(dateColumnName);
 			
@@ -1146,8 +1277,9 @@ namespace Squirrel.Cleansing
 		/// A hole is an empty cell that has no value. 
 		/// </summary>
 		/// <param name="tab"></param>
+		/// <param name="missingMarkers"></param>
 		/// <returns></returns>
-		public static Table RemoveIncompleteRows(this Table tab)
+		public static Table RemoveIncompleteRows(this Table tab, params string[] missingMarkers)
 		{
 			tab.ThrowIfTableIsNull();
 			var toBeRemoved = new List<int>();
@@ -1155,7 +1287,8 @@ namespace Squirrel.Cleansing
 			{
 				foreach (var col in tab.ColumnHeaders)
 				{
-					if(tab[col][i].Trim().Length == 0)
+					if(tab[col][i].Trim().Length == 0
+					   || Array.IndexOf(missingMarkers, tab[col][i]) != -1)
 						toBeRemoved.Add(i);
 				}
 			}

@@ -37,18 +37,22 @@ namespace Squirrel
         /// Capture till we encounter the space character
         /// </summary>
         TerminateAtSpace,
+
         /// <summary>
         /// 
         /// </summary>
         TerminateAtNumber,
+
         /// <summary>
         /// 
         /// </summary>
         TerminateAtFirstNonAlpha,
+
         /// <summary>
         /// 
         /// </summary>
         TerminateAtFirstNonAlphaNumeric,
+
         /// <summary>
         /// 
         /// </summary>

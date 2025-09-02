@@ -41,15 +41,23 @@ namespace Squirrel
             return new Tuple<decimal, decimal>(q1 - 1.5M * iqr, q3 + 1.5M * iqr);
         }
 
+
         /// <summary>
-        /// Returns the range of values for the given columns.
+        /// Calculates the range of a sequence of decimal values.
+        /// The range is the difference between the maximum and minimum values in the sequence.
         /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
+        /// <param name="values">An enumerable sequence of decimal values.</param>
+        /// <returns>The range of the sequence as a decimal.</returns>
         public static decimal Range(this IEnumerable<decimal> values)
         {
             return values.Max() - values.Min();
         }
+
+        public static double Kurtosis(this IEnumerable<decimal> values)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Returns the kurtosis of a data set. Kurtosis characterizes the relative peakedness or flatness of a 
         /// distribution compared with the normal distribution. 
@@ -125,11 +133,21 @@ namespace Squirrel
             
 
         }
-
+        public static double StandardDeviation(this IEnumerable<decimal> values)
+        {
+            throw new NotImplementedException();
+        }
         public static double StandardDeviation(this IEnumerable<double> values)
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Raises each element of the given vector to the specified power.
+        /// </summary>
+        /// <param name="vector">The vector containing the elements to be powered.</param>
+        /// <param name="power">The exponent to which each element of the vector will be raised.</param>
+        /// <returns>A new vector where each element is raised to the specified power.</returns>
         public static Vector<double> Pow(Vector<double> vector, int power)
         {
             // Create a new vector to store the results
@@ -185,6 +203,16 @@ namespace Squirrel
         {
             var avg = values.Average();
             return values.Count(s => s < avg);
+        }
+
+        public static decimal MedianAbsoluteDeviation(List<decimal> values)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static decimal Percentile(List<decimal> values, decimal lowerPercentile)
+        {
+            throw new NotImplementedException();
         }
     }
 }
