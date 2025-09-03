@@ -5,14 +5,12 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/TableAPI.svg)](https://www.nuget.org/packages/TableAPI/)
 [![.NET Standard](https://img.shields.io/badge/.NET%20Standard-2.0-blue.svg)](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 [![License](https://img.shields.io/github/license/sudipto80/Squirrel.svg)](LICENSE)
-[![Build Status](https://github.com/sudipto80/Squirrel/workflows/CI/badge.svg)](https://github.com/sudipto80/Squirrel/actions)
-[![codecov](https://codecov.io/gh/sudipto80/Squirrel/branch/main/graph/badge.svg)](https://codecov.io/gh/sudipto80/Squirrel)
-[![CodeQL](https://github.com/sudipto80/Squirrel/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sudipto80/Squirrel/actions/workflows/codeql-analysis.yml)
+
 [![GitHub issues](https://img.shields.io/github/issues/sudipto80/Squirrel.svg)](https://github.com/sudipto80/Squirrel/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/sudipto80/Squirrel.svg)](https://github.com/sudipto80/Squirrel/commits/main)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/sudipto80/Squirrel/graphs/commit-activity)
 [![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Documentation.md)
-[![Book](https://img.shields.io/badge/Apress-Published%20Book-blue.svg)](link-to-book)
+
 
 <img src="squirrel_logo.png" height="200" width="240" align="right">
 
@@ -34,9 +32,7 @@ var insights = DataAcquisition.LoadCsv("sales_data.csv")
     .RemoveOutliers("amount")
     .NormalizeColumn("customer_name", NormalizationStrategy.NameCase)
     .RemoveNonMatches("email", @"^[^@]+@[^@]+\.[^@]+$")
-    .GroupBy("region")
-    .Aggregate("amount", AggregateFunction.Sum)
-    .SortByDescending("amount");
+    .SortBy("amount");
 
 insights.PrettyDump();
 ```
@@ -85,11 +81,17 @@ var chart = model.Pick("Time", "Speed")
 ```
 
 ### Data Acquisition
-Load data from multiple sources with automatic type inference:
+Load and save data from/to multiple sources/destinations.
 ```csharp
 var data = DataAcquisition.LoadCsv("file.csv");
-var dbData = DataAcquisition.LoadFromSqlServer(connectionString, query);
-var webData = DataAcquisition.LoadFromUrl("https://api.example.com/data");
+var table = DataAcquisition.LoadHtml(tableHtml);
+var data = DataAcquisition.LoadParquet("file.parquet");
+var data = DataAcquisition.LoadCsv("file.csv");
+tab.ToCsv("logs.csv");
+// Reading from anonymous type list
+var fromMemory = Enumerable.Range(1,10).Select( n => new { Name = $"Name {n}", Data = n })
+                                       .ToTableFromAnonList();
+
 ```
 
 ### Data Cleaning & Validation
@@ -105,16 +107,15 @@ cleanData = messyData
 ### Statistical Analysis
 Built-in statistical functions and aggregations:
 ```csharp
-var stats = data.BasicStatistics("salary");
 var outliers = data.ExtractOutliers("revenue");
-var summary = data.GroupBy("department").Aggregate("salary", AggregateFunction.Average);
+// data is a table instance 
+var summary = data.Gist();
 ```
 
 ### Data Visualization
 Ready-made connectors to popular visualization libraries:
 ```csharp
-data.ToGoogleChart(ChartType.BarChart, "revenue", "region");
-data.ToHighcharts(ChartType.LineChart, "date", "sales");
+data.ToBarChartByGoogleDataVisualization( "revenue", "region", "revenue per region");
 ```
 
 ## 🏗️ Architecture
@@ -138,9 +139,6 @@ Here are couple of design decisions that have been the guiding principle for the
 * A column at a given index should be available by the column name index. So if we have a table `StockValues` that stores average stock values in a year of different companies where the row depicts the year and the column depicts the company for which the stock price is stored, then we should be able to get the stock price for Microsoft (Symbol "MSFT") for 5th year as `StockValues[4]["MSFT"]`
 * Value at row "k" (Expressed as an integer) and column "m" (Expressed as a string) has to be accessible by either of the syntax `table[k]["m"]` or `table["m"][k]`.
 
-## 📖 Featured in
-
-**[Data Analytics with Squirrel for .NET](https://link.springer.com/book/10.1007/978-1-4842-XXXX-X)** - Comprehensive guide published by Apress, covering enterprise data processing patterns and best practices.
 
 ## 🚀 Installation
 
@@ -186,21 +184,19 @@ var cleanCustomers = messyCustomerData
 ```csharp
 var analysis = transactionData
     .RemoveOutliers("amount")
-    .GroupBy("category", "month")
-    .Aggregate("amount", AggregateFunction.Sum)
-    .SortByDescending("amount")
-    .ToGoogleChart(ChartType.ColumnChart, "category", "amount");
+    .SortBy("amount")
+    .ToBarChartByGoogleDataVisualization ("amount", "Amounts", "Sales Amounts");
 ```
 
 ## 📋 API Overview
 
-1. **BasicStatistics** - Basic statistical functions like Median, Range, Standard Deviation, Kurtosis, etc.
-2. **CustomComparers** - Several customized comparators for sorting data.
-3. **DataAcquisition** - Data loaded/dumped from/to various formats, e.g. CSV, TSV, HTML, ARFF, etc.
-4. **DatabaseConnectors** - Data can be loaded from popular DB repositories by using the connectors for SQL Server and MongoDB.
-5. **DataCleansers** - Extraction/Removal of outliers or data that matches specific boolean criteria.
-6. **OrderedTable** - A data structure to hold sort results temporarily.
-7. **Table** - An ubiquitous data structure used to encapsulate the data. Several APIs are part of the *Table* -
+1. **`BasicStatistics`** - Basic statistical functions like Median, Range, Standard Deviation, Kurtosis, etc.
+2. **`CustomComparers`** - Several customized comparators for sorting data.
+3. **`DataAcquisition`** - Data loaded/dumped from/to various formats, e.g. CSV, TSV, HTML, ARFF, etc.
+4. **`DatabaseConnectors`** - Data can be loaded from popular DB repositories by using the connectors for SQL Server and MongoDB.
+5. **`DataCleansers`** - Extraction/Removal of outliers or data that matches specific boolean criteria.
+6. **`OrderedTable`** - A data structure to hold sort results temporarily.
+7. **`Table`** - An ubiquitous data structure used to encapsulate the data. Several APIs are part of the *Table* -
    * Filter data using regular expressions or SQL clause.
    * Sort data based on columns and their values.
    * Programmatic manipulation i.e. deletion, updation and insertion of data.
@@ -281,7 +277,7 @@ The documentation will be perpetually in-progress as the development is very act
 7. [Calculating speed of a bungee jumper](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-07.md)
 8. [Finding most popular baby names in centuries](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-08.md)
 9. [Stock Price Analysis](https://github.com/sudipto80/Squirrel/blob/master/example-09.md)
-10. More examples coming soon...
+10. More examples coming very soon... 
 
 ## 🛣️ Roadmap
 
