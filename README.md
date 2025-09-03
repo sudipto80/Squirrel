@@ -262,7 +262,7 @@ The documentation will be perpetually in-progress as the development is very act
 
 ## 📊 Usage Stats & Community
 
-- **8,500+ NuGet Downloads**: Growing adoption across .NET teams
+- **8,100+ NuGet Downloads**: Growing adoption across .NET teams 
 - **Enterprise Validation**: Used in algorithmic trading and financial analytics
 - **Active Development**: Regular updates and community-driven features
 
