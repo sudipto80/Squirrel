@@ -16,12 +16,12 @@ namespace Squirrel
         public static decimal Median(List<decimal> numbers)
         {
             numbers = numbers.OrderBy(m => m).ToList();
-            if (numbers.Count%2 == 0)
+            if (numbers.Count % 2 == 0)
             {
-                return (numbers[numbers.Count/2] + numbers[numbers.Count/2 - 1])/2;
+                return (numbers[numbers.Count / 2] + numbers[numbers.Count / 2 - 1]) / 2;
             }
 
-            return numbers[numbers.Count/2];
+            return numbers[numbers.Count / 2];
 
         }
 
@@ -88,55 +88,57 @@ namespace Squirrel
 
 
             //SIMD
-           
-                double count = values.Count;
-                double n1 = count + 1;
-                double n2 = count;
-                double d1 = count - 1;
-                double d2 = count - 2;
-                double d3 = count - 3;
 
-                double sum = 0;
-                double v = values.Average();
-                double s = StandardDeviation(values);
+            double count = values.Count;
+            double n1 = count + 1;
+            double n2 = count;
+            double d1 = count - 1;
+            double d2 = count - 2;
+            double d3 = count - 3;
 
-                if (Vector.IsHardwareAccelerated && values.Count >= Vector<double>.Count)
+            double sum = 0;
+            double v = values.Average();
+            double s = StandardDeviation(values);
+
+            if (Vector.IsHardwareAccelerated && values.Count >= Vector<double>.Count)
+            {
+                var vVector = new Vector<double>(v);
+                var sVector = new Vector<double>(s);
+                var sumVector = Vector<double>.Zero;
+
+                int i;
+                for (i = 0; i <= values.Count - Vector<double>.Count; i += Vector<double>.Count)
                 {
-                    var vVector = new Vector<double>(v);
-                    var sVector = new Vector<double>(s);
-                    var sumVector = Vector<double>.Zero;
-
-                    int i;
-                    for (i = 0; i <= values.Count - Vector<double>.Count; i += Vector<double>.Count)
-                    {
-                        var valueVector = new Vector<double>(values.ToArray(), i);
-                        var diffVector = (valueVector - vVector) / sVector;
-                        sumVector += Pow(diffVector, 4);
-                    }
-
-                    sum = Vector.Dot(sumVector, Vector<double>.One);
-
-                    for (; i < values.Count; i++)
-                    {
-                        sum += Math.Pow((values[i] - v) / s, 4);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < count; i++)
-                    {
-                        sum += Math.Pow((values[i] - v) / s, 4);
-                    }
+                    var valueVector = new Vector<double>(values.ToArray(), i);
+                    var diffVector = (valueVector - vVector) / sVector;
+                    sumVector += Pow(diffVector, 4);
                 }
 
-                return (n1 * n2 * sum) / (d1 * d2 * d3) - (3 * (Math.Pow(count - 1, 2))) / (d2 * d3);
-            
+                sum = Vector.Dot(sumVector, Vector<double>.One);
+
+                for (; i < values.Count; i++)
+                {
+                    sum += Math.Pow((values[i] - v) / s, 4);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    sum += Math.Pow((values[i] - v) / s, 4);
+                }
+            }
+
+            return (n1 * n2 * sum) / (d1 * d2 * d3) - (3 * (Math.Pow(count - 1, 2))) / (d2 * d3);
+
 
         }
+
         public static double StandardDeviation(this IEnumerable<decimal> values)
         {
             throw new NotImplementedException();
         }
+
         public static double StandardDeviation(this IEnumerable<double> values)
         {
             throw new NotImplementedException();
@@ -161,6 +163,7 @@ namespace Squirrel
 
             return result;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -171,6 +174,7 @@ namespace Squirrel
             return 0.0;
             //  return Math.Sqrt(Variance(values));
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -181,6 +185,7 @@ namespace Squirrel
             var avg = values.Average();
             return values.Count(s => s >= values.Average());
         }
+
         /// <summary>
         /// Returns a number of 
         /// </summary>
@@ -188,12 +193,13 @@ namespace Squirrel
         /// <returns></returns>
         /// 
         [Description("More than average,Above Average,More than mean")]
-        
+
         public static int AboveAverageCount(this IEnumerable<decimal> values)
         {
             var avg = values.Average();
             return values.Count(s => s > avg);
         }
+
         /// <summary>
         /// Returns the number of instances that are below average value
         /// </summary>
@@ -205,14 +211,72 @@ namespace Squirrel
             return values.Count(s => s < avg);
         }
 
-        public static decimal MedianAbsoluteDeviation(List<decimal> values)
+        /// <summary>
+        /// Calculates the Median Absolute Deviation (MAD) of the values.
+        /// MAD is a robust measure of variability that is less sensitive to outliers than standard deviation.
+        /// </summary>
+        /// <param name="values">The list of decimal values</param>
+        /// <returns>The median absolute deviation</returns>
+        public static decimal MedianAbsoluteDeviation(this List<decimal> values)
         {
-            throw new NotImplementedException();
+            if (!values.Any())
+                throw new ArgumentException("Values collection cannot be empty");
+    
+            decimal median = Median(values);
+            var absoluteDeviations = values.Select(x => Math.Abs(x - median)).ToList();
+            return Median(absoluteDeviations);
         }
 
-        public static decimal Percentile(List<decimal> values, decimal lowerPercentile)
+        /// <summary>
+        /// Calculates the value at the specified percentile.
+        /// Uses the nearest-rank method for percentile calculation.
+        /// </summary>
+        /// <param name="values">The list of decimal values</param>
+        /// <param name="percentile">The percentile to calculate (0-100)</param>
+        /// <returns>The value at the specified percentile</returns>
+        public static decimal Percentile(this List<decimal> values, decimal percentile)
         {
-            throw new NotImplementedException();
+            if (!values.Any())
+                throw new ArgumentException("Values collection cannot be empty");
+    
+            if (percentile < 0 || percentile > 100)
+                throw new ArgumentOutOfRangeException(nameof(percentile), "Percentile must be between 0 and 100");
+    
+            var sortedValues = values.OrderBy(x => x).ToList();
+    
+            if (percentile == 0) return sortedValues.First();
+            if (percentile == 100) return sortedValues.Last();
+    
+            decimal rank = (percentile / 100m) * (sortedValues.Count - 1);
+            int lowerIndex = (int)Math.Floor(rank);
+            int upperIndex = (int)Math.Ceiling(rank);
+    
+            if (lowerIndex == upperIndex)
+                return sortedValues[lowerIndex];
+    
+            decimal weight = rank - lowerIndex;
+            return sortedValues[lowerIndex] * (1 - weight) + sortedValues[upperIndex] * weight;
         }
+
+        /// <summary>
+        /// Calculates the variance of decimal values
+        /// </summary>
+        public static double Variance(this IEnumerable<decimal> values)
+        {
+            var doubles = values.Select(d => (double)d).ToList();
+            return Variance(doubles);
+        }
+
+        /// <summary>
+        /// Calculates the variance of double values
+        /// </summary>
+        public static double Variance(this IEnumerable<double> values)
+        {
+            if (!values.Any()) return 0.0;
+
+            double mean = values.Average();
+            return values.Select(d => Math.Pow(d - mean, 2)).Average();
+        }
+
     }
 }
