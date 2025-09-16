@@ -953,6 +953,82 @@ namespace Squirrel
 
             file.Close();
         }
+        
+        // Method 1: Read S3 object content as string (improved version of your method)
+        public static async Task<string> ReadS3ObjectAsString(string accessKey, string secretKey,
+            string bucketName, string objectKey)
+        {
+            var s3Client = new AmazonS3Client(accessKey, secretKey, RegionEndpoint.USEast1);
+    
+            var getRequest = new GetObjectRequest
+            {
+                BucketName = bucketName,
+                Key = objectKey
+            };
+
+            using var response = await s3Client.GetObjectAsync(getRequest);
+            using var responseStream = response.ResponseStream;
+            using var reader = new StreamReader(responseStream);
+    
+            return await reader.ReadToEndAsync();
+        }
+        public static async Task<List<S3Object>> ListAllS3Objects(string accessKey, string secretKey, string bucketName)
+        {
+            var s3Client = new AmazonS3Client(
+                accessKey,
+                secretKey,
+                RegionEndpoint.USEast1
+            );
+    
+            var allObjects = new List<S3Object>();
+            string continuationToken = null;
+    
+            do
+            {
+                var request = new ListObjectsV2Request
+                {
+                    BucketName = bucketName,
+                    MaxKeys = 1000, // Maximum objects per request
+                    ContinuationToken = continuationToken
+                };
+        
+                var response = await s3Client.ListObjectsV2Async(request);
+                allObjects.AddRange(response.S3Objects);
+                continuationToken = response.NextContinuationToken;
+        
+            } while (continuationToken != null);
+    
+            return allObjects;
+        }
+        public static async Task<string> LoadFromS3AsString(string accessKey, string secretKey,
+            string bucketName, string resourceName)
+        {
+            var s3Client = new AmazonS3Client(
+                accessKey,
+                secretKey,
+                RegionEndpoint.USEast1
+            );
+            
+            //READ Content of S3 
+            // Download a specific object
+            var getRequest = new GetObjectRequest
+            {
+                BucketName = bucketName, 
+                Key = resourceName// The file path/name in S3
+            };
+
+            StreamWriter sw = new StreamWriter("test.csv");
+            using (var response = await s3Client.GetObjectAsync(getRequest))
+            using (var responseStream = response.ResponseStream)
+            using (var reader = new StreamReader(responseStream))
+            {
+                sw.WriteLine(reader.ReadToEnd());
+            }
+            sw.Close();
+            //TODO: Depending on the extension
+            // We can load any pdefined functions.
+            return File.ReadAllText("test.csv");
+        }
         /// <summary>
         /// Reads data from S3 bucket
         /// </summary>

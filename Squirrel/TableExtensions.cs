@@ -9,8 +9,7 @@ public static class TableExtensions
         if (start < 0 || end < 0 || start > end)
             throw new ArgumentOutOfRangeException(
                 "The start and end values should be non-negative and start should be less than end");
-        if (end > table.RowCount)
-            throw new ArgumentOutOfRangeException("The end value should be less than the number of rows in the table");
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(end, table.RowCount);
         var newTable = new Table();
         for (int i = start; i <= end; i++)
         {
@@ -27,10 +26,8 @@ public static class TableExtensions
     /// </summary>
     public static Table Where(this Table table, Func<Dictionary<string, string>, bool> condition)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (condition == null)
-            throw new ArgumentNullException(nameof(condition));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(condition);
 
         var result = new Table();
         result.Rows.AddRange(table.Rows.Where(condition));
@@ -42,8 +39,7 @@ public static class TableExtensions
     /// </summary>
     public static Table Between(this Table table, string column, string min, string max)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
         if (string.IsNullOrEmpty(min))
@@ -73,12 +69,10 @@ public static class TableExtensions
     /// </summary>
     public static Table In(this Table table, string column, params string[] values)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
-        if (values == null)
-            throw new ArgumentNullException(nameof(values));
+        ArgumentNullException.ThrowIfNull(values);
 
         var valueSet = new HashSet<string>(values);
         return table.Where(row => valueSet.Contains(row[column]));
@@ -89,12 +83,10 @@ public static class TableExtensions
     /// </summary>
     public static Table NotIn(this Table table, string column, params string[] values)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
-        if (values == null)
-            throw new ArgumentNullException(nameof(values));
+        ArgumentNullException.ThrowIfNull(values);
 
         var valueSet = new HashSet<string>(values);
         return table.Where(row => !valueSet.Contains(row[column]));
@@ -105,8 +97,7 @@ public static class TableExtensions
     /// </summary>
     public static Table IsNull(this Table table, string column)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
 
@@ -118,8 +109,7 @@ public static class TableExtensions
     /// </summary>
     public static Table IsNotNull(this Table table, string column)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
 
@@ -135,14 +125,10 @@ public static class TableExtensions
     /// </summary>
     public static Table Iloc(this Table table, int startIndex, int endIndex)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (startIndex < 0)
-            throw new ArgumentOutOfRangeException(nameof(startIndex));
-        if (endIndex < startIndex)
-            throw new ArgumentOutOfRangeException(nameof(endIndex));
-        if (startIndex >= table.RowCount)
-            throw new ArgumentOutOfRangeException(nameof(startIndex));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentOutOfRangeException.ThrowIfNegative(startIndex);
+        ArgumentOutOfRangeException.ThrowIfLessThan(endIndex, startIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(startIndex, table.RowCount);
 
         var result = new Table();
         int actualEndIndex = Math.Min(endIndex, table.RowCount - 1);
@@ -155,17 +141,40 @@ public static class TableExtensions
         return result;
     }
 
+    public static Table GetRowsFromTheseIndices(this Table table, params int[] indices)
+    {
+        var tab = new Table();
+        for (int i = 0; i< indices.Length; i++)
+        {
+            if (indices[i] >= 0 && indices[i] < table.RowCount)
+            {
+                tab.AddRow(table[indices[i]]);
+            }
+        }
+        return tab;
+    }
+
+    public static Table GetRowsWhere(this Table table, Func<Dictionary<string, string>, bool> func)
+    {
+        var tab = new Table();
+        for (int i = 0; i < table.RowCount; i++)
+        {
+            if (func(table[i]))
+            {
+                tab.AddRow(table[i]);
+            }
+        }
+        return tab;
+    }
     /// <summary>
     /// Select every nth row, optionally with an offset
     /// </summary>
     public static Table Every(this Table table, int n, int offset = 0)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (n <= 0)
             throw new ArgumentOutOfRangeException(nameof(n), "n must be positive");
-        if (offset < 0)
-            throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfNegative(offset);
 
         var result = new Table();
         for (int i = offset; i < table.RowCount; i += n)
@@ -181,10 +190,8 @@ public static class TableExtensions
     /// </summary>
     public static Table Skip(this Table table, int n)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (n < 0)
-            throw new ArgumentOutOfRangeException(nameof(n));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentOutOfRangeException.ThrowIfNegative(n);
 
         var result = new Table();
         for (int i = n; i < table.RowCount; i++)
@@ -200,10 +207,8 @@ public static class TableExtensions
     /// </summary>
     public static Table SkipWhile(this Table table, Func<Dictionary<string, string>, bool> condition)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (condition == null)
-            throw new ArgumentNullException(nameof(condition));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(condition);
 
         var result = new Table();
         bool skipPhase = true;
@@ -225,10 +230,8 @@ public static class TableExtensions
     /// </summary>
     public static Table TakeWhile(this Table table, Func<Dictionary<string, string>, bool> condition)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (condition == null)
-            throw new ArgumentNullException(nameof(condition));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(condition);
 
         var result = new Table();
         foreach (var row in table.Rows)
@@ -246,10 +249,8 @@ public static class TableExtensions
     /// </summary>
     public static Table SelectIndices(this Table table, params int[] indices)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (indices == null)
-            throw new ArgumentNullException(nameof(indices));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(indices);
 
         var result = new Table();
         foreach (int index in indices)
@@ -270,10 +271,9 @@ public static class TableExtensions
     /// <summary>
     /// Numeric comparison with proper type handling
     /// </summary>
-    public static Table WhereNumeric(this Table table, string column, string operatorStr, decimal value)
+    public static Table Where(this Table table, string column, string operatorStr, decimal value)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
         if (string.IsNullOrEmpty(operatorStr))
@@ -300,10 +300,9 @@ public static class TableExtensions
     /// <summary>
     /// Date-based filtering
     /// </summary>
-    public static Table WhereDate(this Table table, string column, string operatorStr, DateTime date)
+    public static Table Where(this Table table, string column, string operatorStr, DateTime date)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
 
@@ -328,10 +327,9 @@ public static class TableExtensions
     /// <summary>
     /// Date range filtering
     /// </summary>
-    public static Table WhereDateRange(this Table table, string column, DateTime startDate, DateTime endDate)
+    public static Table Where(this Table table, string column, DateTime startDate, DateTime endDate)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
 
@@ -346,14 +344,12 @@ public static class TableExtensions
     /// <summary>
     /// String contains operation
     /// </summary>
-    public static Table WhereContains(this Table table, string column, string substring)
+    public static Table Where(this Table table, string column, string substring)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
-        if (substring == null)
-            throw new ArgumentNullException(nameof(substring));
+        ArgumentNullException.ThrowIfNull(substring);
 
         return table.Where(row =>
             row.GetValueOrDefault(column, "").Contains(substring, StringComparison.OrdinalIgnoreCase));
@@ -364,12 +360,10 @@ public static class TableExtensions
     /// </summary>
     public static Table WhereStartsWith(this Table table, string column, string prefix)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
-        if (prefix == null)
-            throw new ArgumentNullException(nameof(prefix));
+        ArgumentNullException.ThrowIfNull(prefix);
 
         return table.Where(row =>
             row.GetValueOrDefault(column, "").StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
@@ -380,12 +374,10 @@ public static class TableExtensions
     /// </summary>
     public static Table WhereEndsWith(this Table table, string column, string suffix)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
-        if (suffix == null)
-            throw new ArgumentNullException(nameof(suffix));
+        ArgumentNullException.ThrowIfNull(suffix);
 
         return table.Where(row =>
             row.GetValueOrDefault(column, "").EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
@@ -400,12 +392,10 @@ public static class TableExtensions
     /// </summary>
     public static Table StratifiedSample(this Table table, string column, int totalSampleSize)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(column))
             throw new ArgumentNullException(nameof(column));
-        if (totalSampleSize <= 0)
-            throw new ArgumentOutOfRangeException(nameof(totalSampleSize));
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(totalSampleSize);
 
         var groups = table.SplitOn(column);
         var result = new Table();
@@ -417,7 +407,7 @@ public static class TableExtensions
             int groupSampleSize =
                 Math.Max(1, (int)Math.Round((double)group.RowCount / table.RowCount * totalSampleSize));
 
-            // Take random sample from this group
+            // Take a random sample from this group
             var shuffled = group.Rows.OrderBy(x => random.Next()).Take(groupSampleSize);
             foreach (var row in shuffled)
             {
@@ -425,7 +415,7 @@ public static class TableExtensions
             }
         }
 
-        return result;
+        return result.Top(totalSampleSize);
     }
 
     /// <summary>
@@ -433,10 +423,8 @@ public static class TableExtensions
     /// </summary>
     public static Table SystematicSample(this Table table, int interval)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (interval <= 0)
-            throw new ArgumentOutOfRangeException(nameof(interval));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(interval);
 
         var random = new Random();
         int start = random.Next(interval); // Random starting point
@@ -486,8 +474,7 @@ public static class TableExtensions
     /// </summary>
     public static Table Search(this Table table, string searchTerm)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
+        ArgumentNullException.ThrowIfNull(table);
         if (string.IsNullOrEmpty(searchTerm))
             throw new ArgumentNullException(nameof(searchTerm));
 
@@ -500,10 +487,8 @@ public static class TableExtensions
     /// </summary>
     public static Table SearchColumns(this Table table, string[] columns, string searchTerm)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (columns == null)
-            throw new ArgumentNullException(nameof(columns));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(columns);
         if (string.IsNullOrEmpty(searchTerm))
             throw new ArgumentNullException(nameof(searchTerm));
 
@@ -520,10 +505,8 @@ public static class TableExtensions
     /// </summary>
     public static IEnumerable<Table> Partition(this Table table, int size)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (size <= 0)
-            throw new ArgumentOutOfRangeException(nameof(size));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
 
         for (int i = 0; i < table.RowCount; i += size)
         {
@@ -538,16 +521,13 @@ public static class TableExtensions
     }
 
     /// <summary>
-    /// Create sliding windows of specified size
+    /// Create sliding windows of a specified size
     /// </summary>
     public static IEnumerable<Table> SlidingWindow(this Table table, int windowSize, int step = 1)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (windowSize <= 0)
-            throw new ArgumentOutOfRangeException(nameof(windowSize));
-        if (step <= 0)
-            throw new ArgumentOutOfRangeException(nameof(step));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(windowSize);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(step);
 
         for (int i = 0; i <= table.RowCount - windowSize; i += step)
         {
@@ -556,7 +536,6 @@ public static class TableExtensions
             {
                 window.AddRow(table[j]);
             }
-
             yield return window;
         }
     }
@@ -570,12 +549,9 @@ public static class TableExtensions
     /// </summary>
     public static Table Head(this Table table, int n, Func<Dictionary<string, string>, bool> condition)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (condition == null)
-            throw new ArgumentNullException(nameof(condition));
-        if (n <= 0)
-            throw new ArgumentOutOfRangeException(nameof(n));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(condition);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(n);
 
         var result = new Table();
         int count = 0;
@@ -599,12 +575,9 @@ public static class TableExtensions
     /// </summary>
     public static Table Tail(this Table table, int n, Func<Dictionary<string, string>, bool> condition)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (condition == null)
-            throw new ArgumentNullException(nameof(condition));
-        if (n <= 0)
-            throw new ArgumentOutOfRangeException(nameof(n));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(condition);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(n);
 
         var matchingRows = table.Rows.Where(condition).Reverse().Take(n).Reverse();
         var result = new Table();
@@ -621,10 +594,8 @@ public static class TableExtensions
     /// </summary>
     public static Table Slice(this Table table, int start, int end, int step = 1)
     {
-        if (table == null)
-            throw new ArgumentNullException(nameof(table));
-        if (step <= 0)
-            throw new ArgumentOutOfRangeException(nameof(step));
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(step);
         if (start < 0)
             start = Math.Max(0, table.RowCount + start);
         if (end < 0)
