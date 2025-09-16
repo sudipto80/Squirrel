@@ -98,6 +98,7 @@ namespace Squirrel
 		/// //So the following call will return all the rows that has either "Sudipta" or "Sudipto" in the "Name" column.
 		/// Table filtered = tab.FilterByRegex("Name","Sudipt[a|o]");
 		/// </example>
+		[Category("Slicing and Dicing")]
 		public Table FilterByRegex(string column, string regexPattern)
 		{
 
@@ -317,7 +318,8 @@ namespace Squirrel
 			{
 				SmartDefaults.Instance.GetSmartDefaultValues(smartDefaultFile);//Populate and keep it ready once. 
 
-				var matchingEntriesIfAny = SmartDefaults.Instance.DoesMatchingEntryExist(ValuesOf(columnName));
+				var matchingEntriesIfAny = 
+					SmartDefaults.Instance.DoesMatchingEntryExist(ValuesOf(columnName));
 
 				//Smart Sort the day and month names 
 				if (matchingEntriesIfAny.Key)
@@ -339,24 +341,24 @@ namespace Squirrel
 			//The column we are trying to sort has all numeric values
 			if (isNumericColumn)
 			{
-				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName], comp).ToList() : _rows.OrderByDescending(m => m[columnName], comp).ToList();
+				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName].Trim(), comp).ToList() : _rows.OrderByDescending(m => m[columnName].Trim(), comp).ToList();
 			}
-			if (isCurrencyColumn)
+			else if (isCurrencyColumn)
 			{
-				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName], currencyComp).ToList() : _rows.OrderByDescending(m => m[columnName], currencyComp).ToList();
+				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName].Trim(), currencyComp).ToList() : _rows.OrderByDescending(m => m[columnName].Trim(), currencyComp).ToList();
 			}
 			//The column we are trying to has all date values
 			else if (isDateColumn)
 			{
-				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName], currencyComp).ToList() : _rows.OrderByDescending(m => m[columnName], dateComp).ToList();
+				sortedTable._rows = how == SortDirection.Ascending ? _rows.OrderBy(m => m[columnName].Trim(), currencyComp).ToList() : _rows.OrderByDescending(m => m[columnName].Trim(), dateComp).ToList();
 			}
 
 			//the column has all string values. So we are assuming that default "alphabetic" sort will do.
 			else
 			{
 				sortedTable._rows = how == SortDirection.Ascending
-					? _rows.OrderBy(m => m[columnName]).ToList()
-					: _rows.OrderByDescending(m => m[columnName]).ToList();
+					? _rows.OrderBy(m => m[columnName].Trim()).ToList()
+					: _rows.OrderByDescending(m => m[columnName].Trim()).ToList();
 			}
 			return sortedTable;
 		}
@@ -1159,17 +1161,12 @@ namespace Squirrel
 			return SplitOn(columnName).ToDictionary(t => t.Key, t => t.Value.RowCount);
 			
 		}
+
 		/// <summary>
-		/// Splits a table on the distinct values of a given column
+		/// Splits the current table into multiple smaller tables based on unique values in the specified column.
 		/// </summary>
-		/// <param name="columnName">The column; depending on values of which we want to perform the split</param>
-		/// <returns>A mapping between values of the column and their corresponding table</returns>
-		/// <github>
-		/// SplitOn
-		/// =======
-		/// Splits a table on the distinct values of a given column.
-		/// 
-		/// </github>
+		/// <param name="columnName">The column name based on which the table will be split into smaller tables.</param>
+		/// <returns>A dictionary where keys are the unique values from the specified column, and values are the corresponding tables containing rows with those unique values.</returns>
 		[Description("Split by,Split on,Break by,Partition by,Divide by")]
 		public Dictionary<string, Table> SplitOn(string columnName)
 		{
@@ -1538,6 +1535,7 @@ namespace Squirrel
 
 			return Enumerable.Range(0, RowCount - rowsPerSplit + 1)
 							 .Select(m => Middle(m * rowsPerSplit, rowsPerSplit))
+							 .Where(m => m.RowCount > 0)
 							 .ToList();
 			
 		}
