@@ -250,7 +250,8 @@ namespace SquirrelUnitTest
             tempTable.AddRow(row3);
             //Add a column called "Difference" that will have the differences of temperatures in Austin and Tampa
             tempTable.AddColumn(columnName: "Difference", formula: "[Austin] - [Tampa]", decimalDigits: 3);
-            
+
+            var calCols = tempTable.CalculatedColumns;
 
             //After the column gets added, the name of the column should be available in the column header collection.
             Assert.IsTrue(tempTable.ColumnHeaders.Contains("Difference"));
@@ -723,6 +724,39 @@ namespace SquirrelUnitTest
             Table aggregatedOverMonth = sales.Aggregate("Month");
             Assert.AreEqual(2, aggregatedOverMonth.RowCount);
             Assert.AreEqual("51",  aggregatedOverMonth[0]["Quantity"]);
+        }
+
+        [TestMethod]
+        public void Test_Explode()
+        {
+            var employeeTable = new Table();
+            employeeTable.AddRow(new Dictionary<string, string> 
+            {
+                { "name", "sam" },
+                { "age", "19" },
+                { "skills", "F#;C#;VB" }
+            });
+            employeeTable.AddRow(new Dictionary<string, string> 
+            {
+                { "name", "jenny" },
+                { "age", "28" },
+                { "skills", "C++;OCaml" }
+            });
+            employeeTable.AddRow(new Dictionary<string, string> 
+            {
+                { "name", "john" },
+                { "age", "35" },
+                { "skills", "Python" }
+            });
+
+            // Explode the skills column
+            var exploded = employeeTable.Explode("skills");
+            
+            Assert.AreEqual(6, exploded.RowCount);
+            Assert.AreEqual("F#", exploded[0]["skills"]);
+            Assert.AreEqual("C#", exploded[1]["skills"]);
+            Assert.AreEqual("VB", exploded[2]["skills"]);
+            Assert.AreEqual(3, exploded.ColumnHeaders.Count);
         }
     }
 }

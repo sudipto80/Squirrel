@@ -850,13 +850,14 @@ namespace Squirrel
             Func<string, string> quote = x => "\"" + x + "\"";
             StringBuilder csvOrtsvBuilder = new StringBuilder();
             //Append column headers 
-            csvOrtsvBuilder.Append(tab.ColumnHeaders.Aggregate((a, b) => quote(a) + delim.ToString() + quote(b)));
+            csvOrtsvBuilder.AppendLine(tab.ColumnHeaders.Aggregate((a, b) => quote(a) + delim.ToString() + quote(b)));
             //Append rows 
             for (int i = 0; i < tab.RowCount - 1; i++)
             {
                 foreach (string header in tab.ColumnHeaders)
                 {
                     csvOrtsvBuilder.Append(quote(tab[header, i]));
+                    csvOrtsvBuilder.Append(delim);
                 }
 
                 csvOrtsvBuilder.Append(quote(tab[tab.ColumnHeaders.ElementAt(tab.ColumnHeaders.Count - 1),
