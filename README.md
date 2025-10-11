@@ -296,9 +296,9 @@ Squirrel is open source and free to use. For enterprise support, training, or cu
 
 ## 🙏 Sponsors
 
-Special thanks to [Alfas.ai](https://www.alfas.ai/) for supporting this project.
+Special thanks to [Arest](https://www.arest.co.uk/) for supporting this project.
 
-<img src="https://cdn.prod.website-files.com/67ae50dd8dc3c526a35c36ca/67bdff27725edb47b56db77f_A.ai%20(Website)-cropped.svg" width="200">
+<a href="https://www.arest.co.uk/"><img src="https://cdn.prod.website-files.com/67c4a817479d760fe28c99b2/67d830ee1e9da1094a69179a_arest%20logo.svg" width="200"/></img>
 
 ## 📄 License
 
