@@ -1649,7 +1649,7 @@ namespace Squirrel
 		/// //The following dumps the table to console except the "Sex" column.
 		/// tab.Drop("Sex").PrettyDump();</example>
 		[Description("Hide,Don't show")]
-		public Table Drop(params string[] columns)
+		public Table Drop(params IEnumerable<string> columns)
 		{
 			return Pick(ColumnHeaders.Except(columns).ToArray());
 		}
@@ -1956,6 +1956,46 @@ namespace Squirrel
 			}
 
 			
+		}
+
+		/// <summary>
+		/// A property that retrieves a list of column names deemed irrelevant based on their value distribution.
+		/// Irrelevant columns are identified as those where more than 90% of their values remain the same across rows,
+		/// indicating low variability and reduced usefulness for meaningful analysis.
+		/// </summary>
+		public List<string> IrrelevantColumns
+		{
+			get
+			{
+				//Finds columns whose values don't change often
+				//columns where more than 90% value is the same
+				//for each row are pretty much irrelevant 
+		
+				var irrelevantColumns = new List<string>();
+		
+				if (RowCount == 0)
+					return irrelevantColumns;
+		
+				foreach (var columnName in ColumnHeaders)
+				{
+					var columnValues = ValuesOf(columnName);
+			
+					// Group-by-value and count occurrences
+					var valueCounts = columnValues
+						.GroupBy(v => v)
+						.Select(g => new { Value = g.Key, Count = g.Count() })
+						.OrderByDescending(x => x.Count)
+						.ToList();
+			
+					// Check if the most frequent value appears in more than 90% of rows
+					if (valueCounts.Count != 0 && valueCounts.First().Count > (RowCount * 0.9))
+					{
+						irrelevantColumns.Add(columnName);
+					}
+				}
+		
+				return irrelevantColumns;
+			}
 		}
 	  
 	}

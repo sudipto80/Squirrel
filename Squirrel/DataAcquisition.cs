@@ -808,21 +808,33 @@ namespace Squirrel
         /// <returns>A string representing the table in HTML format.</returns>
         public static string ToHtmlTable(this Table tab)
         {
+            if (tab.RowCount == 0)
+                return "<table></table>";
+    
             StringBuilder tableBuilder = new StringBuilder();
             tableBuilder.AppendLine("<table>");
+    
+            // Build header row
+            tableBuilder.AppendLine("<thead><tr>");
             foreach (string header in tab.ColumnHeaders)
             {
                 tableBuilder.AppendLine("<th>" + header + "</th>");
             }
-
-            for (int i = 0; i < tab.RowCount; i++)
+            tableBuilder.AppendLine("</tr></thead>");
+    
+            // Build body rows - iterate through Rows directly
+            tableBuilder.AppendLine("<tbody>");
+            foreach (var row in tab.Rows)
             {
                 tableBuilder.AppendLine("<tr>");
                 foreach (string header in tab.ColumnHeaders)
-                    tableBuilder.AppendLine("<td>" + tab[header][i] + "</td>");
+                {
+                    tableBuilder.AppendLine("<td>" + row[header] + "</td>");
+                }
                 tableBuilder.AppendLine("</tr>");
             }
-
+            tableBuilder.AppendLine("</tbody>");
+    
             tableBuilder.AppendLine("</table>");
             return tableBuilder.ToString();
         }
@@ -847,6 +859,7 @@ namespace Squirrel
 
         private static string ToValues(this Table tab, char delim)
         {
+            if(tab.ColumnHeaders.Count == 0) return string.Empty;
             Func<string, string> quote = x => "\"" + x + "\"";
             StringBuilder csvOrtsvBuilder = new StringBuilder();
             //Append column headers 
