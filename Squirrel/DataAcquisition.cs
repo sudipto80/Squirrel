@@ -167,18 +167,11 @@ namespace Squirrel
 
        
 
-        /// <summary>
-        /// Creates a table out of a list of anonynous type objects. 
-        /// This is useful when you are creating a bunch of objects 
-        /// of anonymous type and want to 
-        /// </summary>
-        /// <typeparam name="T">Type of the anonynous type</typeparam>
-        /// <param name="list">list of anonynous objects</param>
-        /// <returns>A table with rows created from a list of anonymnous objects</returns>
+        
         /// <summary>
         /// Creates a table out of a list of anonymous type objects.
         /// This is useful when you are creating a bunch of objects
-        /// of anonymous type and want to create a table using those objects  
+        /// of an anonymous type and want to create a table using those objects  
         /// as rows of the table.
         /// </summary>
         /// <typeparam name="T">Type of the anonymous type</typeparam>
@@ -863,21 +856,18 @@ namespace Squirrel
             Func<string, string> quote = x => "\"" + x + "\"";
             StringBuilder csvOrtsvBuilder = new StringBuilder();
             //Append column headers 
-            csvOrtsvBuilder.AppendLine(tab.ColumnHeaders.Aggregate((a, b) => quote(a) + delim.ToString() + quote(b)));
+            csvOrtsvBuilder.AppendLine(tab.ColumnHeaders.Aggregate((a, b) => a + delim + b));
             //Append rows 
             for (int i = 0; i < tab.RowCount - 1; i++)
             {
+                var parts = new List<string>(); 
                 foreach (string header in tab.ColumnHeaders)
                 {
-                    csvOrtsvBuilder.Append(quote(tab[header, i]));
-                    csvOrtsvBuilder.Append(delim);
+                    parts.Add(quote(tab.Rows[i][header]));
                 }
-
-                csvOrtsvBuilder.Append(quote(tab[tab.ColumnHeaders.ElementAt(tab.ColumnHeaders.Count - 1),
-                    tab.RowCount - 1]));
-                csvOrtsvBuilder.AppendLine(); //Push in a new line.
+                csvOrtsvBuilder.AppendLine(parts.Aggregate((a, b)
+                    => a + delim.ToString() + b));
             }
-
             return csvOrtsvBuilder.ToString();
         }
 

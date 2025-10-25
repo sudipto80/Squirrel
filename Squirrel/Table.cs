@@ -1369,7 +1369,7 @@ namespace Squirrel
 
 
 
-		public Table Explode(string columnName)
+		public Table Explode(string columnName, char delim = ';')
 		{
 			this.ThrowIfTableIsNull();
 			this.ThrowIfColumnsAreNotPresentInTable(columnName);
@@ -1398,7 +1398,7 @@ namespace Squirrel
 			for (int i = 0; i < values.Count; i++)
 			{
 				// Split on semicolon (your comment shows semicolon, not comma)
-				var parts = values[i].Split([';'], StringSplitOptions.RemoveEmptyEntries);
+				var parts = values[i].Split([delim], StringSplitOptions.RemoveEmptyEntries);
         
 				if (parts.Length > 0)
 				{

@@ -1,6 +1,6 @@
 ﻿namespace Squirrel;
 
-public class SymbolConstants
+public static class SymbolConstants
 {
     /// <summary>
     /// Comprehensive array of currency symbols for major world currencies.

@@ -1,4 +1,5 @@
 ﻿using Squirrel;
+using Squirrel.Cleansing;
 
 namespace Squirrel;
 
@@ -415,6 +416,13 @@ public static class TableExtensions
             }
         }
 
+        //Possibly add one string variant 
+        //result.Where("Age < 18")
+        //      .Where("Name not in [Sam,Ram,Harry]") 
+        //      .Where("Temp is between 30 and 44")
+        //      .Where("Code is not between 4 and 10")
+        
+        result.Where("Age", operatorStr:"<", value: 18);
         return result.Top(totalSampleSize);
     }
 

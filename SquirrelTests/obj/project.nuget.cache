@@ -81,12 +81,5 @@
     "/Users/sudiptamukherjee/.nuget/packages/tesseract/5.2.0/tesseract.5.2.0.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/zstdsharp.port/0.8.1/zstdsharp.port.0.8.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }

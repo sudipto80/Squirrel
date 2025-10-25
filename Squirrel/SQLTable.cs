@@ -47,7 +47,17 @@ public class SqlTable<T>
             { "Int32", "int" },
             { "Bool", "bit" },
             { "String", "varchar(max)" },
-            { "DateTime", "datetime" }
+            { "DateTime", "datetime" },
+            {"Decimal", "decimal(18,2)"},
+            {"Double", "float"},
+            {"Single", "float"},
+            {"Byte", "tinyint"},
+            {"Int16", "smallint"},
+            {"Int64", "bigint"},
+            {"Char", "char(1)"},
+            {"Guid", "uniqueidentifier"},
+            {"TimeSpan", "time"},
+            {"DateTimeOffset", "datetimeoffset"}
         };
     
     /// <summary>

@@ -9,9 +9,7 @@ public static class StringStatisticsExtensions
     /// <returns>The average value as decimal</returns>
     public static decimal Average(this IEnumerable<string> values)
     {
-        return values.Where(s => decimal.TryParse(s, out _))
-                     .Select(decimal.Parse)
-                     .Average();
+      return values.Select(s => Convert.ToDecimal(s.Trim())).Average();;
     }
 
     /// <summary>
