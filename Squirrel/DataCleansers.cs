@@ -1526,6 +1526,61 @@ namespace Squirrel.Cleansing
 		{
 			return tab;
 		}
-		
+
+		/// <summary>
+		/// Anonymizes values in the specified column by replacing them with generated identifiers.
+		/// Each unique value in the column is mapped to a unique anonymized identifier.
+		/// </summary>
+		/// <param name="tab">The table to anonymize</param>
+		/// <param name="columnName">The column containing values to anonymize</param>
+		/// <param name="anonymizationPrefix">Prefix for anonymized values (e.g., "ANON-", "USER-")</param>
+		/// <returns>A new table with the specified column anonymized</returns>
+		/// <example>
+		/// // Anonymizes the "CustomerName" column with prefix "CUST-"
+		/// // "John Smith" becomes "CUST-0", "Jane Doe" becomes "CUST-1", etc.
+		/// Table anonymized = tab.Anonymize("CustomerName", "CUST-");
+		/// </example>
+		public static Table Anonymize(this Table tab, string columnName, string anonymizationPrefix)
+		{
+			tab.ThrowIfTableIsNull();
+			tab.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+			if (string.IsNullOrEmpty(anonymizationPrefix))
+				throw new ArgumentException("Anonymization prefix cannot be null or empty",
+					nameof(anonymizationPrefix));
+
+			var anonymized = new Table();
+
+			// Get all unique values from the column
+			var allUniqueValues = tab.ValuesOf(columnName).Distinct().ToList();
+
+			// Create mapping from original values to anonymized values
+			Dictionary<string, string> anonymizationMap = new Dictionary<string, string>();
+			for (int i = 0; i < allUniqueValues.Count; i++)
+			{
+				anonymizationMap.Add(allUniqueValues[i], anonymizationPrefix + i.ToString("D4"));
+			}
+
+			// Build the anonymized table
+			foreach (var col in tab.ColumnHeaders)
+			{
+				if (col.Equals(columnName))
+				{
+					// Replace original values with anonymized values for the target column
+					var anonymizedValues = tab.ValuesOf(col)
+						.Select(originalValue => anonymizationMap[originalValue])
+						.ToList();
+					anonymized.AddColumn(col, anonymizedValues);
+				}
+				else
+				{
+					// Keep other columns unchanged
+					anonymized.AddColumn(col, tab.ValuesOf(col));
+				}
+			}
+
+			return anonymized;
+		}
+
 	}
 }

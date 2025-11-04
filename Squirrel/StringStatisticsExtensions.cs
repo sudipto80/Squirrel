@@ -10,6 +10,9 @@ public static class StringStatisticsExtensions
     public static decimal Average(this IEnumerable<string> values)
     {
       return values.Select(s => Convert.ToDecimal(s.Trim())).Average();;
+    } public static decimal Sum(this IEnumerable<string> values)
+    {
+        return values.Select(s => Convert.ToDecimal(s.Trim())).Sum();;
     }
 
     /// <summary>

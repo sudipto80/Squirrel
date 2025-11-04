@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BogusGenerator", "BogusGene
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmlDemo", "AmlDemo\AmlDemo.csproj", "{07FC121C-115B-48C9-9F4A-8ECC0AA3A94A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootFall_1", "FootFall_1\FootFall_1.csproj", "{31EFFD94-ED01-45A4-9337-EF1F233A49DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,5 +128,9 @@ Global
 		{07FC121C-115B-48C9-9F4A-8ECC0AA3A94A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07FC121C-115B-48C9-9F4A-8ECC0AA3A94A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07FC121C-115B-48C9-9F4A-8ECC0AA3A94A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31EFFD94-ED01-45A4-9337-EF1F233A49DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31EFFD94-ED01-45A4-9337-EF1F233A49DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31EFFD94-ED01-45A4-9337-EF1F233A49DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31EFFD94-ED01-45A4-9337-EF1F233A49DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

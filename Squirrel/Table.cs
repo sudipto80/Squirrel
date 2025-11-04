@@ -93,8 +93,8 @@ namespace Squirrel
 				throw new ArgumentNullException(nameof(predicate), "The predicate provided is null");
 			}
 
-			
-			
+
+
 			var result = new Table();
 			result.Rows.AddRange(Rows.Where(predicate.Invoke));
 			return result;
@@ -720,49 +720,58 @@ namespace Squirrel
 		public Table AddColumn(string columnName, string formula, int decimalDigits)
 		{
 
-			this.ThrowIfTableIsNull();
-			if (!this.CalculatedColumns.ContainsKey(columnName))
-				this.CalculatedColumns.Add(columnName, formula);
-			//this.ThrowIfColumnsAreNotPresentInTable(columnName);
-			ArgumentNullException.ThrowIfNull(columnName);
-			ArgumentNullException.ThrowIfNull(formula);
-			if (decimalDigits < 0)
-				throw new ArgumentNullException($"{nameof(decimalDigits)} is null");
-
-			string copyFormula = formula;
-
-			string[] columns = formula.Split(new[] { '+', '-', '*', '/', '(', ')', ' ' },
-				StringSplitOptions.RemoveEmptyEntries);
-
-			columns = columns.Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty))
-				.Intersect(ColumnHeaders)
-				.Select(z => "[" + z + "]")
-				.ToArray();
-
-			for (int i = 0; i < RowCount; i++)
+			try
 			{
-				formula = copyFormula;
-				foreach (string column in columns)
+				this.ThrowIfTableIsNull();
+				if (!this.CalculatedColumns.ContainsKey(columnName))
+					this.CalculatedColumns.Add(columnName, formula);
+				//this.ThrowIfColumnsAreNotPresentInTable(columnName);
+				ArgumentNullException.ThrowIfNull(columnName);
+				ArgumentNullException.ThrowIfNull(formula);
+				if (decimalDigits < 0)
+					throw new ArgumentNullException($"{nameof(decimalDigits)} is null");
+
+				string copyFormula = formula;
+
+				string[] columns = formula.Split(new[] { '+', '-', '*', '/', '(', ')', ' ' },
+					StringSplitOptions.RemoveEmptyEntries);
+
+				columns = columns.Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty))
+					.Intersect(ColumnHeaders)
+					.Select(z => "[" + z + "]")
+					.ToArray();
+
+				for (int i = 0; i < RowCount; i++)
 				{
-					try
+					formula = copyFormula;
+					foreach (string column in columns)
 					{
-						formula = formula.Replace(column, _rows[i][column.Replace("[", string.Empty)
-							.Replace("]", string.Empty)]);
+						try
+						{
+							formula = formula.Replace(column, _rows[i][column.Replace("[", string.Empty)
+								.Replace("]", string.Empty)]);
+						}
+
+						//catch(KeyNotFoundException ex)//Occurs when the column name is not found
+						//{
+						//       throw new KeyNotFoundException(nameof())                        
+						//	}
+						catch (Exception ex)
+						{
+							return this;
+						}
 					}
 
-					//catch(KeyNotFoundException ex)//Occurs when the column name is not found
-					//{
-					//       throw new KeyNotFoundException(nameof())                        
-					//	}
-					catch (Exception ex)
-					{
-						return this;
-					}
+
+					_rows[i].Add(columnName, Math.Round(
+						Convert.ToDecimal(new Expression(formula).Evaluate().ToString()),
+						decimalDigits).ToString(CultureInfo.InvariantCulture));
 				}
-
-
-				_rows[i].Add(columnName, Math.Round(Convert.ToDecimal(new Expression(formula).Evaluate().ToString()),
-					decimalDigits).ToString(CultureInfo.InvariantCulture));
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("FORMULA " + formula);;
+				Console.WriteLine(ex.Message);
 			}
 
 			return this;
@@ -836,7 +845,7 @@ namespace Squirrel
 					result.Add(_rows[i]);
 				}
 
-				
+
 				return result;
 			}
 		}
@@ -852,20 +861,21 @@ namespace Squirrel
 		{
 			get
 			{
-                ArgumentNullException.ThrowIfNull(indices);
+				ArgumentNullException.ThrowIfNull(indices);
 
-                var result = new List<Dictionary<string, string>>();
+				var result = new List<Dictionary<string, string>>();
 				foreach (var index in indices)
 				{
 					if (index < 0 || index >= _rows.Count)
 						throw new ArgumentOutOfRangeException($"Index {index} is out of range");
-            
+
 					result.Add(_rows[index]);
 				}
+
 				return result;
 			}
 		}
-		
+
 		/// <summary>
 		/// Indexer of the table.
 		/// </summary>
@@ -918,9 +928,10 @@ namespace Squirrel
 				this.ThrowIfColumnsAreNotPresentInTable(columnName);
 				for (int i = 0; i < indices.Count(); i++)
 				{
-					if(indices.ElementAt(i) < 0 || indices.ElementAt(i) >= _rows.Count)
+					if (indices.ElementAt(i) < 0 || indices.ElementAt(i) >= _rows.Count)
 						throw new ArgumentOutOfRangeException($"{nameof(indices)} is out of range");
 				}
+
 				foreach (var index in indices)
 				{
 					if (index >= _rows.Count)
@@ -978,17 +989,24 @@ namespace Squirrel
 						switch (how)
 						{
 							case AggregationMethod.Sum:
-								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Sum().ToString(CultureInfo.InvariantCulture));
+								currentRow.Add(col,
+									this[col].Take(i + 1).Select(Convert.ToDecimal).Sum()
+										.ToString(CultureInfo.InvariantCulture));
 								break;
 							case AggregationMethod.Average:
 								currentRow.Add(col,
-									this[col].Take(i + 1).Select(Convert.ToDecimal).Average().ToString(CultureInfo.InvariantCulture));
+									this[col].Take(i + 1).Select(Convert.ToDecimal).Average()
+										.ToString(CultureInfo.InvariantCulture));
 								break;
 							case AggregationMethod.Max:
-								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Max().ToString(CultureInfo.InvariantCulture));
+								currentRow.Add(col,
+									this[col].Take(i + 1).Select(Convert.ToDecimal).Max()
+										.ToString(CultureInfo.InvariantCulture));
 								break;
 							case AggregationMethod.Min:
-								currentRow.Add(col, this[col].Take(i + 1).Select(Convert.ToDecimal).Min().ToString(CultureInfo.InvariantCulture));
+								currentRow.Add(col,
+									this[col].Take(i + 1).Select(Convert.ToDecimal).Min()
+										.ToString(CultureInfo.InvariantCulture));
 								break;
 							case AggregationMethod.Count:
 							case AggregationMethod.StandardDeviation:
@@ -1026,56 +1044,56 @@ namespace Squirrel
 		public Table Transpose(string newFirstColumnName)
 		{
 			this.ThrowIfTableIsNull();
-    
+
 			if (RowCount == 0)
 				return new Table();
-    
+
 			// Original:
 			// Product | Jan   | Feb   | Mar   | Apr
 			// Laptop  | 15000 | 18000 | 22000 | 19000
 			// Phone   | 25000 | 28000 | 31000 | 27000
 			// Tablet  | 8000  | 9500  | 11000 | 10500
-    
+
 			// With Transpose("Month") becomes:
 			// Month  | Laptop | Phone | Tablet
 			// Jan    | 15000  | 25000 | 8000
 			// Feb    | 18000  | 28000 | 9500
 			// Mar    | 22000  | 31000 | 11000
 			// Apr    | 19000  | 27000 | 10500
-    
+
 			Table transposed = new Table();
-    
+
 			// Get the original first column
 			var firstColumnName = ColumnHeaders.ElementAt(0);
-    
+
 			// Use provided name or default to original
 			var newColName = string.IsNullOrWhiteSpace(newFirstColumnName) ? firstColumnName : newFirstColumnName;
 			transposed.ColumnHeaders.Add(newColName);
-    
+
 			// Values from first column become the new column headers
 			var firstColumnValues = this[firstColumnName].ToList();
 			firstColumnValues.ForEach(value => transposed.ColumnHeaders.Add(value));
-    
+
 			// Each remaining column becomes a row
 			for (int colIndex = 1; colIndex < ColumnHeaders.Count; colIndex++)
 			{
 				var columnName = ColumnHeaders.ElementAt(colIndex);
 				var columnValues = this[columnName].ToList();
-        
+
 				var newRow = new Dictionary<string, string>();
-        
+
 				// Add the column name as the first cell (with new column name as key)
 				newRow.Add(newColName, columnName);
-        
+
 				// Add each value mapped to its corresponding header
 				for (int rowIndex = 0; rowIndex < columnValues.Count; rowIndex++)
 				{
 					newRow.Add(firstColumnValues[rowIndex], columnValues[rowIndex]);
 				}
-        
+
 				transposed.AddRow(newRow);
 			}
-    
+
 			return transposed;
 		}
 
@@ -1373,11 +1391,11 @@ namespace Squirrel
 		{
 			this.ThrowIfTableIsNull();
 			this.ThrowIfColumnsAreNotPresentInTable(columnName);
-    
+
 			//name,age,skills
 			//sam,19,F#;C#;VB
 			//jenny,28,C++;OCaml
-    
+
 			//Becomes:
 			//name,age,skills
 			//sam,19,F#
@@ -1385,37 +1403,37 @@ namespace Squirrel
 			//sam,19,VB
 			//jenny,28,C++
 			//jenny,28,OCaml
-    
+
 			Table exploded = new Table();
-    
+
 			// FIX: Initialize column headers from original table
 			foreach (var header in this.ColumnHeaders)
 			{
 				exploded.ColumnHeaders.Add(header);
 			}
-    
+
 			var values = ValuesOf(columnName);
 			for (int i = 0; i < values.Count; i++)
 			{
 				// Split on semicolon (your comment shows semicolon, not comma)
 				var parts = values[i].Split([delim], StringSplitOptions.RemoveEmptyEntries);
-        
+
 				if (parts.Length > 0)
 				{
 					// Create a row for each part
 					for (int j = 0; j < parts.Length; j++)
 					{
 						var newRow = new Dictionary<string, string>();
-                
+
 						// Copy all columns from original row
 						foreach (var key in this.Rows[i].Keys)
 						{
 							newRow.Add(key, this.Rows[i][key]);
 						}
-                
+
 						// Replace the exploded column with the individual part
 						newRow[columnName] = parts[j].Trim(); // Added Trim() for safety
-                
+
 						exploded.AddRow(newRow);
 					}
 				}
@@ -1425,7 +1443,7 @@ namespace Squirrel
 					exploded.AddRow(this.Rows[i]);
 				}
 			}
-    
+
 			return exploded;
 		}
 
@@ -1589,20 +1607,23 @@ namespace Squirrel
 			this.ThrowIfTableIsNull();
 			anotherTable.ThrowIfTableIsNull();
 
-			var result = new Table ();
+			var result = new Table();
 			for (var i = 0; i < RowCount; i++)
 			{
-				if(!anotherTable._rows.Any(r => IsSameRow(r,_rows[i])))
+				if (!anotherTable._rows.Any(r => IsSameRow(r, _rows[i])))
 					result.AddRow(_rows[i]);
 			}
+
 			return result;
 		}
+
 		/// <summary>
 		/// Finding common rows from two tables. Since it returns a table, there can be cascaded calls.
 		/// </summary>
 		/// <param name="anotherTable">The other table with which we want to find common rows</param>
 		/// <returns>A table with only common rows</returns>
 		/// <example>Table comRows = t1.Common(t2);//returns common rows that are available in "t1" and "t2"</example>
+
 		#region Useful Utility Methods
 
 
@@ -1619,15 +1640,15 @@ namespace Squirrel
 		/// //and the new column is named "Full_Name"
 		/// Table mergedColumns = t1.MergeColumns("Full_Name", ' ',"First_Name","Last_Name");</example>
 		public Table MergeColumns(string newColumnName,
-								  char separator = ' ',
-								  bool removeColums = false,
-								  params string[] columns)
+			char separator = ' ',
+			bool removeColums = false,
+			params string[] columns)
 		{
 			var mergedValues = new List<string>();
 			for (int i = 0; i < columns.Length - 1; i++)
 				mergedValues = ValuesOf(columns[i])
-							   .Zip(ValuesOf(columns[i + 1]), (a, b) => a + separator.ToString() + b)
-							   .ToList();
+					.Zip(ValuesOf(columns[i + 1]), (a, b) => a + separator.ToString() + b)
+					.ToList();
 
 			AddColumn(newColumnName, mergedValues);
 			//merged!
@@ -1638,6 +1659,7 @@ namespace Squirrel
 				columns.ToList().ForEach(RemoveColumn);
 			return this;
 		}
+
 		/// <summary>
 		/// Returns a table with all the columns except those mentioned in parameters
 		/// </summary>
@@ -1653,6 +1675,7 @@ namespace Squirrel
 		{
 			return Pick(ColumnHeaders.Except(columns).ToArray());
 		}
+
 		/// <summary>
 		/// Returns a table with just the columns mentioned.
 		/// </summary>
@@ -1668,21 +1691,24 @@ namespace Squirrel
 			foreach (var row in Rows)
 			{
 				var tempRow = new Dictionary<string, string>();
-				foreach (string key in row.Keys)                
+				foreach (string key in row.Keys)
 				{
 					if (columns.Contains(key))
 						tempRow.Add(key, row[key]);
 				}
+
 				var orderedRow = new Dictionary<string, string>();
 				foreach (string col in columns)
 				{
 					orderedRow.Add(col, tempRow[col]);
 				}
+
 				skippedColumnTable.AddRow(orderedRow);
 			}
+
 			return skippedColumnTable;
 		}
-	
+
 		/// <summary>
 		/// Random Sample rows from the table
 		/// </summary>
@@ -1699,8 +1725,8 @@ namespace Squirrel
 				throw new ArgumentOutOfRangeException($"Sample size provided is negative or zero or beyond RowCount");
 			return Shuffle().Top(sampleSize);
 		}
-		   
-		
+
+
 		/// <summary>
 		/// Retuns top n rows 
 		/// </summary>
@@ -1718,6 +1744,7 @@ namespace Squirrel
 			};
 			return headTable;
 		}
+
 		/// <summary>
 		/// Returns last n rows
 		/// </summary>
@@ -1735,6 +1762,7 @@ namespace Squirrel
 			};
 			return tailTable;
 		}
+
 		/// <summary>
 		/// Returns top n percent entries from the table
 		/// </summary>
@@ -1746,10 +1774,10 @@ namespace Squirrel
 		{
 			if (n <= 0)
 				throw new ArgumentOutOfRangeException($"Value of percentage provided is negative");
-			int rowCount = Convert.ToInt16( Math.Floor((float) RowCount * n / 100.0));
+			int rowCount = Convert.ToInt16(Math.Floor((float)RowCount * n / 100.0));
 			return Top(rowCount);
 		}
-		
+
 
 		/// <summary>
 		/// Returns the bottom n % entries as a new table
@@ -1768,21 +1796,23 @@ namespace Squirrel
 			int rowCount = Convert.ToInt16(Math.Floor((float)RowCount * n / 100.0));
 			return Bottom(rowCount);
 		}
+
 		/// <summary>
 		/// Returns a section of rows from the middle of the table
 		/// </summary>
 		/// <param name="skip">Skip these many rows</param>
 		/// <param name="take">Then tale these many rows to form the new table</param>
 		/// <returns></returns>
-		public Table Middle(int skip,int take)
+		public Table Middle(int skip, int take)
 		{
 			if (take > RowCount)
 				take = RowCount;
 
 			var mid = new Table();
-			mid.Rows.AddRange( Rows.Skip(skip).Take(take));
+			mid.Rows.AddRange(Rows.Skip(skip).Take(take));
 			return mid;
 		}
+
 		/// <summary>
 		/// Splits the table according to the rows
 		/// </summary>
@@ -1792,11 +1822,12 @@ namespace Squirrel
 		{
 
 			return Enumerable.Range(0, RowCount - rowsPerSplit + 1)
-							 .Select(m => Middle(m * rowsPerSplit, rowsPerSplit))
-							 .Where(m => m.RowCount > 0)
-							 .ToList();
-			
+				.Select(m => Middle(m * rowsPerSplit, rowsPerSplit))
+				.Where(m => m.RowCount > 0)
+				.ToList();
+
 		}
+
 		/// <summary>
 		/// Generates multiple tables with the specified columns per table. 
 		/// </summary>
@@ -1814,10 +1845,11 @@ namespace Squirrel
 					temp.AddColumn(col, ValuesOf(col));
 				tables.Add(temp);
 			}
+
 			return tables;
 		}
-		
-		
+
+
 		/// <summary>
 		/// Random shuffle. Returns a shuffled table. 
 		/// This can be very handy while generating a random sample
@@ -1834,6 +1866,7 @@ namespace Squirrel
 			};
 			return shuffledTable;
 		}
+
 		/// <summary>
 		/// Checks if two rows are same or not. 
 		/// If all the columns of two rows have the same value, 
@@ -1844,16 +1877,18 @@ namespace Squirrel
 		/// <returns>True if both rows are same, else returns false.</returns>
 		private bool IsSameRow(Dictionary<string, string> firstRow, Dictionary<string, string> secondRow)
 		{
-			if(firstRow == null || secondRow == null)
-				throw new Exception("Either of the rows provided is null"); 
+			if (firstRow == null || secondRow == null)
+				throw new Exception("Either of the rows provided is null");
 
 			return firstRow.Keys.All(k => secondRow.Keys.Contains(k)) &&
-				firstRow.Keys.All(k => secondRow[k] == firstRow[k]);
+			       firstRow.Keys.All(k => secondRow[k] == firstRow[k]);
 		}
+
 		#endregion
+
 		public Table Common(Table anotherTable)
 		{
-			
+
 			this.ThrowIfTableIsNull();
 			anotherTable.ThrowIfTableIsNull();
 
@@ -1863,8 +1898,10 @@ namespace Squirrel
 				if (anotherTable._rows.Any(r => IsSameRow(r, _rows[i])))
 					result.AddRow(_rows[i]);
 			}
+
 			return result;
 		}
+
 		/// <summary>
 		/// Checks whether a given table is subset of this table or not
 		/// </summary>
@@ -1891,12 +1928,15 @@ namespace Squirrel
 					break;
 				}
 			}
+
 			return isSubset;
 		}
-		#endregion 
+
+		#endregion
 
 
 		#region Natural Query
+
 		/// <summary>
 		/// Sometimes we are interested to find rows in the table that match a given condition 
 		/// </summary>
@@ -1905,8 +1945,8 @@ namespace Squirrel
 		public Table ShowMe(string query)
 		{
 			Table result = this;
-			string[] words = query.Split(' ');//how many easy courses are there 
-		
+			string[] words = query.Split(' '); //how many easy courses are there 
+
 			foreach (string word in words)
 			{
 				foreach (string column in ColumnHeaders)
@@ -1917,8 +1957,10 @@ namespace Squirrel
 					}
 				}
 			}
+
 			return result;
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -1928,6 +1970,7 @@ namespace Squirrel
 		{
 			return ShowMe(query).RowCount;
 		}
+
 		#endregion
 
 		public string CalculatedColumnsAsExcelFormulae
@@ -1936,26 +1979,28 @@ namespace Squirrel
 			{
 				foreach (var column in CalculatedColumns.Keys)
 				{
-					
+
 				}
 
 				return string.Empty;
 			}
-			
+
 		}
+
 		public Table()
 		{
-			
+
 		}
+
 		public Table(Table another)
 		{
-			
-			foreach(var row in another.Rows)
+
+			foreach (var row in another.Rows)
 			{
 				this.AddRow(row);
 			}
 
-			
+
 		}
 
 		/// <summary>
@@ -1970,34 +2015,86 @@ namespace Squirrel
 				//Finds columns whose values don't change often
 				//columns where more than 90% value is the same
 				//for each row are pretty much irrelevant 
-		
+
 				var irrelevantColumns = new List<string>();
-		
+
 				if (RowCount == 0)
 					return irrelevantColumns;
-		
+
 				foreach (var columnName in ColumnHeaders)
 				{
 					var columnValues = ValuesOf(columnName);
-			
+
 					// Group-by-value and count occurrences
 					var valueCounts = columnValues
 						.GroupBy(v => v)
 						.Select(g => new { Value = g.Key, Count = g.Count() })
 						.OrderByDescending(x => x.Count)
 						.ToList();
-			
+
 					// Check if the most frequent value appears in more than 90% of rows
 					if (valueCounts.Count != 0 && valueCounts.First().Count > (RowCount * 0.9))
 					{
 						irrelevantColumns.Add(columnName);
 					}
 				}
-		
+
 				return irrelevantColumns;
 			}
 		}
-	  
+
+		// <summary>
+		/// Simple, working pivot implementation
+		/// </summary>
+		public Table PivotSimple(
+			string indexColumn,
+			string pivotColumn, 
+			string valueColumn)
+		{
+			this.ThrowIfTableIsNull();
+    
+			// Step 1: Get all unique merchants (rows)
+			var merchants = ValuesOf(indexColumn).Distinct().OrderBy(x => x).ToList();
+    
+			// Step 2: Create ALL hours 0-23 (columns)
+			var allHours = ValuesOf(pivotColumn).Distinct().OrderBy(x => Convert.ToInt16(x)).ToList();
+	
+			// Step 3: Create result table
+			var result = new Table();
+    
+			// Step 4: For each merchant, create a row
+			foreach (var merchant in merchants)
+			{
+				var newRow = new Dictionary<string, string>
+				{
+					[indexColumn] = merchant
+				};
+
+				// For each hour 0-23
+				foreach (var hour in allHours)
+				{
+					// Find matching rows
+					var footfall = 0m;
+            
+					foreach (var row in Rows)
+					{
+						if (row[indexColumn] == merchant && row[pivotColumn] == hour)
+						{
+							if (decimal.TryParse(row[valueColumn], out decimal val))
+							{
+								footfall += val;
+							}
+						}
+					}
+            
+					newRow[hour] = footfall.ToString(CultureInfo.InvariantCulture);
+				}
+        
+				result.AddRow(newRow);
+			}
+    
+			return result;
+		}
 	}
 
 }
