@@ -1,6 +1,7 @@
 # Squirrel (TableAPI) Documentation
 
-Welcome to the documentation for Squirrel (formerly TableAPI), a comprehensive data processing and analytics framework for .NET.
+Welcome to the documentation for Squirrel!
+A comprehensive data processing and analytics framework for .NET.
 
 ## Overview
 
