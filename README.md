@@ -9,7 +9,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/sudipto80/Squirrel.svg)](https://github.com/sudipto80/Squirrel/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/sudipto80/Squirrel.svg)](https://github.com/sudipto80/Squirrel/commits/main)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/sudipto80/Squirrel/graphs/commit-activity)
-[![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Documentation.md)
+[![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://github.com/sudipto80/Squirrel/blob/master/Docs/index.md)
 
 
 <img src="squirrel_logo.png" height="200" width="240" align="right">
