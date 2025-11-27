@@ -251,18 +251,15 @@ dotnet test SquirrelTests/
 ```
 
 ## 📚 Documentation & Learning
-
-- **[API Documentation](doc/TableAPI.chm)** - Comprehensive method reference
-- **[Examples Gallery](ScreenCastDemos/)** - Real-world use cases and tutorials
 - **[Video Tutorial](https://youtu.be/jv1znNEq5h4)** - 5-minute introduction
 - **[CheatSheet](http://www.slideshare.net/sudipto80/squirrel-do-morewithlesscodelightcheatsheet)** - Quick reference guide
-- **[High-level Function List](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Documentation.md)** - Functions and their summaries
+- **[High-level Function List](https://github.com/sudipto80/Squirrel/blob/master/Docs/API/Documentation.md)** - Functions and their summaries
 
-The documentation will be perpetually in-progress as the development is very active right now. Also this is a place where you can contribute. If you are looking for example, take a look at the documentation for [Aggregate](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Aggregate.md).
+The documentation will be perpetually in-progress as the development is very active right now. Also this is a place where you can contribute. If you are looking for example, take a look at the documentation for [Aggregate](https://github.com/sudipto80/Squirrel/blob/master/Docs/API/Aggregate.md).
 
 ## 📊 Usage Stats & Community
 
-- **8,100+ NuGet Downloads**: Growing adoption across .NET teams 
+- **9400+ NuGet Downloads**: Growing adoption across .NET teams 
 - **Enterprise Validation**: Used in algorithmic trading and financial analytics
 - **Active Development**: Regular updates and community-driven features
 
