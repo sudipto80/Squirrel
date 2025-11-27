@@ -17,7 +17,6 @@ Squirrel provides a fluent, business-readable API for:
 - [Data Acquisition](data-acquisition.md): How to load and save data.
 - [Data Cleaning & Transformation](data-cleaning.md): Methods for cleaning and transforming your datasets.
 - [Analysis & Statistics](analysis-statistics.md): Statistical functions and data analysis tools.
-- [Visualization](visualization.md): Creating charts and visual outputs.
 - [Utilities](utilities.md): Helper functions and extensions.
 
 ## Quick Start
