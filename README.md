@@ -251,32 +251,30 @@ dotnet test SquirrelTests/
 ```
 
 ## 📚 Documentation & Learning
-
-- **[API Documentation](doc/TableAPI.chm)** - Comprehensive method reference
-- **[Examples Gallery](ScreenCastDemos/)** - Real-world use cases and tutorials
 - **[Video Tutorial](https://youtu.be/jv1znNEq5h4)** - 5-minute introduction
 - **[CheatSheet](http://www.slideshare.net/sudipto80/squirrel-do-morewithlesscodelightcheatsheet)** - Quick reference guide
-- **[High-level Function List](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Documentation.md)** - Functions and their summaries
+- **[High-level Function List](https://github.com/sudipto80/Squirrel/blob/master/Docs/API/Documentation.md)** - Functions and their summaries
 
-The documentation will be perpetually in-progress as the development is very active right now. Also this is a place where you can contribute. If you are looking for example, take a look at the documentation for [Aggregate](https://github.com/sudipto80/Squirrel/blob/master/Documentations/Aggregate.md).
+The documentation will be perpetually in-progress as the development is very active right now. Also this is a place where you can contribute. If you are looking for example, take a look at the documentation for [Aggregate](https://github.com/sudipto80/Squirrel/blob/master/Docs/API/Aggregate.md).
 
 ## 📊 Usage Stats & Community
 
-- **8,100+ NuGet Downloads**: Growing adoption across .NET teams 
+- **9400+ NuGet Downloads**: Growing adoption across .NET teams 
 - **Enterprise Validation**: Used in algorithmic trading and financial analytics
 - **Active Development**: Regular updates and community-driven features
 
 ## 🛠️ First 50 Examples (Work in Progress)
 
-1. [Do women pay more tip than men?](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-01.md)
-2. [Iris dataset aggregation](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-02.md)
-3. [Finding Gender-Ratio statistics in North America](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-03.md)
-4. [Finding top gold winning nations in Olympics](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-04.md)
-5. [How much money someone will accumulate at retirement](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-05.md)
-6. [Titanic Survivor Analysis per class](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-06.md)
-7. [Calculating speed of a bungee jumper](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-07.md)
-8. [Finding most popular baby names in centuries](https://github.com/sudipto80/Squirrel/blob/master/ScreenCastDemos/example-08.md)
-9. [Stock Price Analysis](https://github.com/sudipto80/Squirrel/blob/master/example-09.md)
+
+1. [Do women pay more tip than men?](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-01.md)
+2. [Iris dataset aggregation](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-02.md)
+3. [Finding Gender-Ratio statistics in North America](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-03.md)
+4. [Finding top gold winning nations in Olympics](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-04.md)
+5. [How much money someone will accumulate at retirement](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-05.md)
+6. [Titanic Survivor Analysis per class](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-06.md)
+7. [Calculating speed of a bungee jumper](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-07.md)
+8. [Finding most popular baby names in centuries](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-08.md)
+9. [Stock Price Analysis](https://github.com/sudipto80/Squirrel/blob/master/Docs/Examples/example-09.md)
 10. More examples coming very soon... 
 
 ## 🛣️ Roadmap
