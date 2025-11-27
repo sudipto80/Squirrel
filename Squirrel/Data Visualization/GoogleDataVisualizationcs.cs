@@ -178,7 +178,7 @@ namespace Squirrel
         /// <param name="title">Title of the chart</param>
         /// <param name="type"></param>
         /// <returns>Gennerated HTML for the chart</returns>
-        public static string ToBarChartByGoogleDataVisualization(this Table tab, 
+        public static string ToBarChartByGoogleDataVisualization_legacy(this Table tab, 
                                                                  string column, 
                                                                  string legendText, 
                                                                  string title, 
@@ -247,6 +247,90 @@ namespace Squirrel
 
             return html;
         }
+
+        public static string ToBarChartByGoogleDataVisualization(this Table tab,
+            string column,
+            string legendText,
+            string title,
+            BarChartType type = BarChartType.Bar)
+        {
+            List<string> numericColumns = new List<string>();
+            string numericRegex = @"^-?[0-9]\d*(\.\d+)?$"; // matches decimals with negative
+            foreach (var colName in tab.ColumnHeaders)
+            {
+                if (colName.Equals(column)) continue;
+                if (tab.ValuesOf(colName).All(m => Regex.IsMatch(m, numericRegex)))
+                    numericColumns.Add(colName);
+            }
+
+            // Create column headers for data array
+            string columnHeaders = "['" + column + "'," + string.Join(",", numericColumns.Select(x => "'" + x + "'")) +
+                                   "]";
+
+            StringBuilder dataBuilder = new StringBuilder();
+
+            for (int i = 0; i < tab.RowCount; i++)
+            {
+                dataBuilder.Append("['" + tab[column, i] + "',");
+                for (int j = 0; j < numericColumns.Count - 1; j++)
+                {
+                    dataBuilder.Append(tab[numericColumns[j], i] + ",");
+                }
+
+                // Append the last numeric value without trailing comma
+                dataBuilder.Append(tab[numericColumns[numericColumns.Count - 1], i]);
+                dataBuilder.AppendLine("],");
+            }
+
+            string data = dataBuilder.ToString();
+
+            // Remove the trailing comma after the last row
+            if (data.EndsWith(",\n") || data.EndsWith(",\r\n"))
+            {
+                data = data.Substring(0, data.Length - 2);
+            }
+            else if (data.EndsWith(","))
+            {
+                data = data.Substring(0, data.Length - 1);
+            }
+
+            string html = @"<html>
+        <head>
+            <script type=""text/javascript"" src=""https://www.gstatic.com/charts/loader.js""></script>
+            <script type=""text/javascript"">
+                google.charts.load('current', { packages:['corechart', 'bar'] });
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        !COLUMN_HEADERS!,
+                        !DATA!
+                    ]);
+                    var options = {
+                        title: '!TITLE!',
+                        vAxis: { title: '!LEGEND_TEXT!', titleTextStyle: { color: 'red' } }
+                    };
+                    var chart = new google.visualization.!CHART_TYPE!(document.getElementById('chart_div'));
+                    chart.draw(data, options);
+                }
+            </script>
+        </head>
+        <body>
+            <div id=""chart_div"" style=""width: 900px; height: 500px;""></div>
+        </body>
+    </html>"
+                .Replace("!LEGEND_TEXT!", legendText)
+                .Replace("!TITLE!", title)
+                .Replace("!COLUMN_HEADERS!", columnHeaders)
+                .Replace("!DATA!", data);
+
+            if (type == BarChartType.Bar)
+                html = html.Replace("!CHART_TYPE!", "BarChart");
+            else if (type == BarChartType.Column)
+                html = html.Replace("!CHART_TYPE!", "ColumnChart");
+
+            return html;
+        }
+
         /// <summary>
         /// TODO
         /// </summary>
