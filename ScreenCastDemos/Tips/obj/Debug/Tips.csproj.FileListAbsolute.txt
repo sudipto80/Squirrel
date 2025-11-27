@@ -1,2 +1,0 @@
-C:\Users\Admin\RiderProjects\Squirrel\ScreenCastDemos\Tips\obj\Debug\Tips.csproj.AssemblyReference.cache
-C:\Users\Admin\RiderProjects\Squirrel\ScreenCastDemos\Tips\obj\Debug\Tips.csproj.CoreCompileInputs.cache

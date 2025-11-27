@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+<!--	  <LangVersion>13.0</LangVersion>-->
+      <LangVersion>preview</LangVersion>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>TableAPI</PackageId>
+    <Version>1.0.4.01</Version>
+    <Authors>Sudipta Mukherjee</Authors>
+    <Company>Squirrel Analytics</Company>
+    <Product>Squirrel</Product>
+    <Description>A comprehensive cross platform agile data analytics framework.</Description>
+    <PackageTags>Data Analytics;C# Data Analytics; F# Data Analytics; ETL; Exploratory Data Analysis; .NET; dotnet</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/sudipto80/squirrel</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sudipto80/squirrel</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
+    <!-- Optional: Add an icon -->
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+  
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="4.0.6.4" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.8.0-develop00474" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="Nunit" Version="3.13.2" />
+    <PackageReference Include="CoreCLR-NCalc" Version="3.1.253" />
+    <PackageReference Include="Parquet.Net" Version="5.1.1" />
+    <PackageReference Include="ParquetSharp" Version="19.0.1" />
+    <PackageReference Include="System.Data.OleDb" Version="10.0.0-preview.4.25258.110" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.0-preview.4.25258.110" />
+    <PackageReference Include="Tesseract" Version="5.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+   
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>
+
