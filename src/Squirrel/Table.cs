@@ -677,6 +677,41 @@ namespace Squirrel
 			AddColumn(columnName, values);
 		}
 
+		public Table AddBooleanColumn(string columnName, string ifFormula)
+		{
+			var matches = Regex.Matches(ifFormula, "'[a-zA-Z0-9 _-]+'")
+				.Cast<Match>()
+				.Select(t => t.Value[1..^1]) //Dropping quotes ' and '
+				.ToList();
+
+			Dictionary<string, string> map = new Dictionary<string, string>();
+			for (int i = 0; i < matches.Count; i++)
+			{
+				map.Add(matches[i], i.ToString());
+			}
+
+			foreach (var mk in map.Keys)
+			{
+				ifFormula = ifFormula.Replace(mk, map[mk]);
+			}
+
+			var tab = AddColumn(columnName, formula: ifFormula, 2);
+			
+			var colValues = tab[columnName];
+			for (int i = 0; i < colValues.Count; i++)
+			{
+				foreach (var v in map.Keys)
+				{
+					if (colValues[i] == map[v])
+					{
+						colValues[i] = v;
+					}
+				}
+			}
+			tab.RemoveColumn(columnName);
+			tab.AddColumn(columnName, colValues);
+			return tab;
+		}
 		/// <summary>
 		/// This method let's us add column based on string column values.
 		/// </summary>
@@ -710,6 +745,7 @@ namespace Squirrel
 
 			AddColumn(columnName, values);
 		}
+
 
 	
 		/// <summary>

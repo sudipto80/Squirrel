@@ -1,0 +1,10 @@
+customer_id,first_name,last_name,email,phone,registration_date,last_purchase,total_spent,status
+CUST001,John,Smith,john.smith@gmail.com,555-123-4567,2023-01-15,2024-08-20,1250.75,Active
+CUST002,Sarah,Johnson,sarah.johnson@yahoo,555-234-5678,2023-02-10,2024-07-15,890.50,Active
+CUST003,Mike,Brown,mike@brown@outlook.com,555-345-6789,2023-03-05,2024-08-25,2100.00,Active
+CUST004,Lisa,Davis,lisa.davis@,555-456-7890,2023-03-20,2024-06-30,450.25,Active
+CUST005,Robert,Wilson,@hotmail.com,555-567-8901,2023-04-12,2024-08-10,1875.80,Active
+CUST007,David,Anderson,david anderson@yahoo.com,555-789-0123,2023-06-15,2024-07-22,1320.90,Active
+CUST008,Jessica,Thomas,jessica@thomas@company,555-890-1234,2023-07-02,2024-08-05,980.65,Inactive
+CUST009,Christopher,Jackson,chris.jackson@gmail..com,555-901-2345,2023-08-10,2024-08-18,1540.30,Active
+CUST010,Amanda,White,amanda_white@outlook.com,555-012-3456,2023-09-05,2024-08-22,720.85,Active

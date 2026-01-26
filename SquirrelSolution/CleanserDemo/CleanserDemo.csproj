@@ -8,7 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Squirrel\Squirrel.csproj" />
+      <ProjectReference Include="..\..\Squirrel\Squirrel.csproj" />
+      <ProjectReference Include="..\Universe\Universe.csproj" />
     </ItemGroup>
 
 </Project>

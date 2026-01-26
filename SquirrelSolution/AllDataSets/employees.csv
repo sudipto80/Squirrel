@@ -1,0 +1,16 @@
+EmployeeID,Name,Department,Region,Product,Q1_Sales,Q2_Sales,Q3_Sales,Q4_Sales,Total_Sales,Commission
+E001,John Smith,Sales,North,Laptops,15000,18000,22000,25000,80000,8000
+E002,Sarah Johnson,Sales,North,Tablets,12000,14000,16000,18000,60000,6000
+E003,Mike Brown,Marketing,South,Laptops,8000,9000,11000,13000,41000,4100
+E004,Lisa Davis,Sales,East,Smartphones,20000,22000,24000,26000,92000,9200
+E005,Tom Wilson,Marketing,West,Tablets,10000,12000,14000,16000,52000,5200
+E006,Emma Garcia,Sales,South,Laptops,16000,18000,20000,22000,76000,7600
+E007,James Miller,IT,North,Smartphones,5000,6000,7000,8000,26000,2600
+E008,Anna Lee,Sales,East,Tablets,14000,15000,17000,19000,65000,6500
+E009,Robert Taylor,Marketing,West,Laptops,11000,13000,15000,17000,56000,5600
+E010,Maria Rodriguez,IT,South,Smartphones,7000,8000,9000,10000,34000,3400
+E011,David Kim,Sales,North,Tablets,13000,15000,17000,19000,64000,6400
+E012,Jennifer White,Marketing,East,Laptops,9000,11000,13000,15000,48000,4800
+E013,Chris Anderson,Sales,West,Smartphones,18000,20000,22000,24000,84000,8400
+E014,Michelle Thompson,IT,North,Tablets,6000,7000,8000,9000,30000,3000
+E015,Kevin Martinez,Sales,South,Laptops,17000,19000,21000,23000,80000,8000

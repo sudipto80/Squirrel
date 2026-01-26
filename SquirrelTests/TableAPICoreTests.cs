@@ -215,6 +215,36 @@ namespace SquirrelUnitTest
             Assert.AreEqual(11, t.RowCount);
             Assert.AreEqual("2023", t[10]["Year"]);
         }
+
+        [TestMethod]
+        public void Test_AddBooleanColumn()
+        {
+            var data = new Table();
+            data.AddColumn("Qty", ["5", "15", "8", "22"]);
+            data.AddColumn("Price", ["100", "200", "150", "300"]);
+            var g = 34;
+            // Example: Apply a discount based on a condition (using NCalc's logic)
+            data.AddColumn(columnName:"DiscountedPrice", formula:"if([Qty] > 10, [Price] * 0.9, [Price])", decimalDigits: 2);
+        }
+        
+        [TestMethod]
+        public void TestConditionalColumn()
+        {
+            Dictionary<string, string> row1 = new Dictionary<string, string>();
+            row1.Add("Temp", "-4");
+            row1.Add("City", "London");
+            
+            Dictionary<string, string> row2 = new Dictionary<string, string>();
+            row2.Add("Temp", "25");
+            row2.Add("City", "Bangalore");
+
+
+            Table temps = new Table();
+            temps.AddRow(row1);
+            temps.AddRow(row2);
+            //string condition, string trueValue, string falseValue, string newColumnName)
+            temps.AddBooleanColumn("isCold", "if([Temp] < 0, 'Cold', 'No')");
+        }
         [TestMethod]
         public void TestAddColumnCelciusFarenCase()
         {
