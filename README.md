@@ -217,11 +217,11 @@ var analysis = transactionData
 
 ## 🧪 Unit Tests
 
-To run unit tests. Use the following .NET CLI command:
+To run unit tests open `SquirrelProjects` folder in terminal. Use the following .NET CLI command:
 
 ```batch
 dotnet test SquirrelTests/
-``` 
+```
 
 ## 📋 Dependency
 
