@@ -1476,7 +1476,7 @@
           "lib/net8.0/ZstdSharp.dll": {}
         }
       },
-      "Squirrel/1.0.0": {
+      "TableAPI/1.0.4.1": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
@@ -1494,10 +1494,10 @@
           "Tesseract": "5.2.0"
         },
         "compile": {
-          "bin/placeholder/Squirrel.dll": {}
+          "bin/placeholder/TableAPI.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Squirrel.dll": {}
+          "bin/placeholder/TableAPI.dll": {}
         }
       }
     }
@@ -5110,10 +5110,10 @@
         "zstdsharp.port.nuspec"
       ]
     },
-    "Squirrel/1.0.0": {
+    "TableAPI/1.0.4.1": {
       "type": "project",
-      "path": "../Squirrel/Squirrel.csproj",
-      "msbuildProject": "../Squirrel/Squirrel.csproj"
+      "path": "../src/Squirrel/Squirrel.csproj",
+      "msbuildProject": "../src/Squirrel/Squirrel.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5121,7 +5121,7 @@
       "MSTest.TestAdapter >= 2.1.0",
       "MSTest.TestFramework >= 2.1.0",
       "Microsoft.NET.Test.Sdk >= 16.5.0",
-      "Squirrel >= 1.0.0",
+      "TableAPI >= 1.0.4.1",
       "coverlet.collector >= 1.2.0"
     ]
   },
@@ -5144,15 +5144,14 @@
         "net9.0"
       ],
       "sources": {
-        "/Users/sudiptamukherjee/.dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/Squirrel/Squirrel.csproj": {
-              "projectPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/Squirrel/Squirrel.csproj"
+            "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Squirrel.csproj": {
+              "projectPath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Squirrel.csproj"
             }
           }
         }
@@ -5206,7 +5205,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/sudiptamukherjee/.dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

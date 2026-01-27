@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Xe6Sr3aZfGc=",
+  "dgSpecHash": "RzSddkLOyQ4=",
   "success": true,
   "projectFilePath": "/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelTests/SquirrelUnitTests.csproj",
   "expectedPackageFiles": [
@@ -79,7 +79,8 @@
     "/Users/sudiptamukherjee/.nuget/packages/system.xml.readerwriter/4.0.11/system.xml.readerwriter.4.0.11.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/system.xml.xdocument/4.0.11/system.xml.xdocument.4.0.11.nupkg.sha512",
     "/Users/sudiptamukherjee/.nuget/packages/tesseract/5.2.0/tesseract.5.2.0.nupkg.sha512",
-    "/Users/sudiptamukherjee/.nuget/packages/zstdsharp.port/0.8.1/zstdsharp.port.0.8.1.nupkg.sha512"
+    "/Users/sudiptamukherjee/.nuget/packages/zstdsharp.port/0.8.1/zstdsharp.port.0.8.1.nupkg.sha512",
+    "/Users/sudiptamukherjee/.nuget/packages/tableapi/1.0.4.1/tableapi.1.0.4.1.nupkg.sha512"
   ],
   "logs": []
 }
