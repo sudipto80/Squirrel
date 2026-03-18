@@ -1,80 +1,129 @@
 ﻿using System.Diagnostics;
+using System.Reflection.Emit;
 using Squirrel;
+using Squirrel.ChartJSTemplates;
+using Squirrel.Data_Visualization;
+using Squirrel.Data_Visualization.ChartJS;
+using Squirrel.DataVisualization;
 
 namespace SquirrelProjects;
 
 class Program
 {
+ 
     static void Main(string[] args)
     {
-        var prods = DataAcquisition.LoadCsv("/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Data/products.csv");
-        prods.PrettyDump();
-        prods.Transpose("Month")
-            .PrettyDump(rowColor: ConsoleColor.Blue);
+       var births  = DataAcquisition.LoadCsv(@"/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Data/births.csv");
 
-        uint x = 30;
-        //     Dictionary<string, PerfRecord> perfRecords = new Dictionary<string, PerfRecord>();
+       var pie = births.SplitOn("sex")
+           
+           .Select(t => new
+           {
+               Gender = t.Key,
+               TotalBirths = Convert.ToInt32(t.Value.Filter("state","CA")["births"].Sum())
+           })
+           .ToLookup(t => t.Gender)
+           .ToDictionary(t => t.Key, t => t.Sum(x => x.TotalBirths))
+           .ToDoughnutChartByChartJs("Birth", ColorScheme.EarthTones);
+           
+       File.WriteAllText("birth_pie.html", pie);
+       var psi23 = new ProcessStartInfo
+       {
+           FileName = "open",
+           Arguments = "birth_pie.html",
+           RedirectStandardOutput = false,
+           UseShellExecute = true,
+           CreateNoWindow = true
+       };
+          
+       Process.Start(psi23);
+       // var html = births.SplitOn("state")
+       //     .Select(t => new
+       //     {
+       //         State = t.Key, Births = Convert.ToInt32(t.Value["births"].Sum() / 10000)
+       //     })
+       //     
+       //     .ToTableFromAnonList()
+       //     .SortBy("Births", how: SortDirection.Descending)
+       //     .Top(10)
+       //     .ToBarChartByChartJs("Label","State", "State",["Births"], colors: new RgbaColor[] { RgbaColor.FromName("blue") });
+       //
+       // File.WriteAllText("births.html", html);
+       //   var psi = new ProcessStartInfo
+       //   {
+       //        FileName = "open",
+       //        Arguments = "births.html",
+       //        RedirectStandardOutput = false,
+       //        UseShellExecute = true,
+       //        CreateNoWindow = true
+       //   };
+         
+         //  Process.Start(psi);
+            
+        //Statewise boy vs girl bar chart 
+        var stateWise = births.SplitOn("state")
+             .Select(t => new
+             {
+                 State = t.Key,
+                 Boys = Convert.ToInt32(t.Value.Filter("sex", "boy")["births"].Sum() / 1000),
+                 Girls = Convert.ToInt32(t.Value.Filter("sex", "girl")["births"].Sum() / 1000),
+             })
+             .ToTableFromAnonList()
+             .Top(10);
+        
+         stateWise.AddColumn("Gap", "[Boys] - [Girls]", 0); 
+         stateWise.SortBy("Gap", how: SortDirection.Descending)
+             .Top(5)
+             .PrettyDump();
+         var stateWiseComp = stateWise
+             .SortBy("Gap", how: SortDirection.Descending)
+             .ToBarChartWithBackgroundImageByChartJs(
+                 chartTitle: "Statewide Birth Comparison",
+                 label: "Statewide gap comparison",
+                 labelColumn: "State",
+                 columns: ["Boys", "Girls"],
+                 scheme: ColorScheme.CoolTones,
+                 backgroundImageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmlydGhzJTIwY2hpbGRyZW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60");
+         //[ RgbaColor.FromName("blue"),RgbaColor.FromName("pink")]);
+             
+                 
+        
+         File.WriteAllText("statewise_births.html", stateWiseComp);
+             var psi2 = new ProcessStartInfo
+             {
+                 FileName = "open",
+                 Arguments = "statewise_births.html",
+                 RedirectStandardOutput = false,
+                 UseShellExecute = true,
+                 CreateNoWindow = true
+             };
+          
+             Process.Start(psi2);
+        
+        // Girl population in CA over the years!
+
+        // var caGirls = births
+        //     .Filter("state", "CA")
+        //     .Filter("sex", "girl")
+        //     .Pick("year", "births")
+        //     .Top(5);
+        //     caGirls.PrettyDump();
         //     
-        //     var files = new[]
-        //     {
-        //         // Add the paths to your CSV files here
-        //         "/Users/sudiptamukherjee/Downloads/house.csv",
-        //         "/Users/sudiptamukherjee/Downloads/products-100000.csv",
-        //         // Add more file paths as needed
-        //     };  
-        //     foreach (var file in files)
-        //     {
-        //         var record = new PerfRecord();
-        //         var w = new Stopwatch();
-        //         w.Start();
-        //         var table = DataAcquisition.LoadCsv(file);
-        //         w.Stop();
-        //         record.RowCount = table.RowCount;
-        //         record.ColumnCount = table.ColumnHeaders.Count;
-        //         record.LoadTimeMs = w.ElapsedMilliseconds;
+        // var caGirlsHtml= caGirls.ToBarChartByChartJs("CA Girls over the years", "Girls", "year",
+        //     ["births"],
+        //     [RgbaColor.FromName("purple")]);
         //
-        //         w.Restart();
-        //         table.PrettyDump();
-        //         w.Stop();
-        //         record.DumpTimeMs = w.ElapsedMilliseconds;
-        //
-        //         w.Restart();
-        //         var gist = table.Gist().ToTable();
-        //         gist.PrettyDump();
-        //         w.Stop();
-        //         record.GistTimeMs = w.ElapsedMilliseconds;
-        //
-        //         perfRecords[file] = record;
-        //     }
-        //     foreach (var kvp in perfRecords)
-        //     {
-        //         Console.WriteLine($"File: {kvp.Key}");
-        //         Console.WriteLine($"Rows: {kvp.Value.RowCount}, Columns: {kvp.Value.ColumnCount}");
-        //         Console.WriteLine($"Load Time (ms): {kvp.Value.LoadTimeMs}");
-        //         Console.WriteLine($"Dump Time (ms): {kvp.Value.DumpTimeMs}");
-        //         Console.WriteLine($"Gist Time (ms): {kvp.Value.GistTimeMs}");
-        //         Console.WriteLine();
-        //     }
-        //     
-        // }
-        //
-        // public class PerfRecord
+        // File.WriteAllText("cagirls.html", caGirlsHtml);
+        // var psi3 = new ProcessStartInfo
         // {
-        //     public int RowCount; 
-        //     public int ColumnCount;
-        //     public long LoadTimeMs;
-        //     public long DumpTimeMs;
-        //     public long GistTimeMs;
-        // }
-        var tab = DataAcquisition.LoadCsv("/Users/sudiptamukherjee/Downloads/dataset.csv");
-        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-        tab.PrettyDump(header: "All rows",
-            rowColor: ConsoleColor.Black);
-        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-        tab.BottomNPercent(20)
-            .PrettyDump(header:"Bottom 20% rows",
-                headerColor: ConsoleColor.Green, 
-                rowColor: ConsoleColor.Blue);
+        //     FileName = "open",
+        //     Arguments = "cagirls.html",
+        //     RedirectStandardOutput = false,
+        //     UseShellExecute = true,
+        //     CreateNoWindow = true
+        // };
+        //
+        // Process.Start(psi3);
 
-    }
+    }   
 }

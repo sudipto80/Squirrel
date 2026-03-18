@@ -626,15 +626,15 @@ namespace SquirrelUnitTest
 
             Table second = new Table();
             Dictionary<string, string> r21 = new Dictionary<string, string>();
-            r21.Add("Name", "Jane");
+            r21.Add("Name2", "Jane");
             r21.Add("Course", "C#");
 
             Dictionary<string, string> r22 = new Dictionary<string, string>();
-            r22.Add("Name", "Sam");
+            r22.Add("Name2", "Sam");
             r22.Add("Course", "F#");
 
             Dictionary<string, string> r23 = new Dictionary<string, string>();
-            r23.Add("Name", "Raskin");
+            r23.Add("Name2", "Raskin");
             r23.Add("Course", "Python");
 
             second.Rows.Add(r21);

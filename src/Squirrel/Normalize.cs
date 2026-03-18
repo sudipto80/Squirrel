@@ -170,6 +170,69 @@ namespace Squirrel
             return normalizedColumnValues;
         }
 
+        public static string NormalizeAsPerStrategy(this string value, NormalizationStrategy strategy)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+
+            switch (strategy)
+            {
+                case NormalizationStrategy.LowerCase:
+                    return value.Trim().ToLower();
+            
+                case NormalizationStrategy.UpperCase:
+                    return value.Trim().ToUpper();
+            
+                case NormalizationStrategy.NameCase:
+                    return NameCase(value);
+            
+                case NormalizationStrategy.SentenceCase:
+                    return SentenceCase(value);
+            
+                case NormalizationStrategy.MostFrequentOne:
+                    // For single string, just return the value itself
+                    return value;
+            
+                case NormalizationStrategy.LeastFrequentOne:
+                    // For single string, just return the value itself
+                    return value;
+            
+                case NormalizationStrategy.TerminateAtSpace:
+                    return TillSpace(value);
+            
+                case NormalizationStrategy.TerminateAtNumber:
+                    return TillNumber(value);
+            
+                case NormalizationStrategy.TerminateAtFirstNonAlpha:
+                    return TerminateAtFirstNonAlpha(value);
+            
+                case NormalizationStrategy.TerminateAtFirstNonAlphaNumeric:
+                    return TerminateAtFirstNonAlphaNumeric(value);
+            
+                default:
+                    return value;
+            }
+        }
+        // Helper methods for the missing strategies
+        private static string TerminateAtFirstNonAlpha(string value)
+        {
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (!char.IsLetter(value[i]))
+                    return value.Substring(0, i);
+            }
+            return value;
+        }
+
+        private static string TerminateAtFirstNonAlphaNumeric(string value)
+        {
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (!char.IsLetterOrDigit(value[i]))
+                    return value.Substring(0, i);
+            }
+            return value;
+        }
         public static Table NormalizeTable(this Table tab,
             Dictionary<string, NormalizationStrategy> strategies)
         {
