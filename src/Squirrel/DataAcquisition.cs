@@ -1066,5 +1066,34 @@ namespace Squirrel
             // We can load any pdefined functions.
             return DataAcquisition.LoadCsv("test.csv");
         }
+
+
+        public static Table LoadFromMarkdown(string markdown)
+        {
+            Table table = new Table();
+            var lines = markdown.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            if (lines.Length < 2)
+                return table; // Not enough lines for a valid markdown table
+
+            var headers = lines[0].Split('|').Select(h => h.Trim()).ToList();
+            var separator = lines[1].Split('|').Select(s => s.Trim()).Where(t => t.Trim().Length > 0).ToList();
+            if (separator.All(s => s.Trim().StartsWith("---")))
+            {
+                for (int i = 2; i < lines.Length; i++)
+                {
+                    var values = lines[i].Split('|').Select(v => v.Trim()).ToList();
+                    if (values.Count == headers.Count)
+                    {
+                        var row = new Dictionary<string, string>();
+                        for (int j = 0; j < headers.Count; j++)
+                            if(headers[j].Trim().Length > 0)
+                                row.Add(headers[j], values[j]);
+                        table.AddRow(row);
+                    }
+                }
+            }
+            return table;
+
+        }
     }
 }

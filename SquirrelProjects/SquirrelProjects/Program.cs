@@ -13,11 +13,29 @@ class Program
  
     static void Main(string[] args)
     {
+        var md = @"| Student ID | Name | Age | Grade | Subject | Score |
+                   |------------|------|-----|-------|---------|-------|
+                   | S001 | Alice Johnson | 20 | A | Mathematics | 95 |
+                   | S002 | Bob Smith | 22 | B | Physics | 78 |
+                   | S003 | Clara Lee | 21 | A | Chemistry | 91 |
+                   | S004 | David Brown | 23 | C | Biology | 65 |
+                   | S005 | Emma Davis | 20 | B | English | 82 |
+                   | S006 | Frank Wilson | 22 | A | History | 88 |
+                   | S007 | Grace Taylor | 21 | C | Geography | 60 |
+                   | S008 | Henry Martin | 24 | B | Computer Science | 75 |";
+        var studentsMD = DataAcquisition.LoadFromMarkdown(md);
+            studentsMD.PrettyDump();
         var dirs = Directory.GetFiles("/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Data/")
             .Select(t => new FileInfo(t))
             .ToTableFromAnonList()
             .SortBy("Length", how: SortDirection.Descending)
             .Pick("Name", "Length");
+
+        var tab2 = Enumerable.Range(0, 10)
+            .Select(t => new { Name = $"File {t}", Length = t })
+            .ToTableFromAnonList();
+        
+        tab2.PrettyDump(header:"Tab2");
         
         dirs.PrettyDump();
         
