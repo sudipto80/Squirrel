@@ -13,30 +13,38 @@ class Program
  
     static void Main(string[] args)
     {
-       var births  = DataAcquisition.LoadCsv(@"/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Data/births.csv");
-
-       var pie = births.SplitOn("sex")
-           
-           .Select(t => new
-           {
-               Gender = t.Key,
-               TotalBirths = Convert.ToInt32(t.Value.Filter("state","CA")["births"].Sum())
-           })
-           .ToLookup(t => t.Gender)
-           .ToDictionary(t => t.Key, t => t.Sum(x => x.TotalBirths))
-           .ToDoughnutChartByChartJs("Birth", ColorScheme.EarthTones);
-           
-       File.WriteAllText("birth_pie.html", pie);
-       var psi23 = new ProcessStartInfo
-       {
-           FileName = "open",
-           Arguments = "birth_pie.html",
-           RedirectStandardOutput = false,
-           UseShellExecute = true,
-           CreateNoWindow = true
-       };
-          
-       Process.Start(psi23);
+        var dirs = Directory.GetFiles("/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Data/")
+            .Select(t => new FileInfo(t))
+            .ToTableFromAnonList()
+            .SortBy("Length", how: SortDirection.Descending)
+            .Pick("Name", "Length");
+        
+        dirs.PrettyDump();
+        
+        var births  = DataAcquisition.LoadCsv(@"/Users/sudiptamukherjee/Documents/GitHub/Squirrel/src/Squirrel/Data/births.csv");
+       //
+       // var pie = births.SplitOn("sex")
+       //     
+       //     .Select(t => new
+       //     {
+       //         Gender = t.Key,
+       //         TotalBirths = Convert.ToInt32(t.Value.Filter("state","CA")["births"].Sum())
+       //     })
+       //     .ToLookup(t => t.Gender)
+       //     .ToDictionary(t => t.Key, t => t.Sum(x => x.TotalBirths))
+       //     .ToDoughnutChartByChartJs("Birth", ColorScheme.CoolTones);
+       //     
+       // File.WriteAllText("birth_pie.html", pie);
+       // var psi23 = new ProcessStartInfo
+       // {
+       //     FileName = "open",
+       //     Arguments = "birth_pie.html",
+       //     RedirectStandardOutput = false,
+       //     UseShellExecute = true,
+       //     CreateNoWindow = true
+       // };
+       //    
+       // // Process.Start(psi23);
        // var html = births.SplitOn("state")
        //     .Select(t => new
        //     {
@@ -46,7 +54,7 @@ class Program
        //     .ToTableFromAnonList()
        //     .SortBy("Births", how: SortDirection.Descending)
        //     .Top(10)
-       //     .ToBarChartByChartJs("Label","State", "State",["Births"], colors: new RgbaColor[] { RgbaColor.FromName("blue") });
+       //     .ToBarChartByChartJs("Label","State", "State",["Births"], colors: new RgbaColor[] { RgbaColor.FromName("pink") });
        //
        // File.WriteAllText("births.html", html);
        //   var psi = new ProcessStartInfo
@@ -57,73 +65,74 @@ class Program
        //        UseShellExecute = true,
        //        CreateNoWindow = true
        //   };
-         
-         //  Process.Start(psi);
-            
-        //Statewise boy vs girl bar chart 
-        var stateWise = births.SplitOn("state")
-             .Select(t => new
-             {
-                 State = t.Key,
-                 Boys = Convert.ToInt32(t.Value.Filter("sex", "boy")["births"].Sum() / 1000),
-                 Girls = Convert.ToInt32(t.Value.Filter("sex", "girl")["births"].Sum() / 1000),
-             })
-             .ToTableFromAnonList()
-             .Top(10);
-        
-         stateWise.AddColumn("Gap", "[Boys] - [Girls]", 0); 
-         stateWise.SortBy("Gap", how: SortDirection.Descending)
-             .Top(5)
-             .PrettyDump();
-         var stateWiseComp = stateWise
-             .SortBy("Gap", how: SortDirection.Descending)
-             .ToBarChartWithBackgroundImageByChartJs(
-                 chartTitle: "Statewide Birth Comparison",
-                 label: "Statewide gap comparison",
-                 labelColumn: "State",
-                 columns: ["Boys", "Girls"],
-                 scheme: ColorScheme.CoolTones,
-                 backgroundImageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmlydGhzJTIwY2hpbGRyZW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60");
-         //[ RgbaColor.FromName("blue"),RgbaColor.FromName("pink")]);
-             
-                 
-        
-         File.WriteAllText("statewise_births.html", stateWiseComp);
-             var psi2 = new ProcessStartInfo
-             {
-                 FileName = "open",
-                 Arguments = "statewise_births.html",
-                 RedirectStandardOutput = false,
-                 UseShellExecute = true,
-                 CreateNoWindow = true
-             };
-          
-             Process.Start(psi2);
-        
-        // Girl population in CA over the years!
-
-        // var caGirls = births
-        //     .Filter("state", "CA")
-        //     .Filter("sex", "girl")
-        //     .Pick("year", "births")
-        //     .Top(5);
-        //     caGirls.PrettyDump();
-        //     
-        // var caGirlsHtml= caGirls.ToBarChartByChartJs("CA Girls over the years", "Girls", "year",
-        //     ["births"],
-        //     [RgbaColor.FromName("purple")]);
-        //
-        // File.WriteAllText("cagirls.html", caGirlsHtml);
-        // var psi3 = new ProcessStartInfo
-        // {
-        //     FileName = "open",
-        //     Arguments = "cagirls.html",
-        //     RedirectStandardOutput = false,
-        //     UseShellExecute = true,
-        //     CreateNoWindow = true
-        // };
-        //
-        // Process.Start(psi3);
+       //   
+       //    Process.Start(psi);
+       //      
+       //  //Statewise boy vs girl bar chart 
+       // var stateWise = births.SplitOn("state")
+       //      .Select(t => new
+       //      {
+       //          State = t.Key,
+       //          Boys = Convert.ToInt32(t.Value.Filter("sex", "boy")["births"].Sum() / 1000),
+       //          Girls = Convert.ToInt32(t.Value.Filter("sex", "girl")["births"].Sum() / 1000),
+       //      })
+       //      .ToTableFromAnonList()
+       //      .Top(10);
+       //
+       //  stateWise.AddColumn("Gap", "[Boys] - [Girls]", 0); 
+       //  stateWise.SortBy("Gap", how: SortDirection.Descending)
+       //      .Top(5)
+       //      .PrettyDump();
+       //  var stateWiseComp = stateWise
+       //      .SortBy("Gap", how: SortDirection.Descending)
+       //      .ToBarChartWithBackgroundImageByChartJs(
+       //          chartTitle: "Statewide Birth Comparison",
+       //          label: "Statewide gap comparison",
+       //          labelColumn: "State",
+       //          columns: ["Boys", "Girls"],
+       //          scheme: ColorScheme.CoolTones,
+       //          backgroundImageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmlydGhzJTIwY2hpbGRyZW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60");
+       //
+       // //   //[ RgbaColor.FromName("blue"),RgbaColor.FromName("pink")]);
+       // //       
+       // //           
+       // //  
+       // File.WriteAllText("statewise_births.html", stateWiseComp);
+       //     var psi2 = new ProcessStartInfo
+       //     {
+       //         FileName = "open",
+       //         Arguments = "statewise_births.html",
+       //         RedirectStandardOutput = false,
+       //         UseShellExecute = true,
+       //         CreateNoWindow = true
+       //     };
+       //  
+       //     Process.Start(psi2);
+       //  
+       //  // Girl population in CA over the years!
+       //
+       var caGirls = births
+           .Filter("state", "CA")
+           .Filter("sex", "girl")
+           .Pick("year", "births")
+           .Top(10);
+           caGirls.PrettyDump();
+           
+       var caGirlsHtml= caGirls.ToBarChartByChartJs("CA Girls over the years", "Girls", "year",
+           ["births"],
+           [RgbaColor.FromName("purple")]);
+       
+       File.WriteAllText("cagirls.html", caGirlsHtml);
+       var psi3 = new ProcessStartInfo
+       {
+           FileName = "open",
+           Arguments = "cagirls.html",
+           RedirectStandardOutput = false,
+           UseShellExecute = true,
+           CreateNoWindow = true
+       };
+       
+       Process.Start(psi3);
 
     }   
 }

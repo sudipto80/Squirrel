@@ -182,7 +182,7 @@ namespace Squirrel
             {
                 Dictionary<string, string> row = new();
                 foreach (var p in props)
-                    row.Add(p, firstType.GetProperty(p)!.GetValue(l)!.ToString()!);
+                    row.Add(p, firstType.GetProperty(p)?.GetValue(l)?.ToString()!);
                 result.Rows.Add(row);
             }
 
