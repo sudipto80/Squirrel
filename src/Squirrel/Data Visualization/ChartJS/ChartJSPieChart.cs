@@ -99,14 +99,23 @@ public static class ChartJSPieChart
                    ColorScheme scheme = ColorScheme.CoolTones)
     {
         var data = tab.SplitOn(column);
-        
-        var dataDict = portion switch
+        var dataDict = new Dictionary<string, int>();
+        if (portion == Portion.RawValue)
         {
-            Portion.Percentage => data.ToDictionary(t => t.Key, t => Convert.ToInt32(t.Value[column].Sum() * 100 / tab[column].Sum())),
-            Portion.RawValue => data.ToDictionary(t => t.Key, t => Convert.ToInt32(t.Value[column].Sum())),
-            _ => throw new ArgumentOutOfRangeException(nameof(portion), portion, null)
-        };
+            dataDict = data.Select(t => new { Name = t.Key, Sizes = t.Value.RowCount })
+                .ToDictionary(t => t.Name, t => t.Sizes);
+        }
+        else if (portion == Portion.Percentage)
+        {
+            dataDict = data.Select(t => new
+            {
+                Name = t.Key,
+                Sizes = t.Value.RowCount * 100 / tab.RowCount
+            })
+                .ToDictionary(t => t.Name, t => t.Sizes);
+        }
         
+       
         return ToPieChartByChartJs(dataDict, label, scheme);
     }
 }
