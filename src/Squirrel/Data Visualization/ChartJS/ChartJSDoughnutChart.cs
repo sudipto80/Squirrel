@@ -76,8 +76,8 @@ public static class ChartJSDoughnutChart
         var dataDict = portion switch
         {
             Portion.Percentage => data.ToDictionary(t => t.Key,
-                t => Convert.ToInt32(t.Value["value"].Sum() * 100 / tab.Rows.Count)),
-            Portion.RawValue => data.ToDictionary(t => t.Key, t => Convert.ToInt32(t.Value["value"].Sum())),
+                t => Convert.ToInt32(t.Value.RowCount * 100 / tab.Rows.Count)),
+            Portion.RawValue => data.ToDictionary(t => t.Key, t => Convert.ToInt32(t.Value.RowCount)),
             _ => throw new ArgumentOutOfRangeException(nameof(portion), portion, null)
         };
         return ToDoughnutChartByChartJs(dataDict, label, colors);

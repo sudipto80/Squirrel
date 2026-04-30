@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using System.Reflection.Emit;
 using Squirrel;
 using Squirrel.ChartJSTemplates;
@@ -14,19 +15,37 @@ class Program
     static void Main(string[] args)
     {
         
+        var allStocks = DataAcquisition.LoadCsv(@"//Users/sudiptamukherjee/Downloads/AAPL_historical.csv");
+        allStocks.AddColumn(columnName: "Diff", formula: "[Open] - [Close]", decimalDigits: 4);
+        //Preparing to write the result in a HTML file.
+        StreamWriter sw = new StreamWriter("tempApple.html");
+        Func<Dictionary<string, string>, bool> greatValues = x => Math.Abs(Convert.ToDecimal(x["Diff"])) == 1M;
+        Func<Dictionary<string, string>, bool> worries = x => Math.Abs(Convert.ToDecimal(x["Diff"])) == 0.99M;
+        Func<Dictionary<string, string>, bool> warnings = x => Math.Abs(Convert.ToDecimal(x["Diff"])) <= 0.98M;
+        string htmlTable = allStocks
+            //Sort by the difference in descending order
+            .SortBy("Diff", how: SortDirection.Descending)
+            //Taking top 20 entries
+            .Skip(1)//Skip the header
+            .Top(20)
+            //Pick only these columns
+            .Pick("Diff", "High", "Close")
+            .ToBootstrapHtmlTableWithColoredRows
+            (
+                infoPredicate: greatValues,
+                warningPredicate: warnings,
+                dangerPredicate: worries
+            );
+
+        sw.WriteLine(htmlTable);
+        sw.Close();
+        System.Diagnostics.Process.Start("tempApple.htm");
       
        var sampleTable  = DataAcquisition.LoadCsv(@"/Users/sudiptamukherjee/Documents/GitHub/Squirrel/SquirrelProjects/SquirrelProjects/SampleTable.csv");
        
-       sampleTable.PrettyDump();
+       sampleTable.PrettyDump(header:"Sample Table", headerColor:ConsoleColor.DarkRed, rowColor: ConsoleColor.Black);
 
-       // var tabHtml = sampleTable
-       //     .SortInThisOrder("Grade", ["A+", "A", "B+", "B", "C+", "C"])
-       //     .ToSemanticRowsTable(table => table.ToSemanticRowsTable(
-       //         row => row.Any(c => c is "A" or "A+") ? "green" : null,
-       //         row => row.Any(c => c is "B+") ? "amber" : null,
-       //         row => row.Any(c => c is "B") ? "red" : null
-       //     );
-       //
+    
        var tabHtml = sampleTable.ToSemanticRowsTable(row 
                => (row.Any(c => c is "A" or "A+") ? "green" : null) ?? string.Empty,
            row => (row.Any(c => c is "B+") ? "amber" : null) ?? string.Empty,

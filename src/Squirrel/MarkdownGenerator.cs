@@ -8,7 +8,8 @@ public static class MarkdownGenerator
     {
         var header = string.Join(" | ", table.ColumnHeaders);
         var separator = string.Join(" | ", table.ColumnHeaders.Select(_ => "---"));
-        var rows = table.Rows.Select(row => string.Join(" | ", row));
+        var rows = table.Rows.Select(row => 
+            row.Values.Aggregate((a,b) => $"{a.Trim()} | {b.Trim()}"));
         return $"{header}\n{separator}\n{string.Join("\n", rows)}";
     }
 

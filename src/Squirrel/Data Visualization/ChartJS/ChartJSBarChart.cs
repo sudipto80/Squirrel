@@ -111,13 +111,13 @@ public static class ChartJSBarChart
 </html>";
 
     public static string ToBarChartByChartJs
-    (this Table tab, string chartTitle, string label, string labelColumn,
+    (this Table tab, string chartTitle, string groupByColumn,
         IEnumerable<string> columns,
         ColorScheme scheme)
     {
         var count = columns.Count();
         var colors = ColorPicker.GetColorsForScheme(scheme, count);
-        return tab.ToBarChartByChartJs(chartTitle, label, labelColumn, columns, colors);
+        return tab.ToBarChartByChartJs(chartTitle, groupByColumn, columns, colors);
     }
 
     public static string WithTitle(this string html, string title) =>
@@ -127,30 +127,37 @@ public static class ChartJSBarChart
     public static string SetHeight(this string html, int width) => html.Replace("height: 400px", $"height: {width}px");
 
     public static string ToBarChartWithBackgroundImageByChartJs
-        (this Table tab, string chartTitle, string label, string labelColumn,
-        IEnumerable<string> columns,
+        (this Table tab, string chartTitle, string groupByColumn,
+        IEnumerable<string> numericColumns,
         ColorScheme scheme, string backgroundImageUrl)
     {
-        var count = columns.Count();
+        var count = numericColumns.Count();
         var colors = ColorPicker.GetColorsForScheme(scheme, count);
         var html = _toBarChartByChartJs(tab,
                                              chartTitle, 
-                                             labelColumn, 
-                                             columns, 
+                                             groupByColumn, 
+                                             numericColumns, 
                                              colors, 
                                              BackgroundStyle.Image);
         return html.Replace("_background_image_url_", backgroundImageUrl);
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tab"></param>
+    /// <param name="chartTitle"></param>
+    /// <param name="groupByColumn"></param>
+    /// <param name="numericColumns"></param>
+    /// <param name="colors"></param>
+    /// <returns></returns>
     public static string ToBarChartByChartJs(
         this Table tab,
         string chartTitle,
-        string label,
-        string labelColumn,
-       
-        IEnumerable<string> columns,
+        string groupByColumn,
+        IEnumerable<string> numericColumns,
         IEnumerable<RgbaColor> colors)
     {
-        return _toBarChartByChartJs(tab, chartTitle, labelColumn, columns,  colors);
+        return _toBarChartByChartJs(tab, chartTitle, groupByColumn, numericColumns,  colors);
     }
 
     private static string _toBarChartByChartJs(Table tab, string chartTitle, string labelColumn, IEnumerable<string> columns,

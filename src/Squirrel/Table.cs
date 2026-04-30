@@ -1392,6 +1392,25 @@ namespace Squirrel
 
 		}
 
+		public Dictionary<string, int> SplitCount(string columnName)
+		{
+			this.ThrowIfTableIsNull();
+			this.ThrowIfColumnsAreNotPresentInTable(columnName);
+
+			var map = new Dictionary<string, int>();
+			var vals = this.ValuesOf(columnName);
+			for (int i = 0; i < this.RowCount; i++ )
+			{
+				if (!map.ContainsKey(vals[i]))
+				{
+					map.Add(vals[i], Convert.ToInt32(this.Rows[i].Values.Last()));
+				}
+				
+			}
+			return map;
+
+		}
+
 		/// <summary>
 		/// Splits the current table into multiple smaller tables based on unique values in the specified column.
 		/// </summary>

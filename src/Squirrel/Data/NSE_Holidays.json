@@ -1,0 +1,18 @@
+{
+  "calendar": "NSE",
+  "year": 2024,
+  "fixed": [
+    { "date": "2024-01-26", "name": "Republic Day" },
+    { "date": "2024-08-15", "name": "Independence Day" },
+    { "date": "2024-11-01", "name": "Diwali" }
+  ],
+  "rules": [
+    { "ordinal":  4, "day": "Thursday", "month": 11, "name": "Thanksgiving" },
+    { "ordinal":  1, "day": "Monday",   "month":  9, "name": "Labor Day" },
+    { "ordinal": -1, "day": "Monday",   "month":  5, "name": "Spring Bank Holiday" }
+  ],
+  "easter_relative": [
+    { "offset": -2, "name": "Good Friday" },
+    { "offset":  1, "name": "Easter Monday" }
+  ]
+}

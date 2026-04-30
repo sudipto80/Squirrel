@@ -47,17 +47,34 @@ public static class DateRanges
 
     public static List<DateTime> BusinessDaysFrom(this int days, DateTime? from)
     {
-        // TODO : 
-        throw new NotImplementedException();
+        var resultDays = new List<DateTime>();
+        var startDate = from ?? DateTime.Today;
+        while (resultDays.Count < days)
+        {
+            if (startDate.DayOfWeek != DayOfWeek.Saturday && startDate.DayOfWeek != DayOfWeek.Sunday)
+            {
+                resultDays.Add(startDate);
+            }
+            startDate = startDate.AddDays(1);
+        }
+        return resultDays;
     }
 
-    public static List<DateTime> WeekdaysFrom(this int days, DateTime? from)
-    {
-        throw new NotImplementedException();
-    }
+    public static List<DateTime> WeekdaysFrom(this int days, DateTime? from) => BusinessDaysFrom(days, from);
+
     public static List<DateTime> AlternateMondaysFrom(this int days, DateTime? from)
     {
-        throw new NotImplementedException();
+        var resultDays = new List<DateTime>();
+        var startDate = from ?? DateTime.Today;
+        while (resultDays.Count < days)
+        {
+            if (startDate.DayOfWeek == DayOfWeek.Monday && (resultDays.Count == 0 || (startDate - resultDays.Last()).TotalDays >= 14))
+            {
+                resultDays.Add(startDate);
+            }
+            startDate = startDate.AddDays(1);
+        }
+        return resultDays;
     }
    // pulic static List<DateTime> Generaate
     //

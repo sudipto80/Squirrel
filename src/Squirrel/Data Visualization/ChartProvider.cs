@@ -2,21 +2,21 @@ namespace Squirrel.DataVisualization;
 
 public enum ChartProvider
 {
-    ChartJS,
+    ChartJs,
     GoogleCharts,
-    D3JS,
+    D3Js,
     Plotly,
     Highcharts,
     ApexCharts,
     ECharts,
-    C3JS,
+    C3Js,
     FusionCharts,
-    CanvasJS,
-    ChartistJS,
-    NVD3,
+    CanvasJs,
+    ChartistJs,
+    Nvd3,
     ZingChart,
     AnyChart, 
-    amCharts,
+    AmCharts,
     Recharts,
     VictoryCharts
 }

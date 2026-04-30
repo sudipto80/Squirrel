@@ -624,5 +624,65 @@ public static class TableExtensions
 
 
     #endregion
+    
+    // Filter table rows to only those whose date column matches the spine
+    public static Table FilterByDates(
+        this Table tab,
+        string dateColumn,
+        IEnumerable<DateTime> spine)
+    {
+        var dateSet = spine.Select(d => d.Date).ToHashSet();
+
+        return tab.Filter(row =>
+            dateSet.Contains(DateTime.Parse(row[dateColumn]).Date));
+    }
+
+    // Build a date index for repeated filtering — build once, query many times
+    public static Dictionary<DateTime, List<Dictionary<string, string>>> ToDateIndex(
+        this Table tab,
+        string dateColumn)
+    {
+        return tab.Rows
+            .GroupBy(row => DateTime.Parse(row[dateColumn]).Date)
+            .ToDictionary(g => g.Key, g => g.ToList());
+    }
+
+    // Apply spine to pre-built index — O(m) after index is built
+    public static Table Mask(
+        this Dictionary<DateTime, List<Dictionary<string, string>>> index,
+        IEnumerable<DateTime> spine)
+    {
+        var result = new Table();
+        foreach (var date in spine)
+        {
+            if (index.TryGetValue(date.Date, out var rows))
+                rows.ForEach(result.AddRow);
+        }
+        return result;
+    }
+    
+    // Build the index once
+    public static Dictionary<DateTime, List<T>> ToDateIndex<T>(
+        this IEnumerable<T> source,
+        Func<T, DateTime> dateSelector)
+    {
+        return source
+            .GroupBy(row => dateSelector(row).Date)
+            .ToDictionary(g => g.Key, g => g.ToList());
+    }
+
+    // Apply any spine to the index — O(m)
+    public static List<T> Mask<T>(
+        this Dictionary<DateTime, List<T>> index,
+        IEnumerable<DateTime> spine)
+    {
+        var result = new List<T>();
+        foreach (var date in spine)
+        {
+            if (index.TryGetValue(date.Date, out var rows))
+                result.AddRange(rows);
+        }
+        return result;
+    }
 
 }

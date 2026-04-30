@@ -192,7 +192,7 @@ public class ColorPicker
             RgbaColor.ParseAny("#A9A9A9"), // Light Gray
             RgbaColor.ParseAny("#C5C5C5"), // Silver
             RgbaColor.ParseAny("#E1E1E1"), // Very Light Gray
-            RgbaColor.ParseAny("#FFFFFF") // White
+
         };
     }
 

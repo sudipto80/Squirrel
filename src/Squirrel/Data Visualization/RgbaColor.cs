@@ -199,7 +199,8 @@ public class RgbaColor
                 defaultAlpha
             );
         }
-        else if (hexString.Length == 6) // #RRGGBB
+
+        if (hexString.Length == 6) // #RRGGBB
         {
             return new RgbaColor(
                 Convert.ToInt32(hexString.Substring(0, 2), 16),
@@ -208,7 +209,8 @@ public class RgbaColor
                 defaultAlpha
             );
         }
-        else if (hexString.Length == 8) // #RRGGBBAA
+
+        if (hexString.Length == 8) // #RRGGBBAA
         {
             return new RgbaColor(
                 Convert.ToInt32(hexString.Substring(0, 2), 16),
